@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24774d76f51644a42abcb2523a480aa1, type: 3}
+  m_Name: Bar of Soap
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: 'Bar of Soap '
+  description: An item that feels familiar.
+  worldSprite: {fileID: 7724290689761396270, guid: 6b74cc6afddf74748897150b39c00625, type: 3}
+  inventorySprite: {fileID: 7724290689761396270, guid: 6b74cc6afddf74748897150b39c00625, type: 3}
+  memoryText: The smell... lavender. She used to buy this.
+  pickupSound: {fileID: 0}
