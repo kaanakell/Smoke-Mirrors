@@ -17,4 +17,6 @@ MonoBehaviour:
   worldSprite: {fileID: 7724290689761396270, guid: 6b74cc6afddf74748897150b39c00625, type: 3}
   inventorySprite: {fileID: 7724290689761396270, guid: 6b74cc6afddf74748897150b39c00625, type: 3}
   memoryText: I take these every morning. Don't I?
+  memoryBackground: {fileID: 21300000, guid: 320af3d42ebdd1d4f94b8c4c91e7aa57, type: 3}
   pickupSound: {fileID: 0}
+  canTriggerMindForest: 0

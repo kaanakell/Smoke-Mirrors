@@ -22,12 +22,8 @@ public class PlayerInteraction : MonoBehaviour
         ResolvePromptReferences();
     }
 
-    // Called once on Awake and again whenever the scene changes and
-    // the player is repositioned, in case the UI lives in the scene.
     private void ResolvePromptReferences()
     {
-        // Try the serialized reference first (works when UI is a child of the prefab)
-        // Fall back to tag search (works when UI is a separate scene canvas object)
         if (promptUI == null)
         {
             var found = GameObject.FindGameObjectWithTag("PromptUI");
@@ -54,14 +50,11 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnEnable()
     {
-        // Player prefab can be re-enabled after a scene load —
-        // re-resolve in case the scene's prompt canvas changed
         ResolvePromptReferences();
     }
 
     void Update()
     {
-        // If references went null mid-session (scene reload edge case), recover
         if (promptUI == null) ResolvePromptReferences();
 
         FindNearest();

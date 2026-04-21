@@ -36,7 +36,6 @@ public class PlayerSpawnManager : MonoBehaviour
 
         PlayerController pc = FindFirstObjectByType<PlayerController>();
 
-        // ── Mind forest return: restore exact position, skip spawn point lookup ──
         if (MindForestTrigger.IsReturningFromForest)
         {
             if (pc != null)
@@ -47,7 +46,6 @@ public class PlayerSpawnManager : MonoBehaviour
             yield return StartCoroutine(FadeIn());
             yield break;
         }
-        // ── Normal spawn point logic ──────────────────────────────────────────────
 
         SpawnPoint[] points = FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None);
         SpawnPoint target = null;

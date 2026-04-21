@@ -31,7 +31,6 @@ public class MindForestManager : MonoBehaviour
     [Header("Dialogue Sets")]
     [SerializeField] private DialogueSet[] dialogueSets;
 
-    // ── Internal state ────────────────────────────────────────────
     private List<DialogueLine> _lines;
     private int _lineIndex;
     private bool _dialogueActive;
@@ -39,11 +38,7 @@ public class MindForestManager : MonoBehaviour
     private Coroutine _typeCoroutine;
     private SpriteRenderer _npcSr;
 
-    // Player is found lazily inside the approach coroutine — NOT in Start.
-    // This avoids the build timing issue entirely.
     private PlayerController _player;
-
-    // ── Lifecycle ─────────────────────────────────────────────────
 
     private void Start()
     {
@@ -60,8 +55,6 @@ public class MindForestManager : MonoBehaviour
         var ai = npc != null ? npc.GetComponent<AIPath>() : null;
         if (ai != null) ai.canMove = false;
 
-
-        // Build dialogue list
         if (dialogueSets != null && dialogueSets.Length > 0)
         {
             var set = dialogueSets[Random.Range(0, dialogueSets.Length)];
@@ -91,13 +84,8 @@ public class MindForestManager : MonoBehaviour
         }
     }
 
-    // ── Main sequence ─────────────────────────────────────────────
-
     private IEnumerator ForestRoutine()
     {
-        // ── 1. Wait for player to be fully spawned ────────────────
-        // PlayerSpawnManager does yield return null before positioning,
-        // so we wait a few frames to be safe in builds.
         yield return new WaitForSeconds(0.3f);
         yield return StartCoroutine(WaitForPlayer());
 
@@ -107,24 +95,15 @@ public class MindForestManager : MonoBehaviour
             yield break;
         }
 
-        // ── 2. Player roams freely for the set time ───────────────
         yield return new WaitForSeconds(timeBeforeNpcApproaches);
 
-        // ── 3. NPC fades in and walks to player ───────────────────
         StartCoroutine(FadeNpc(0f, 1f, npcFadeInDuration));
         yield return StartCoroutine(NpcApproach());
 
-        // ── 4. Brief pause, then dialogue ────────────────────────
         yield return new WaitForSeconds(0.4f);
         BeginDialogue();
     }
 
-    // ── Player finding ────────────────────────────────────────────
-
-    /// <summary>
-    /// Retries finding the player every frame for up to 5 seconds.
-    /// Handles any execution order difference between builds and editor.
-    /// </summary>
     private IEnumerator WaitForPlayer()
     {
         float timeout = 5f;
@@ -142,8 +121,6 @@ public class MindForestManager : MonoBehaviour
         else
             Debug.LogError("[MindForestManager] Could not find PlayerController in scene.");
     }
-
-    // ── NPC approach ──────────────────────────────────────────────
 
     private IEnumerator NpcApproach()
     {
@@ -192,11 +169,6 @@ public class MindForestManager : MonoBehaviour
         LockPlayer();
     }
 
-
-    /// <summary>
-    /// Pure Vector3.MoveTowards — zero dependencies, always works.
-    /// Used as fallback when A* is unavailable.
-    /// </summary>
     private IEnumerator DirectApproach()
     {
         while (true)
@@ -227,8 +199,6 @@ public class MindForestManager : MonoBehaviour
             _player.MovementLocked = true;
     }
 
-    // ── NPC depart ────────────────────────────────────────────────
-
     private IEnumerator NpcDepart()
     {
         StartCoroutine(FadeNpc(1f, 0f, npcFadeInDuration));
@@ -256,7 +226,6 @@ public class MindForestManager : MonoBehaviour
             yield break;
         }
 
-        // Direct fallback depart
         Vector3 departTarget = new Vector3(npcDepartX, npc.position.y, npc.position.z);
         while (Vector3.Distance(npc.position, departTarget) > 0.1f)
         {
@@ -264,8 +233,6 @@ public class MindForestManager : MonoBehaviour
             yield return null;
         }
     }
-
-    // ── NPC alpha ─────────────────────────────────────────────────
 
     private void SetNpcAlpha(float a)
     {
@@ -285,8 +252,6 @@ public class MindForestManager : MonoBehaviour
         }
         SetNpcAlpha(to);
     }
-
-    // ── Dialogue ──────────────────────────────────────────────────
 
     private void BeginDialogue()
     {
@@ -334,8 +299,6 @@ public class MindForestManager : MonoBehaviour
             ShowLine(_lineIndex);
         }
     }
-
-    // ── Exit ──────────────────────────────────────────────────────
 
     private IEnumerator EndSequence()
     {

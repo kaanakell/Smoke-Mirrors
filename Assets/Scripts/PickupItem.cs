@@ -28,7 +28,6 @@ public class PickupItem : MonoBehaviour, IInteractable
         if (itemData != null && itemData.worldSprite != null)
             _sr.sprite = itemData.worldSprite;
 
-        // Already collected in a previous visit — silently remove from world
         if (itemData != null && Inventory.Instance != null && Inventory.Instance.HasItem(itemData))
         {
             Destroy(gameObject);
@@ -58,14 +57,11 @@ public class PickupItem : MonoBehaviour, IInteractable
                 AudioSource.PlayClipAtPoint(itemData.pickupSound, transform.position);
         }
 
-        // TryTrigger returns true if the forest will fire.
-        // It handles memory text → forest sequencing internally,
-        // so we must NOT show memory text ourselves if it returns true.
         bool forestTriggered = MindForestTrigger.Instance != null &&
                                MindForestTrigger.Instance.TryTrigger(itemData, interactor);
 
         if (!forestTriggered && !string.IsNullOrEmpty(itemData.memoryText))
-            MemoryDisplay.Instance?.ShowMemory(itemData.memoryText);
+            MemoryDisplay.Instance?.ShowMemory(itemData.memoryText, itemData.memoryBackground);
 
         _sr.enabled = false;
         GetComponent<Collider2D>().enabled = false;

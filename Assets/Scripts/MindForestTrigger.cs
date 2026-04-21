@@ -32,8 +32,6 @@ public class MindForestTrigger : MonoBehaviour
     private Image _red;
     private Image _cyan;
 
-    // ── Lifecycle ─────────────────────────────────────────────────
-
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -41,8 +39,6 @@ public class MindForestTrigger : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         BuildGlitchOverlay();
     }
-
-    // ── Public API ────────────────────────────────────────────────
 
     public bool TryTrigger(ItemData item, GameObject interactor)
     {
@@ -74,8 +70,6 @@ public class MindForestTrigger : MonoBehaviour
         StartCoroutine(GlitchOutOfForest());
     }
 
-    // ── Sequencing ────────────────────────────────────────────────
-
     private IEnumerator MemoryThenForest(string memoryText, PlayerController pc)
     {
         bool done = false;
@@ -89,14 +83,11 @@ public class MindForestTrigger : MonoBehaviour
         yield return StartCoroutine(GlitchIntoForest());
     }
 
-    // ── Transitions ───────────────────────────────────────────────
-
     private IEnumerator GlitchIntoForest()
     {
         _glitchCanvas.gameObject.SetActive(true);
         yield return StartCoroutine(PlayGlitch(glitchDuration));
 
-        // End on solid white — overlay is definitely opaque before scene loads
         SetAlpha(_white, 1f);
         SetAlpha(_red, 0f);
         SetAlpha(_cyan, 0f);
@@ -104,12 +95,9 @@ public class MindForestTrigger : MonoBehaviour
         IsReturningFromForest = false;
         PlayerSpawnManager.NextSpawnID = "forest_entry";
 
-        // Load and wait for completion using async so we know exactly when it's done
         AsyncOperation load = SceneManager.LoadSceneAsync(mindForestSceneName);
         yield return new WaitUntil(() => load.isDone);
 
-        // Scene is loaded — now fade overlay out on this DontDestroyOnLoad object
-        // This is reliable because we own the coroutine, not the loaded scene
         yield return StartCoroutine(FadeOverlayOut(overlayFadeOut));
     }
 
@@ -129,8 +117,6 @@ public class MindForestTrigger : MonoBehaviour
 
         yield return StartCoroutine(FadeOverlayOut(overlayFadeOut));
     }
-
-    // ── Glitch effect ─────────────────────────────────────────────
 
     private IEnumerator PlayGlitch(float duration)
     {
@@ -164,7 +150,6 @@ public class MindForestTrigger : MonoBehaviour
 
     private IEnumerator FadeOverlayOut(float duration)
     {
-        // Wait two frames — lets the new scene's Awake/Start run first
         yield return null;
         yield return null;
 
@@ -182,16 +167,12 @@ public class MindForestTrigger : MonoBehaviour
         _glitchCanvas.gameObject.SetActive(false);
     }
 
-    // ── Roll ──────────────────────────────────────────────────────
-
     private bool RollSucceeds()
     {
         if (_totalPickups < minimumPickupsBefore) return false;
         if (Time.time - _lastTriggerTime < cooldownSeconds) return false;
         return Random.value < triggerChance;
     }
-
-    // ── Overlay builder ───────────────────────────────────────────
 
     private void BuildGlitchOverlay()
     {

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MemoryDisplay : MonoBehaviour
 {
@@ -10,13 +11,15 @@ public class MemoryDisplay : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TextMeshProUGUI memoryText;
 
+    [Header("Background")]
+    [Tooltip("Assign an Image component that sits behind the memory text." + "Its sprite will be swapped per item. Leave unassigned to skip.")]
+    [SerializeField] private Image backgroundImage;
+
     [Header("Timing")]
     [SerializeField] private float fadeInDuration = 0.6f;
     [SerializeField] private float holdDuration = 2.5f;
     [SerializeField] private float fadeOutDuration = 0.8f;
 
-    // Fires once when the memory display fully finishes (after fade out)
-    // MindForestTrigger subscribes to this when it needs to chain forest after memory
     public event Action OnComplete;
 
     void Awake()
@@ -30,11 +33,26 @@ public class MemoryDisplay : MonoBehaviour
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
         }
+
+        if(backgroundImage != null) backgroundImage.gameObject.SetActive(false);
     }
 
-    public void ShowMemory(string text)
+    public void ShowMemory(string text, Sprite background = null)
     {
         if (memoryText != null) memoryText.text = text;
+
+        if(backgroundImage != null)
+        {
+            if(background != null)
+            {
+                backgroundImage.sprite = background;
+                backgroundImage.gameObject.SetActive(true);
+            }
+            else
+            {
+                backgroundImage.gameObject.SetActive(false);
+            }
+        }
         StopAllCoroutines();
         StartCoroutine(DisplayRoutine());
     }
@@ -50,9 +68,8 @@ public class MemoryDisplay : MonoBehaviour
 
         if (pc != null) pc.MovementLocked = false;
 
-        // Notify any listener that memory is done
         OnComplete?.Invoke();
-        OnComplete = null; // clear so it doesn't fire again next time
+        OnComplete = null;
     }
 
     private IEnumerator Fade(float from, float to, float duration)

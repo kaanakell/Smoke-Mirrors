@@ -1,9 +1,5 @@
 using UnityEngine;
 
-// Keep this file at: Assets/Scripts/DialogueSet.cs
-// Do NOT wrap these in a namespace — the ScriptableObject assets
-// were created without one and Unity matches by class name + namespace.
-
 [System.Serializable]
 public class DialogueLine
 {

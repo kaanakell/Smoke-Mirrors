@@ -17,6 +17,9 @@ public class ItemData : ScriptableObject
     [TextArea(3, 8)]
     public string memoryText = "";
 
+    [Tooltip("Background image shown behind the memory text when this item is picked up.")]
+    public Sprite memoryBackground;
+
     [Header("Audio")]
     public AudioClip pickupSound;
 
