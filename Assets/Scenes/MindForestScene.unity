@@ -150,11 +150,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: AstarPathfindingProject::AstarPath
   version: 1
   data:
-    dataString: UEsDBBQAAAgIAAAQIexO5zxhYQIAABkFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VE1z2jAQ/SuMzk3GkDqF3lqHkB5ImJBOLr4s1hprkCWPJPORDP+9K9nGLp2eEG/f7r59WvmTCWUrzJw2CyP4UnNk30fMn9mXUR98wiNstVqLD+w474K7wpMgcF7BCU342KdZXaIzIvuhttKTIwJrJXJtyjnfYqKtswTnIC1SyGjnsxVBnyN2pJ+bmU850WnyzZ8+6DSLRmc6Zqgcmp7aETtaw6pVJqGskHvJPXnSsceT2zgQFY3TcqLb2NfXUgrbqmHuVIVpE6hsTbMQgQug6YKE6HZKQIFiWzhffZj+kucWXSvMwOlBGLKpqct+6sa7EuyuUbcHWWMQNg26mqLLf+I34xDOjS6fur7jyPdwhch2r3DKwLqBuUP4oZc+DiYdQO5gI/G9QPWsF0bXilPQmdqn1hYnD/3fy2hJgdmuxxupHdj1rav/35Ef4hzGPyZSlJtg5dcGWEsdLA8bgIau5xcpDvth2xKEehm/Lb7BdrhIbeBRGOso1I6pvL6Nro2nsnkwzY9Tu0QbhQFuR6lQgXSnFZVx13d4FRu0vYo8gn8ybfM21r2Eq5QA9/wougqt9OFyW7bQhyXa4qV2UijsRfvAM/mUaKWaFRt60qWta5NDNkjb1oL/vVtsM0aeA0zi6A6i2X1+E09jfpfP7qdTiON8iiwsn1A0J8hVI7S1h25N9cUVLVr3JRktDFRh3bmBw0J8lHpguVC5XmcGUb00FS7C0VATepp8zgUZtEbnhAr3zT5TJnW2Q55eCqVh0vnRGUj7KimrxF47j6QsCZ+OlHn4sswrg3uBB9+8K3Zm5z9QSwMEFAAACAgAABAh7Jlj/3htAAAAeAAAAAkAJABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQGrVipLLSrOzM9TslIw0TPSMzTXUVBKL0osyCgGihiCOKWZKSB2tFKSYWpKWmKikamBcaKBpVmarqmFaYpxmqWZhUWiqWmaRapSLFB9SWVBql9ibipET0BiSUZaZl5KZl66nntRZoo7yGil2FoAUEsBAi0AFAAACAgAABAh7E7nPGFhAgAAGQUAAAsAJAAAAAAAAAAAAAAAAAAAAGdyYXBoMC5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsBAi0AFAAACAgAABAh7Jlj/3htAAAAeAAAAAkAJAAAAAAAAAAAAAAArgIAAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLBQYAAAAAAgACALgAAABmAwAAAAA=
+    dataString: UEsDBBQAAAgIAAAQIewgHtTHXgIAABcFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VE1z2jAQ/SuMzk3GkDqF3lqHkB6SMKGdXHxZrDXWICSPPgIkw3/vSraxQ6cnxNu3u++tVv5gQtkaC6fNwgj+qDmy7yMWzuzLqA8+4AE2Wq3EO3acV8FdFUgQOS/ghCZ8HNKs3qEzovihNjKQEwK9EqU2uznfYKatswSXIC1SyGgXshVBHyN2oJ+rWUg50mnyLZze6TRLRic6Fqgcmp7aETtaw/KqkLCrkQfJPXnSsceT6zQSFdlpOcl1GuprKYVt1TB3rKPbDGrryQsRuAByFyUEsxWKTeVC7WHyc1ladK0sA8c7YWhITVX2UzeT24HdNtreQHqMsqZRVVP08Z/41TiGS6N3D13fcRJ6uEoU2xc4FmDdYLRD+O6zcK/2ILewlvhaoXrSC6O94hR0xodUb3Fy1/89W8sqLLY93kjtwK6vr/9/Q8HEKdo/ZFLs1nH0XxtgJXUceLx/NHQ5v0hx3A7bliA0yPhj8TdshmvUBu6FsY5CrU0V9K21N4HK5nFowY53mTYKI9xaqVGBdMcllXGXd3gRG7S9iNxDeDBt8zbWvYOLlAj3/CS5CC31/nxbttL7R7TVs3dSKOxFh8ATzSnTSjUrNpxJl7bypoRikLbxgn/eLbYeIy8BJmlyA8nstrxKpym/KWe30ymkaTlFFpdPKPIJctkIbcdDt6b64ooWrfuOjBYG6rju3MB+Id53ejByoUq9Kgyiem4qnIWjoSb0MPmcCxrQCp0TKt43+8iZ1MUWeX4ulEen84MzkPdVclaLN+0CkrMsfjhyFuDzMi8Nvgnch+ZdsRM7/QVQSwMEFAAACAgAABAh7Jlj/3htAAAAeAAAAAkAJABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQGrVipLLSrOzM9TslIw0TPSMzTXUVBKL0osyCgGihiCOKWZKSB2tFKSYWpKWmKikamBcaKBpVmarqmFaYpxmqWZhUWiqWmaRapSLFB9SWVBql9ibipET0BiSUZaZl5KZl66nntRZoo7yGil2FoAUEsBAi0AFAAACAgAABAh7CAe1MdeAgAAFwUAAAsAJAAAAAAAAAAAAAAAAAAAAGdyYXBoMC5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsBAi0AFAAACAgAABAh7Jlj/3htAAAAeAAAAAkAJAAAAAAAAAAAAAAAqwIAAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLBQYAAAAAAgACALgAAABjAwAAAAA=
     upgradeData: 
     file_cachedStartup: {fileID: 4900000, guid: e19a5e5fd10c07242beb943e1f47352b, type: 3}
     data_cachedStartup: 
-    cacheStartup: 1
+    cacheStartup: 0
   showNavGraphs: 1
   showUnwalkableNodes: 1
   debugMode: 0
@@ -3311,7 +3311,10 @@ MonoBehaviour:
   continueHint: {fileID: 1843148610}
   typewriterDelay: 0.032
   dialogueSets:
-  - {fileID: 11400000, guid: e1dbeef94cfbbb04baef383d7aea1b00, type: 2}
+  - {fileID: 11400000, guid: 5644c2c5471e696439537b1b7bfdecdc, type: 2}
+  - {fileID: 11400000, guid: af5ab842a701e55468a67cf269591179, type: 2}
+  - {fileID: 11400000, guid: e875aecb3a054f347ae030e3c217dff6, type: 2}
+  loopDialogues: 0
 --- !u!4 &1050824764
 Transform:
   m_ObjectHideFlags: 0
@@ -3617,7 +3620,7 @@ GameObject:
   - component: {fileID: 1478872047}
   - component: {fileID: 1478872046}
   m_Layer: 0
-  m_Name: Npc
+  m_Name: SonNPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3672,7 +3675,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -2770708275315003107, guid: 5948f4b608813f6429a7e0dcc8424f22, type: 3}
+  m_Sprite: {fileID: -5043485039180064207, guid: 6bc1019eda237ad4f8f44a7c8837748b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3759,9 +3762,9 @@ MonoBehaviour:
   targetCompatibility: {fileID: 0}
   maxAcceleration: -2.5
   rotationSpeed: 360
-  slowdownDistance: 0.6
-  pickNextWaypointDist: 2
-  endReachedDistance: 0.2
+  slowdownDistance: 0.25
+  pickNextWaypointDist: 0.25
+  endReachedDistance: 0.15
   alwaysDrawGizmos: 1
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0
@@ -5000,7 +5003,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 2.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

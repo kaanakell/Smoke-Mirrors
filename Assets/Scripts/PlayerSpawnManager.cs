@@ -6,21 +6,28 @@ using UnityEngine.UI;
 public class PlayerSpawnManager : MonoBehaviour
 {
     public static PlayerSpawnManager Instance { get; private set; }
+
     public static string NextSpawnID = "default";
+
+    [Header("Spawn IDs")]
+    [Tooltip("SpawnPoint.spawnID used only on the very first scene load. " +
+             "Place a SpawnPoint with this ID in your starting scene (Bathroom).")]
+    [SerializeField] private string gameStartSpawnID = "game_start";
 
     [SerializeField] private Image fadeImage;
     [SerializeField] private float fadeInDuration = 0.5f;
 
-    void Awake()
+    private bool _isFirstLoad = true;
+
+    private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
@@ -47,34 +54,13 @@ public class PlayerSpawnManager : MonoBehaviour
             yield break;
         }
 
+        string targetID = _isFirstLoad ? gameStartSpawnID : NextSpawnID;
+        _isFirstLoad = false;
+
         SpawnPoint[] points = FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None);
-        SpawnPoint target = null;
-
-        foreach (var sp in points)
-        {
-            if (sp.spawnID == NextSpawnID)
-            {
-                target = sp;
-                break;
-            }
-        }
-
-        if (target == null && points.Length > 0)
-        {
-            foreach (var sp in points)
-            {
-                if (sp.spawnID == "default")
-                {
-                    target = sp;
-                    break;
-                }
-            }
-        }
-
-        if (target == null && points.Length > 0)
-        {
-            target = points[0];
-        }
+        SpawnPoint target = FindSpawnPoint(points, targetID)
+                           ?? FindSpawnPoint(points, "default")
+                           ?? (points.Length > 0 ? points[0] : null);
 
         if (pc != null && target != null)
         {
@@ -85,13 +71,19 @@ public class PlayerSpawnManager : MonoBehaviour
         yield return StartCoroutine(FadeIn());
     }
 
+    private static SpawnPoint FindSpawnPoint(SpawnPoint[] points, string id)
+    {
+        foreach (var sp in points)
+            if (sp != null && sp.spawnID == id) return sp;
+        return null;
+    }
+
     private IEnumerator FadeIn()
     {
         if (fadeImage == null) yield break;
 
         Color c = fadeImage.color;
-        c.a = 1f;
-        fadeImage.color = c;
+        c.a = 1f; fadeImage.color = c;
 
         float elapsed = 0f;
         while (elapsed < fadeInDuration)
@@ -101,8 +93,7 @@ public class PlayerSpawnManager : MonoBehaviour
             fadeImage.color = c;
             yield return null;
         }
-        c.a = 0f;
-        fadeImage.color = c;
+        c.a = 0f; fadeImage.color = c;
     }
 
     public IEnumerator FadeOut(float duration)
@@ -117,7 +108,6 @@ public class PlayerSpawnManager : MonoBehaviour
             fadeImage.color = c;
             yield return null;
         }
-        c.a = 1f;
-        fadeImage.color = c;
+        c.a = 1f; fadeImage.color = c;
     }
 }

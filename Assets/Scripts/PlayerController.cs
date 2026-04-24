@@ -6,9 +6,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkSpeed = 3f;
     [SerializeField] private float sprintSpeed = 5.5f;
 
-    [Header("Animation Parameter Names")]
-    [SerializeField] private string animMoveX = "MoveX";
-    [SerializeField] private string animMoveY = "MoveY";
+    [Header("Animator Parameter Names")]
+    [Tooltip("Int parameter: 0=Down  1=Up  2=Left  3=Right")]
+    [SerializeField] private string animDirection = "Direction";
+    [Tooltip("Float parameter: 0 = idle, 1 = moving")]
     [SerializeField] private string animSpeed = "Speed";
 
     private Rigidbody2D _rb;
@@ -16,9 +17,14 @@ public class PlayerController : MonoBehaviour
     private Vector2 _input;
     private Vector2 _lastDir = Vector2.down;
 
-    public bool MovementLocked {get; set;} = false;
+    public bool MovementLocked { get; set; } = false;
 
-    void Awake()
+    private const int DIR_DOWN = 0;
+    private const int DIR_UP = 1;
+    private const int DIR_LEFT = 2;
+    private const int DIR_RIGHT = 3;
+
+    private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
@@ -27,9 +33,9 @@ public class PlayerController : MonoBehaviour
         _rb.freezeRotation = true;
     }
 
-    void Update()
+    private void Update()
     {
-        if(MovementLocked)
+        if (MovementLocked)
         {
             _input = Vector2.zero;
             return;
@@ -39,32 +45,38 @@ public class PlayerController : MonoBehaviour
         _input.y = Input.GetAxisRaw("Vertical");
         _input.Normalize();
 
-        if(_input != Vector2.zero)
-        {
+        if (_input != Vector2.zero)
             _lastDir = _input;
-        }
 
         UpdateAnimator();
     }
 
     private void FixedUpdate()
     {
-        if(MovementLocked)
+        if (MovementLocked)
         {
             _rb.linearVelocity = Vector2.zero;
             return;
         }
 
-        bool isSprinting = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        float speed = isSprinting ? sprintSpeed : walkSpeed;
-        _rb.linearVelocity = _input * speed;
+        bool sprinting = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        _rb.linearVelocity = _input * (sprinting ? sprintSpeed : walkSpeed);
     }
 
     private void UpdateAnimator()
     {
-        _anim.SetFloat(animMoveX, _lastDir.x);
-        _anim.SetFloat(animMoveY, _lastDir.y);
+        if (_anim == null) return;
+
         _anim.SetFloat(animSpeed, _input.magnitude);
+        _anim.SetInteger(animDirection, GetDirectionInt(_lastDir));
+    }
+
+    private static int GetDirectionInt(Vector2 dir)
+    {
+        if (Mathf.Abs(dir.y) > Mathf.Abs(dir.x))
+            return dir.y > 0 ? DIR_UP : DIR_DOWN;
+        else
+            return dir.x > 0 ? DIR_RIGHT : DIR_LEFT;
     }
 
     public Vector2 FacingDirection => _lastDir;

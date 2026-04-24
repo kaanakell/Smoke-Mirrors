@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24774d76f51644a42abcb2523a480aa1, type: 3}
+  m_Name: Hammer
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: Hammer
+  description: Picking up a tool
+  worldSprite: {fileID: -7229485439947937107, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
+  inventorySprite: {fileID: -7229485439947937107, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
+  memoryText: I promised to fix up the treehouse by summer
+  memoryBackground: {fileID: 0}
+  pickupSound: {fileID: 8300000, guid: 6c7870ebda321804b9ff7d6d8ff63ea7, type: 3}
+  canTriggerMindForest: 0

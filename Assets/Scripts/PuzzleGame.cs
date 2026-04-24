@@ -13,44 +13,34 @@ public class PuzzleGame : MonoBehaviour
     [SerializeField] private RectTransform pieceContainer;
 
     [Header("Puzzle Image")]
-    [Tooltip("Sprite to slice. Texture does NOT need Read/Write enabled.")]
     [SerializeField] private Sprite puzzleSprite;
 
     [Range(2, 10)]
     [SerializeField] private int pieceCount = 6;
 
     [Header("Piece Prefab")]
-    [Tooltip("RawImage + PuzzlePiece. See wiring steps in script header.")]
     [SerializeField] private GameObject piecePrefab;
 
     [Header("Piece Size")]
-    [Tooltip("Display size per piece in canvas pixels. " +
-             "Set to (containerWidth / cols, containerHeight / rows). " +
-             "E.g. 600×400 container, 3×2 grid → 200×200.")]
+    [Tooltip("(containerWidth / cols, containerHeight / rows).")]
     [SerializeField] private Vector2 pieceSize = new Vector2(160f, 160f);
 
     [Header("Scatter & Snap")]
-    [Tooltip("Scatter radius for initial piece placement. " +
-             "Should be LARGER than pieceSize so pieces aren't already touching.")]
     [SerializeField] private float scatterRadius = 350f;
-
-    [Tooltip("Max centre-to-centre distance (canvas px) for a snap attempt.")]
     [SerializeField] private float snapProximityThreshold = 110f;
 
-    [Tooltip("Colour similarity 0–1. Lower = stricter. Recommended 0.25–0.35.")]
     [Range(0f, 1f)]
     [SerializeField] private float colorSnapThreshold = 0.28f;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI statusText;
-    [Tooltip("Brief text that pops up when a colour match happens, e.g. 'Colour match!'. " +
-             "Position it centered near the top of PieceContainer.")]
     [SerializeField] private TextMeshProUGUI colourMatchText;
     [SerializeField] private Button closeButton;
 
     private readonly Dictionary<PuzzlePiece, List<PuzzlePiece>> _pieceToGroup = new();
     private readonly List<PuzzlePiece> _allPieces = new();
     private int _snapCount;
+    private bool _completed;
 
     private PlayerController _player;
     private Coroutine _matchTextCoroutine;
@@ -65,19 +55,20 @@ public class PuzzleGame : MonoBehaviour
 
     private void Start()
     {
-        closeButton?.onClick.AddListener(CloseGame);
+        closeButton?.onClick.AddListener(CompletedByPlayer);
     }
 
     private void Update()
     {
         if (panel == null || !panel.activeSelf) return;
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace))
-            CloseGame();
+            CompletedByPlayer();
     }
 
     public void OpenGame(Sprite overrideSprite = null)
     {
         _player = FindFirstObjectByType<PlayerController>();
+        _completed = false;
         if (_player != null) _player.MovementLocked = true;
 
         if (overrideSprite != null) puzzleSprite = overrideSprite;
@@ -86,65 +77,77 @@ public class PuzzleGame : MonoBehaviour
         BuildPuzzle();
     }
 
-    public void CloseGame()
+    public void CompletedByPlayer()
     {
+        if (_completed) return;
+        _completed = true;
+        CloseGame();
+        ItemProgressionManager.Instance?.ReportMiniGameCompleted();
+    }
+
+    private void CloseGame()
+    {
+        if (_matchTextCoroutine != null) StopCoroutine(_matchTextCoroutine);
         DestroyPieces();
         if (panel != null) panel.SetActive(false);
         if (_player != null) { _player.MovementLocked = false; _player = null; }
     }
 
-    public List<PuzzlePiece> GetGroup(PuzzlePiece piece)
-    {
-        return _pieceToGroup.TryGetValue(piece, out var g) ? g : new List<PuzzlePiece> { piece };
-    }
+    public List<PuzzlePiece> GetGroup(PuzzlePiece piece) =>
+        _pieceToGroup.TryGetValue(piece, out var g) ? g : new List<PuzzlePiece> { piece };
 
     public void TrySnap(PuzzlePiece dropped)
     {
-        List<PuzzlePiece> droppedGroup = GetGroup(dropped);
-
-        PuzzlePiece bestCandidate = null;
+        var droppedGroup = GetGroup(dropped);
+        PuzzlePiece best = null;
         float bestScore = float.MaxValue;
 
         foreach (var other in _allPieces)
         {
             if (GetGroup(other) == droppedGroup) continue;
-
-            float dist = Vector2.Distance(
-                dropped.Rt.localPosition, other.Rt.localPosition);
-
+            float dist = Vector2.Distance(dropped.Rt.localPosition, other.Rt.localPosition);
             if (dist > snapProximityThreshold) continue;
-
-            float colorDist = ColorDistance(dropped.AverageColor, other.AverageColor);
-            if (colorDist > colorSnapThreshold) continue;
-
-            float score = colorDist * 0.7f + (dist / snapProximityThreshold) * 0.3f;
-            if (score < bestScore) { bestScore = score; bestCandidate = other; }
+            float cd = ColorDistance(dropped.AverageColor, other.AverageColor);
+            if (cd > colorSnapThreshold) continue;
+            float score = cd * 0.7f + (dist / snapProximityThreshold) * 0.3f;
+            if (score < bestScore) { bestScore = score; best = other; }
         }
 
-        if (bestCandidate == null) return;
+        if (best == null) return;
 
-        Vector2 dir = (Vector2)(dropped.Rt.localPosition - bestCandidate.Rt.localPosition);
-        Vector2 snapOffset = Mathf.Abs(dir.x) >= Mathf.Abs(dir.y)
-            ? new Vector2(Mathf.Sign(dir.x) * pieceSize.x, 0f)
-            : new Vector2(0f, Mathf.Sign(dir.y) * pieceSize.y);
+        Vector2 dir = (Vector2)(dropped.Rt.localPosition - best.Rt.localPosition);
+        Vector2 offset = Mathf.Abs(dir.x) >= Mathf.Abs(dir.y)
+                         ? new Vector2(Mathf.Sign(dir.x) * pieceSize.x, 0f)
+                         : new Vector2(0f, Mathf.Sign(dir.y) * pieceSize.y);
 
-        Vector2 positionDelta = ((Vector2)bestCandidate.Rt.localPosition + snapOffset)
-                                - (Vector2)dropped.Rt.localPosition;
+        Vector2 delta = ((Vector2)best.Rt.localPosition + offset) - (Vector2)dropped.Rt.localPosition;
+        foreach (var p in droppedGroup) p.Rt.localPosition += (Vector3)delta;
 
-        foreach (var p in droppedGroup)
-            p.Rt.localPosition += (Vector3)positionDelta;
-
-        Color matchedColor = (dropped.AverageColor + bestCandidate.AverageColor) * 0.5f;
-
-        MergeGroups(bestCandidate, dropped);
-
-        foreach (var p in GetGroup(bestCandidate))
-            p.FlashSnapColor(matchedColor);
-
-        ShowColourMatchCaption(matchedColor);
+        Color matchedColor = (dropped.AverageColor + best.AverageColor) * 0.5f;
+        MergeGroups(best, dropped);
+        foreach (var p in GetGroup(best)) p.FlashSnapColor(matchedColor);
+        ShowColourCaption(matchedColor);
 
         _snapCount++;
         UpdateStatus();
+        CheckAllSnapped();
+    }
+
+    private void CheckAllSnapped()
+    {
+        if (_allPieces.Count < 2) return;
+        var firstGroup = GetGroup(_allPieces[0]);
+        foreach (var p in _allPieces)
+            if (GetGroup(p) != firstGroup) return;
+
+        StartCoroutine(CompletionRoutine());
+    }
+
+    private IEnumerator CompletionRoutine()
+    {
+        if (statusText != null) statusText.text = "Puzzle complete!";
+        yield return new WaitForSeconds(1.2f);
+        CompletedByPlayer();
     }
 
     private void BuildPuzzle()
@@ -156,7 +159,6 @@ public class PuzzleGame : MonoBehaviour
         if (piecePrefab == null) { Debug.LogError("[PuzzleGame] No piece prefab."); return; }
 
         GetGridDimensions(pieceCount, out int cols, out int rows);
-
         Texture2D tex = ExtractReadableTexture(puzzleSprite);
         int cellW = Mathf.Max(1, tex.width / cols);
         int cellH = Mathf.Max(1, tex.height / rows);
@@ -164,30 +166,25 @@ public class PuzzleGame : MonoBehaviour
         for (int r = 0; r < rows; r++)
             for (int c = 0; c < cols; c++)
             {
-                Color[] pixels = tex.GetPixels(c * cellW, r * cellH, cellW, cellH);
-                Color avgColor = ComputeAverageColor(pixels);
+                Color[] px = tex.GetPixels(c * cellW, r * cellH, cellW, cellH);
+                Color avg = ComputeAverageColor(px);
 
-                Texture2D pieceTex = new Texture2D(cellW, cellH, TextureFormat.RGBA32, false)
+                var pieceTex = new Texture2D(cellW, cellH, TextureFormat.RGBA32, false)
                 { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
-                pieceTex.SetPixels(pixels);
+                pieceTex.SetPixels(px);
                 pieceTex.Apply();
 
-                GameObject go = Instantiate(piecePrefab, pieceContainer);
+                var go = Instantiate(piecePrefab, pieceContainer);
                 go.GetComponent<RectTransform>().sizeDelta = pieceSize;
-                go.GetComponent<RectTransform>().localPosition =
-                    (Vector3)(Random.insideUnitCircle * scatterRadius);
+                go.GetComponent<RectTransform>().localPosition = (Vector3)(Random.insideUnitCircle * scatterRadius);
 
                 var img = go.GetComponent<RawImage>();
                 if (img != null) img.texture = pieceTex;
 
                 var piece = go.GetComponent<PuzzlePiece>();
-                if (piece == null)
-                {
-                    Debug.LogError("[PuzzleGame] Piece prefab missing PuzzlePiece component!");
-                    continue;
-                }
+                if (piece == null) { Debug.LogError("[PuzzleGame] PuzzlePiece missing!"); continue; }
 
-                piece.Init(r * cols + c, avgColor, this);
+                piece.Init(r * cols + c, avg, this);
                 _pieceToGroup[piece] = new List<PuzzlePiece> { piece };
                 _allPieces.Add(piece);
             }
@@ -211,53 +208,36 @@ public class PuzzleGame : MonoBehaviour
 
     private void MergeGroups(PuzzlePiece anchor, PuzzlePiece incoming)
     {
-        var anchorGroup = GetGroup(anchor);
-        var incomingGroup = GetGroup(incoming);
-        if (anchorGroup == incomingGroup) return;
-
-        foreach (var p in incomingGroup)
-        {
-            anchorGroup.Add(p);
-            _pieceToGroup[p] = anchorGroup;
-            p.ShowGroupHighlight();
-        }
-        foreach (var p in anchorGroup)
-            p.ShowGroupHighlight();
+        var ag = GetGroup(anchor);
+        var ig = GetGroup(incoming);
+        if (ag == ig) return;
+        foreach (var p in ig) { ag.Add(p); _pieceToGroup[p] = ag; p.ShowGroupHighlight(); }
+        foreach (var p in ag) p.ShowGroupHighlight();
     }
 
-    private void ShowColourMatchCaption(Color matchedColor)
+    private void ShowColourCaption(Color col)
     {
         if (colourMatchText == null) return;
         if (_matchTextCoroutine != null) StopCoroutine(_matchTextCoroutine);
-        _matchTextCoroutine = StartCoroutine(ColourCaptionRoutine(matchedColor));
+        _matchTextCoroutine = StartCoroutine(CaptionRoutine(col));
     }
 
-    private IEnumerator ColourCaptionRoutine(Color col)
+    private IEnumerator CaptionRoutine(Color col)
     {
         colourMatchText.text = "Colour match!";
         colourMatchText.color = new Color(col.r, col.g, col.b, 1f);
         colourMatchText.enabled = true;
-
         yield return new WaitForSeconds(0.15f);
-
-        float duration = 0.8f, elapsed = 0f;
-        Color start = colourMatchText.color;
-        Color end = new Color(start.r, start.g, start.b, 0f);
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            colourMatchText.color = Color.Lerp(start, end, elapsed / duration);
-            yield return null;
-        }
-
+        float t = 0f;
+        Color start = colourMatchText.color, end = new Color(start.r, start.g, start.b, 0f);
+        while (t < 0.8f) { t += Time.deltaTime; colourMatchText.color = Color.Lerp(start, end, t / 0.8f); yield return null; }
         colourMatchText.enabled = false;
         _matchTextCoroutine = null;
     }
 
-    private static void GetGridDimensions(int desired, out int cols, out int rows)
+    private static void GetGridDimensions(int d, out int cols, out int rows)
     {
-        switch (desired)
+        switch (d)
         {
             case 2: cols = 2; rows = 1; break;
             case 3: cols = 3; rows = 1; break;
@@ -301,7 +281,6 @@ public class PuzzleGame : MonoBehaviour
 
     private void UpdateStatus()
     {
-        if (statusText != null)
-            statusText.text = $"{_snapCount} connections made";
+        if (statusText != null) statusText.text = $"{_snapCount} connections made";
     }
 }
