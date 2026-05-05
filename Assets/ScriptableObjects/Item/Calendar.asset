@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Calendar
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Calendar
-  description: Vacation soon
+  description: 
   worldSprite: {fileID: -3831611014773485264, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   inventorySprite: {fileID: -3831611014773485264, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   memoryText: Feels like stuck in the same day

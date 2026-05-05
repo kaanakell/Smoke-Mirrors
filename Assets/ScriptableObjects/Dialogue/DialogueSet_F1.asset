@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: DialogueSet_F1
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Dad
-    text: Where am I ?
   - speaker: Son
-    text: Everywhere but nowhere at the same time.
+    text: Hey, [REDACTED]. The competition just ended, you missed it. Again.
+  - speaker: Father
+    text: What, no?? It was next week?!
   - speaker: Son
-    text: You need to go back now!
+    text: Yeah, last week. You need to start using a calendar, old man.
+  - speaker: Father
+    text: I suppose time passes by faster when you're older...
+  - speaker: Son
+    text: I won 2nd place, by the way. Mom already put the painting up in the bathroom.

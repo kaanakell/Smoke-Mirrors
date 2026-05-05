@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Pills
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Pills
-  description: Popping open the plastic container
+  description: 
   worldSprite: {fileID: 2327921991316684371, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   inventorySprite: {fileID: 2327921991316684371, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   memoryText: Who is this for?
-  memoryBackground: {fileID: 0}
+  memoryBackground: {fileID: 21300000, guid: 471ae44bbaff08e47a4a39baf6598232, type: 3}
   pickupSound: {fileID: 8300000, guid: 1f7954d7aeb12b54aa7fd55d77da05fa, type: 3}
   canTriggerMindForest: 0

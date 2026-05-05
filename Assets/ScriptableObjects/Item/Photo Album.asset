@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Photo Album
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Photo Album
-  description: Page flipping
+  description: 
   worldSprite: {fileID: 8228710460928617017, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   inventorySprite: {fileID: 8228710460928617017, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   memoryText: I recognise this kid. I should go look for him

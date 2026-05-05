@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: DialogueSet_F
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
+  - speaker: Father
+    text: Wooh... So cold today!
   - speaker: Son
-    text: Now you remember?
-  - speaker: Son
-    text: Who you really are!
+    text: Yeah, it's great! Did you see the snowman mom and I made??
+  - speaker: Father
+    text: Hard to miss!

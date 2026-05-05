@@ -14,7 +14,7 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private Color filledColor = Color.white;
 
     private readonly List<InventorySlot> slots = new();
-    private bool initialized = false;
+    private bool initialized = true;
 
     void Start()
     {
@@ -28,7 +28,7 @@ public class InventoryUI : MonoBehaviour
         BuildSlots();
         initialized = true;
 
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     void OnEnable()

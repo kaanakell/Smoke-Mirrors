@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Radio
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Radio
-  description: Talking gibberish
+  description: 
   worldSprite: {fileID: -6623177961951910335, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   inventorySprite: {fileID: -6623177961951910335, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   memoryText: The weather report is good! It will be nice to work today

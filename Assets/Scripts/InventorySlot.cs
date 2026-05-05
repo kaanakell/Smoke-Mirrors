@@ -12,7 +12,6 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     void Awake()
     {
         image = GetComponent<Image>();
-        // Grab the TMP child automatically — no manual wiring needed
         nameText = GetComponentInChildren<TextMeshProUGUI>();
 
         if (nameText != null)

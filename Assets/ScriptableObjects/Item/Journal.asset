@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Journal
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Journal
-  description: Scribbling noise
+  description: 
   worldSprite: {fileID: 1151937065642169563, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   inventorySprite: {fileID: 1151937065642169563, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   memoryText: I don't remember eating...
