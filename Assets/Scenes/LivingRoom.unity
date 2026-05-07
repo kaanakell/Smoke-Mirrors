@@ -2363,9 +2363,10 @@ MonoBehaviour:
   cursorDot: {fileID: 1648449451}
   instructionText: {fileID: 1861839094}
   clearAllButton: {fileID: 274982998}
-  paperTakeDelay: 10
-  takePaperDialogue: {fileID: 0}
-  afterPaperDialogue: {fileID: 0}
+  doneButton: {fileID: 0}
+  drawingTimeLimitSec: 30
+  timerText: {fileID: 0}
+  timerShowBelowSec: 10
   inkColor: {r: 0.08, g: 0.04, b: 0, a: 1}
   brushRadius: 5
   eraserRadius: 12
@@ -5825,20 +5826,20 @@ MonoBehaviour:
   patrolSpeed: 1.4
   waypointRadius: 0.3
   approachSpeed: 2.2
-  leadSpeed: 1.6
   stopDistance: 1.2
   lockRadius: 2
   returnSpeed: 2.4
-  runAwaySpeed: 3.5
-  runAwaySpot: {fileID: 1171115645}
+  miniGameWaypoint: {fileID: 335135520}
+  leadSpeed: 1.6
   dialoguePanel: {fileID: 1547128511}
   speakerText: {fileID: 333813507}
   bodyText: {fileID: 1386105741}
   continueHint: {fileID: 740649803}
   typewriterDelay: 0.032
-  sonLabel: SON
-  pcLabel: YOU
-  approachDialogue: {fileID: 0}
+  defaultSpeaker: SON
+  introDialogue: {fileID: 11400000, guid: 4c94c1931f2dad340a63a049e3d92c99, type: 2}
+  itemCollectionDialogue: {fileID: 11400000, guid: af94e937f667db54cade2cbabc2bcb9b, type: 2}
+  postMiniGameDialogue: {fileID: 11400000, guid: 260b9f053acab33419eaed2f335020b7, type: 2}
 --- !u!58 &1378083626
 CircleCollider2D:
   m_ObjectHideFlags: 0

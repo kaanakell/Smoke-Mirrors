@@ -10,6 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9f02430c91bfa74cb94cc69190b898e, type: 3}
-  m_Name: PuzzleGameIntroDialogue
+  m_Name: ItemCollectionDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
-  lines: []
+  lines:
+  - speaker: Son
+    text: Follow me dad, let's do something together!

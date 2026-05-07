@@ -127,16 +127,27 @@ public class ItemProgressionManager : MonoBehaviour
 
     private IEnumerator DelayedSonApproach()
     {
+        // Wait for the initial delay so the scene can settle
         yield return new WaitForSeconds(sonApproachDelay);
 
         if (_sonNpc == null)
             _sonNpc = FindFirstObjectByType<SonNPC>();
 
+        // NEW LOGIC: If the Son is currently busy (like doing the intro dialogue), 
+        // wait patiently in a loop until he returns to his Patrol state.
+        while (_sonNpc != null && !_sonNpc.IsAvailable)
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+
         if (_sonNpc != null)
         {
+            // Now that we know he's free, clear the pending flag and trigger the event!
             _approachPending = false;
             _approachCoroutine = null;
-            _sonNpc.TriggerApproach();
+
+            _sonNpc.TriggerItemThresholdApproach(); // Use the specific item method
+
             Debug.Log("[Progression] Son approach triggered successfully.");
         }
         else
