@@ -18,5 +18,5 @@ MonoBehaviour:
   inventorySprite: {fileID: -7670987969367937217, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
   memoryText: I promised to fix up the treehouse by summer
   memoryBackground: {fileID: 21300000, guid: 41700ad02e31e04499a72971b036e66a, type: 3}
-  pickupSound: {fileID: 8300000, guid: 6c7870ebda321804b9ff7d6d8ff63ea7, type: 3}
+  pickupSound: {fileID: 8300000, guid: 8c7cc4f297776fe4780a34e105e95791, type: 3}
   canTriggerMindForest: 0

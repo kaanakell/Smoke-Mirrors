@@ -19,4 +19,4 @@ MonoBehaviour:
   memoryText: The weather report is good! It will be nice to work today
   memoryBackground: {fileID: 0}
   pickupSound: {fileID: 8300000, guid: 8d024d54c10e26542b3748c3da711199, type: 3}
-  canTriggerMindForest: 1
+  canTriggerMindForest: 0

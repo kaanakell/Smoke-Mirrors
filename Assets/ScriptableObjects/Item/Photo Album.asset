@@ -18,5 +18,5 @@ MonoBehaviour:
   inventorySprite: {fileID: 8228710460928617017, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
   memoryText: I recognise this kid. I should go look for him
   memoryBackground: {fileID: 21300000, guid: 320af3d42ebdd1d4f94b8c4c91e7aa57, type: 3}
-  pickupSound: {fileID: 8300000, guid: 6c6f566f6f31e1c44bc7557ef7940989, type: 3}
-  canTriggerMindForest: 1
+  pickupSound: {fileID: 8300000, guid: 8315649d6a4f5c64a87c3a55c58ee23f, type: 3}
+  canTriggerMindForest: 0

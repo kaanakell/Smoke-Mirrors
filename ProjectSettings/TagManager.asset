@@ -6,6 +6,7 @@ TagManager:
   tags:
   - InventoryPanel
   - PromptUI
+  - SonCryingZone
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - UI
   - Interactable
   - Collider
-  - 
+  - Son
   - 
   - 
   - 
