@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Radio
   description: 
-  worldSprite: {fileID: -6623177961951910335, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
-  inventorySprite: {fileID: -6623177961951910335, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
+  worldSprite: {fileID: -8058838277252969893, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
+  inventorySprite: {fileID: -8058838277252969893, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
   memoryText: The weather report is good! It will be nice to work today
   memoryBackground: {fileID: 0}
   pickupSound: {fileID: 8300000, guid: 8d024d54c10e26542b3748c3da711199, type: 3}

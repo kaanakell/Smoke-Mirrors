@@ -27,13 +27,6 @@ public class MindForestManager : MonoBehaviour
     [Tooltip("Drag the Winter, Spring and Summer Tilemap in order")]
     [SerializeField] private GameObject[] seasonalLayouts;
 
-    [Header("Dialogue UI")]
-    [SerializeField] private GameObject dialoguePanel;
-    [SerializeField] private TextMeshProUGUI speakerText;
-    [SerializeField] private TextMeshProUGUI bodyText;
-    [SerializeField] private GameObject continueHint;
-    [SerializeField] private float typewriterDelay = 0.032f;
-
     [Header("Dialogue Sets  (one per visit, in order)")]
     [Tooltip("Each element is used for the corresponding forest visit.\n" +
              "Visit 1 → index 0,  Visit 2 → index 1, etc.\n" +
@@ -46,10 +39,8 @@ public class MindForestManager : MonoBehaviour
     [SerializeField] private bool loopDialogues = false;
 
     private List<DialogueLine> _lines;
-    private int _lineIndex;
     private bool _dialogueActive;
     private bool _canAdvance;
-    private Coroutine _typeCoroutine;
     private SpriteRenderer _npcSr;
     private PlayerController _player;
 
@@ -71,10 +62,6 @@ public class MindForestManager : MonoBehaviour
             }
         }
 
-        // 2. Setup NPC and UI
-        dialoguePanel.SetActive(false);
-        if (continueHint != null) continueHint.SetActive(false);
-
         _npcSr = npc != null ? npc.GetComponent<SpriteRenderer>() : null;
 
         if (npc != null)
@@ -95,10 +82,6 @@ public class MindForestManager : MonoBehaviour
     private void Update()
     {
         if (!_dialogueActive || !_canAdvance) return;
-        if (Input.GetKeyDown(KeyCode.Space) ||
-            Input.GetKeyDown(KeyCode.Return) ||
-            Input.GetMouseButtonDown(0))
-            AdvanceDialogue();
     }
 
     private List<DialogueLine> BuildDialogueForThisVisit()
@@ -137,7 +120,7 @@ public class MindForestManager : MonoBehaviour
 
         yield return new WaitForSeconds(timeBeforeNpcApproaches);
 
-        //StartCoroutine(FadeNpc(0f, 1f, npcFadeInDuration));
+        StartCoroutine(FadeNpc(0f, 1f, npcFadeInDuration));
         yield return StartCoroutine(NpcApproach());
 
         yield return new WaitForSeconds(0.4f);
@@ -207,7 +190,7 @@ public class MindForestManager : MonoBehaviour
 
     private IEnumerator NpcDepart()
     {
-        StartCoroutine(FadeNpc(1f, 0f, npcFadeInDuration));
+        //StartCoroutine(FadeNpc(1f, 0f, npcFadeInDuration));
 
         var ai = npc != null ? npc.GetComponent<AIPath>() : null;
         bool graphReady = AstarPath.active != null && AstarPath.active.graphs?.Length > 0;
@@ -252,47 +235,16 @@ public class MindForestManager : MonoBehaviour
 
     private void BeginDialogue()
     {
-        LockPlayer();
-        _dialogueActive = true;
-        _lineIndex = 0;
-        dialoguePanel.SetActive(true);
-        ShowLine(0);
-    }
+        // Figure out which dialogue set to use based on the visit count
+        int index = _visitCount % dialogueSets.Length;
+        DialogueSet currentSet = dialogueSets[index];
 
-    private void ShowLine(int index)
-    {
-        _canAdvance = false;
-        if (continueHint != null) continueHint.SetActive(false);
-        speakerText.text = _lines[index].speaker;
-        bodyText.text = string.Empty;
-        if (_typeCoroutine != null) StopCoroutine(_typeCoroutine);
-        _typeCoroutine = StartCoroutine(TypewriterRoutine(_lines[index].text));
-    }
-
-    private IEnumerator TypewriterRoutine(string fullText)
-    {
-        foreach (char c in fullText)
+        // Start the dialogue using our global manager!
+        // When it finishes, it will automatically run the EndSequence coroutine.
+        DialogueManager.Instance.StartDialogue(currentSet, () =>
         {
-            bodyText.text += c;
-            yield return new WaitForSeconds(typewriterDelay);
-        }
-        _canAdvance = true;
-        if (continueHint != null) continueHint.SetActive(true);
-    }
-
-    private void AdvanceDialogue()
-    {
-        _lineIndex++;
-        if (_lineIndex >= _lines.Count)
-        {
-            _dialogueActive = false;
-            dialoguePanel.SetActive(false);
             StartCoroutine(EndSequence());
-        }
-        else
-        {
-            ShowLine(_lineIndex);
-        }
+        });
     }
 
     private IEnumerator EndSequence()

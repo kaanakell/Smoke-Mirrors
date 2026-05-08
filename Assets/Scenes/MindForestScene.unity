@@ -5524,8 +5524,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -7.0455}
-  m_SizeDelta: {x: 1920, y: 147.91}
+  m_AnchoredPosition: {x: 172.25378, y: -7.0455017}
+  m_SizeDelta: {x: 1575.4924, y: 147.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &783572892
 MonoBehaviour:
@@ -8040,6 +8040,59 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1004853287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1004853289}
+  - component: {fileID: 1004853288}
+  m_Layer: 0
+  m_Name: DialogueManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1004853288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1004853287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b2c88347e3b56841839655a13a81184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
+  dialoguePanel: {fileID: 1644696315}
+  dialogueBoxBackground: {fileID: 1119522043}
+  speakerNameText: {fileID: 1443934908}
+  dialogueBodyText: {fileID: 783572892}
+  continuePrompt: {fileID: 1843148610}
+  pcBoxSprite: {fileID: 21300000, guid: 507f3ca6f6a99214084e71fa58af99e1, type: 3}
+  sonBoxSprite: {fileID: 21300000, guid: 471be7ba2afa86d4eb5f105e5c9a26d9, type: 3}
+  defaultBoxSprite: {fileID: 21300000, guid: 4349ec37594a9f24197d2f2d67730c1b, type: 3}
+  typeSpeed: 0.03
+--- !u!4 &1004853289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1004853287}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.29033, y: -0.10541, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1025599549
 GameObject:
   m_ObjectHideFlags: 0
@@ -8238,11 +8291,6 @@ MonoBehaviour:
   - {fileID: 744530457}
   - {fileID: 1236012855}
   - {fileID: 691265776}
-  dialoguePanel: {fileID: 1119522041}
-  speakerText: {fileID: 1443934908}
-  bodyText: {fileID: 783572892}
-  continueHint: {fileID: 1843148610}
-  typewriterDelay: 0.032
   dialogueSets:
   - {fileID: 11400000, guid: 5644c2c5471e696439537b1b7bfdecdc, type: 2}
   - {fileID: 11400000, guid: af5ab842a701e55468a67cf269591179, type: 2}
@@ -8316,7 +8364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.9098039}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -10316,7 +10364,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 344.51, y: 0}
   m_SizeDelta: {x: 261.4544, y: 102}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1443934908
@@ -11419,3 +11467,4 @@ SceneRoots:
   - {fileID: 1790412358}
   - {fileID: 1219896685}
   - {fileID: 240222627}
+  - {fileID: 1004853289}

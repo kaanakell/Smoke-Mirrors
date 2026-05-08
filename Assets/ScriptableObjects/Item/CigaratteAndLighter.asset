@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Cigaratte&Lighter
   description: 
-  worldSprite: {fileID: -4895323949962977134, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
-  inventorySprite: {fileID: -4895323949962977134, guid: 87c950813af06374e83c0b5493b18ecb, type: 3}
+  worldSprite: {fileID: 1997007029544330531, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
+  inventorySprite: {fileID: 1997007029544330531, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
   memoryText: Decades old familiar taste
   memoryBackground: {fileID: 21300000, guid: 7f4c8069c3d308549aefc075db8d7c9d, type: 3}
   pickupSound: {fileID: 8300000, guid: 2177cbb157f0f7846b04ebea5f6b9cab, type: 3}

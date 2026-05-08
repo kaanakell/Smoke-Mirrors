@@ -28,16 +28,6 @@ public class SonNPC : MonoBehaviour
     [SerializeField] private Transform[] miniGameWaypoints;
     [SerializeField] private float leadSpeed = 1.8f;
 
-    // ── Dialogue UI ───────────────────────────────────────────────────────────
-    [Header("Dialogue UI")]
-    [SerializeField] private GameObject dialoguePanel;
-    [SerializeField] private TextMeshProUGUI speakerText;
-    [SerializeField] private TextMeshProUGUI bodyText;
-    [SerializeField] private GameObject continueHint;
-    [SerializeField] private float typewriterDelay = 0.032f;
-    [Tooltip("Fallback speaker label when a DialogueLine's speaker field is left blank.")]
-    [SerializeField] private string defaultSpeaker = "SON";
-
     // ── Dialogue Sets ─────────────────────────────────────────────────────────
     [Header("Dialogue Sets")]
     [Tooltip("Plays when the Son first approaches the player in the living room.")]
@@ -58,14 +48,6 @@ public class SonNPC : MonoBehaviour
     private PlayerController _player;
     private int _patrolIndex = 0;
     private Vector3 _returnTarget;
-
-    // Dialogue runtime
-    private bool _dialogueActive;
-    private bool _canAdvance;
-    private int _lineIndex;
-    private Coroutine _typeCoroutine;
-    private DialogueSet _activeSet;
-    private System.Action _onDialogueComplete;
     private int _currentGameIndex = 0;
 
     public bool IsAvailable => _state == State.Patrol;
@@ -80,9 +62,6 @@ public class SonNPC : MonoBehaviour
         _aStarAvailable = _ai != null
                           && AstarPath.active != null
                           && AstarPath.active.graphs?.Length > 0;
-
-        if (dialoguePanel != null) dialoguePanel.SetActive(false);
-        if (continueHint != null) continueHint.SetActive(false);
     }
 
     private void OnEnable()
@@ -118,7 +97,7 @@ public class SonNPC : MonoBehaviour
         switch (_state)
         {
             case State.Patrol: UpdatePatrol(); break;
-            case State.Talk: UpdateDialogue(); break;
+            case State.Talk: break; // Do nothing, DialogueManager handles input
         }
     }
 
@@ -145,13 +124,13 @@ public class SonNPC : MonoBehaviour
     public void TriggerCustomApproach(DialogueSet customDialogue, System.Action onComplete)
     {
         if (!IsAvailable) return;
-        
+
         StopAllCoroutines();
-        StartCoroutine(ApproachThenTalk(customDialogue, () => 
+        StartCoroutine(ApproachThenTalk(customDialogue, () =>
         {
             // Trigger whatever the item wants to do (like removing it from inventory)
             onComplete?.Invoke();
-            
+
             // Go back to walking around
             StartCoroutine(ReturnRoutine());
         }));
@@ -294,77 +273,23 @@ public class SonNPC : MonoBehaviour
             return;
         }
 
-        _state = State.Talk;
-        _activeSet = set;
-        _onDialogueComplete = onComplete;
-        _lineIndex = 0;
-        _dialogueActive = true;
+        _state = State.Talk; // Mark the Son as busy talking
 
-        if (dialoguePanel != null) dialoguePanel.SetActive(true);
-        ShowLine(0);
-    }
-
-    private void ShowLine(int index)
-    {
-        _canAdvance = false;
-        if (continueHint != null) continueHint.SetActive(false);
-
-        DialogueLine line = _activeSet.lines[index];
-
-        if (speakerText != null)
-            speakerText.text = string.IsNullOrWhiteSpace(line.speaker) ? defaultSpeaker : line.speaker;
-
-        if (bodyText != null)
-            bodyText.text = string.Empty;
-
-        if (_typeCoroutine != null) StopCoroutine(_typeCoroutine);
-        _typeCoroutine = StartCoroutine(TypewriterRoutine(line.text));
-    }
-
-    private IEnumerator TypewriterRoutine(string text)
-    {
-        if (text == null) text = string.Empty;
-        foreach (char c in text)
+        // Call the new global manager
+        if (DialogueManager.Instance != null)
         {
-            if (bodyText != null) bodyText.text += c;
-            yield return new WaitForSeconds(typewriterDelay);
+            DialogueManager.Instance.StartDialogue(set, () =>
+            {
+                UnlockPlayer();
+                onComplete?.Invoke();
+            });
         }
-        _canAdvance = true;
-        if (continueHint != null) continueHint.SetActive(true);
-    }
-
-    private void UpdateDialogue()
-    {
-        if (!_dialogueActive || !_canAdvance) return;
-
-        if (Input.GetKeyDown(KeyCode.Space) ||
-            Input.GetKeyDown(KeyCode.Return) ||
-            Input.GetMouseButtonDown(0))
-        {
-            AdvanceDialogue();
-        }
-    }
-
-    private void AdvanceDialogue()
-    {
-        _lineIndex++;
-        if (_lineIndex >= _activeSet.lines.Length)
-            FinishDialogue();
         else
-            ShowLine(_lineIndex);
-    }
-
-    private void FinishDialogue()
-    {
-        _dialogueActive = false;
-        if (dialoguePanel != null) dialoguePanel.SetActive(false);
-
-        UnlockPlayer();
-
-        // Fire the chained callback (e.g. LeadToGame or Return)
-        System.Action callback = _onDialogueComplete;
-        _onDialogueComplete = null;
-        callback?.Invoke();
+        {
+            Debug.LogWarning("[SonNPC] DialogueManager missing! Skipping dialogue.");
+            UnlockPlayer();
+            onComplete?.Invoke();
+        }
     }
 
     // =========================================================================
@@ -410,7 +335,7 @@ public class SonNPC : MonoBehaviour
             }
             PauseAI();
             _state = State.Patrol;
-            if(_state == State.Patrol)
+            if (_state == State.Patrol)
             {
                 StartCoroutine(ReturnRoutine());
             }
