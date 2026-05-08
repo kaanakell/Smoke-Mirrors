@@ -1216,7 +1216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: 6b54fcf28964a144a95949a580567a26, type: 2}
-  unlockStageIndex: 2
+  unlockStageIndex: 3
   bobAmplitude: 0.06
   bobSpeed: 1.5
 --- !u!114 &249401487
@@ -1906,12 +1906,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 335135519}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.138, y: -1.176, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.21185005, y: 0.016490102, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1560049937}
+  m_Father: {fileID: 592671808}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &335135521
 MonoBehaviour:
@@ -2364,9 +2364,9 @@ MonoBehaviour:
   instructionText: {fileID: 1861839094}
   clearAllButton: {fileID: 274982998}
   doneButton: {fileID: 0}
-  drawingTimeLimitSec: 30
+  drawingTimeLimitSec: 10
   timerText: {fileID: 0}
-  timerShowBelowSec: 10
+  timerShowBelowSec: 5
   inkColor: {r: 0.08, g: 0.04, b: 0, a: 1}
   brushRadius: 5
   eraserRadius: 12
@@ -2504,6 +2504,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnPoint
   spawnID: LivingRoom
+--- !u!1 &501284069
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 501284070}
+  - component: {fileID: 501284071}
+  m_Layer: 0
+  m_Name: MemoryMatch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &501284070
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501284069}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.6386, y: 1.89515, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 982522805}
+  m_Father: {fileID: 1861671181}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &501284071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501284069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d87adde82196f5a4eb054e68d98ecce5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MiniGameStageObject
+  activationStage: 1
 --- !u!1 &545385352
 GameObject:
   m_ObjectHideFlags: 0
@@ -2582,6 +2628,52 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5210862, y: 1.2438192}
   m_EdgeRadius: 0
+--- !u!1 &592671807
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 592671808}
+  - component: {fileID: 592671809}
+  m_Layer: 0
+  m_Name: Clock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &592671808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592671807}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.6386, y: 1.89515, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 335135520}
+  m_Father: {fileID: 1861671181}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &592671809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592671807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d87adde82196f5a4eb054e68d98ecce5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MiniGameStageObject
+  activationStage: 0
 --- !u!1 &614780761
 GameObject:
   m_ObjectHideFlags: 0
@@ -3969,10 +4061,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 166161273}
   - {fileID: 462186432}
   - {fileID: 1850888468}
   - {fileID: 866617119}
-  - {fileID: 166161273}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4177,12 +4269,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 982522804}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.14, y: -2.73, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.06615, y: -1.5375099, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1560049937}
+  m_Father: {fileID: 501284070}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &982522806
 CircleCollider2D:
@@ -4856,7 +4948,7 @@ GameObject:
   - component: {fileID: 1119035963}
   - component: {fileID: 1119035962}
   - component: {fileID: 1119035961}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: "Portra\u0131t"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4967,7 +5059,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: 7a2e494be43a41c44b0f669b544404ac, type: 2}
-  unlockStageIndex: 1
+  unlockStageIndex: 3
   bobAmplitude: 0.06
   bobSpeed: 1.5
 --- !u!61 &1119035963
@@ -5829,7 +5921,10 @@ MonoBehaviour:
   stopDistance: 1.2
   lockRadius: 2
   returnSpeed: 2.4
-  miniGameWaypoint: {fileID: 335135520}
+  miniGameWaypoints:
+  - {fileID: 335135520}
+  - {fileID: 982522805}
+  - {fileID: 1450402861}
   leadSpeed: 1.6
   dialoguePanel: {fileID: 1547128511}
   speakerText: {fileID: 333813507}
@@ -6485,7 +6580,7 @@ GameObject:
   - component: {fileID: 1434938088}
   - component: {fileID: 1434938089}
   m_Layer: 0
-  m_Name: DoorToBathroom
+  m_Name: DoorToCorridor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6519,7 +6614,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomTransition
   targetScene: Corridor
-  spawnPointID: LivingRoom
+  spawnPointID: from_livingroom
   requireInteract: 0
   fadeImage: {fileID: 166161274}
   fadeDuration: 0.5
@@ -6628,12 +6723,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450402860}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.02, y: -1.47, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.94615, y: -0.27750993, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1560049937}
+  m_Father: {fileID: 2044808514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1450402862
 MonoBehaviour:
@@ -7446,15 +7541,12 @@ Transform:
   m_Children:
   - {fileID: 2534374251924123876}
   - {fileID: 830019757}
-  - {fileID: 770664639}
   - {fileID: 4211478766991917741}
-  - {fileID: 249401482}
   - {fileID: 1423149258}
+  - {fileID: 249401482}
   - {fileID: 69217318}
-  - {fileID: 335135520}
-  - {fileID: 1450402861}
-  - {fileID: 982522805}
   - {fileID: 1119035959}
+  - {fileID: 770664639}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1598008674
@@ -7837,6 +7929,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1850888467}
   m_CullTransparentMesh: 1
+--- !u!1 &1861671180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1861671181}
+  m_Layer: 0
+  m_Name: MiniGameHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1861671181
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861671180}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 592671808}
+  - {fileID: 501284070}
+  - {fileID: 2044808514}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1861839092
 GameObject:
   m_ObjectHideFlags: 0
@@ -8913,6 +9039,52 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7b8fb91edc267941b4ced6228ffaffe, type: 3}
+--- !u!1 &2044808513
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2044808514}
+  - component: {fileID: 2044808515}
+  m_Layer: 0
+  m_Name: Puzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2044808514
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2044808513}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.6386, y: 1.89515, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1450402861}
+  m_Father: {fileID: 1861671181}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2044808515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2044808513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d87adde82196f5a4eb054e68d98ecce5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MiniGameStageObject
+  activationStage: 2
 --- !u!1 &2052507784
 GameObject:
   m_ObjectHideFlags: 0
@@ -9264,7 +9436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: 641e2ea1f9739854d80e41ace269ce31, type: 2}
-  unlockStageIndex: 1
+  unlockStageIndex: 2
   bobAmplitude: 0.06
   bobSpeed: 1.5
 --- !u!114 &7325566060891298262
@@ -9394,3 +9566,4 @@ SceneRoots:
   - {fileID: 2750104}
   - {fileID: 1171115645}
   - {fileID: 1170667673}
+  - {fileID: 1861671181}

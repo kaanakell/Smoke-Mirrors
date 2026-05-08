@@ -24,8 +24,8 @@ public class SonNPC : MonoBehaviour
 
     // ── Lead To Mini Game ────────────────────────────────────────────────────
     [Header("Lead To Mini Game")]
-    [Tooltip("The position the Son walks to before opening the Clock Drawing mini game.")]
-    [SerializeField] private Transform miniGameWaypoint;
+    [Tooltip("Waypoints for each game in order: Element 0 = Clock, Element 1 = Memory, Element 2 = Puzzle")]
+    [SerializeField] private Transform[] miniGameWaypoints;
     [SerializeField] private float leadSpeed = 1.8f;
 
     // ── Dialogue UI ───────────────────────────────────────────────────────────
@@ -66,6 +66,7 @@ public class SonNPC : MonoBehaviour
     private Coroutine _typeCoroutine;
     private DialogueSet _activeSet;
     private System.Action _onDialogueComplete;
+    private int _currentGameIndex = 0;
 
     public bool IsAvailable => _state == State.Patrol;
 
@@ -137,11 +138,14 @@ public class SonNPC : MonoBehaviour
         StartCoroutine(ApproachThenTalk(introDialogue, () => StartCoroutine(LeadToGameRoutine())));
     }
 
-    public void TriggerItemThresholdApproach()
+    public void TriggerItemThresholdApproach(int gameIndex)
     {
         if (!IsAvailable) return;
+
+        _currentGameIndex = gameIndex; // Store the current game stage
+
         StopAllCoroutines();
-        StartCoroutine(ApproachThenTalk(itemCollectionDialogue, () => StartCoroutine(ReturnRoutine())));
+        StartCoroutine(ApproachThenTalk(itemCollectionDialogue, () => StartCoroutine(LeadToGameRoutine())));
     }
 
 
@@ -350,21 +354,34 @@ public class SonNPC : MonoBehaviour
 
     private IEnumerator LeadToGameRoutine()
     {
+        // 1. Get the correct destination for this stage
+        Transform targetWaypoint = transform;
+        if (miniGameWaypoints != null && _currentGameIndex < miniGameWaypoints.Length)
+        {
+            // Here is where we pick the specific "car" out of the "parking lot"
+            targetWaypoint = miniGameWaypoints[_currentGameIndex];
+        }
+
         _state = State.LeadToGame;
+
         // Player is free to follow during this phase
         UnlockPlayer();
 
-        if (miniGameWaypoint == null)
+        // 2. Check if we have valid waypoints to walk to
+        if (miniGameWaypoints == null || miniGameWaypoints.Length == 0)
         {
-            // No waypoint configured — open immediately where we stand
-            OpenMiniGame();
+            // Fallback: Open immediately where we stand
+            OpenSpecificGameBasedOnIndex();
             yield break;
         }
 
+        // 3. Walk to the chosen waypoint using targetWaypoint.position
         if (_aStarAvailable)
         {
             SetAISpeed(leadSpeed, true);
-            _ai.destination = miniGameWaypoint.position;
+
+            // FIXED: Using targetWaypoint.position
+            _ai.destination = targetWaypoint.position;
 
             float timeout = 20f, elapsed = 0f;
             while (!_ai.reachedDestination && elapsed < timeout)
@@ -373,24 +390,50 @@ public class SonNPC : MonoBehaviour
                 yield return null;
             }
             PauseAI();
+            _state = State.Patrol;
+            if(_state == State.Patrol)
+            {
+                StartCoroutine(ReturnRoutine());
+            }
         }
         else
         {
-            while (Vector3.Distance(transform.position, miniGameWaypoint.position) > waypointRadius)
+            // FIXED: Using targetWaypoint.position in the fallback movement too
+            while (Vector3.Distance(transform.position, targetWaypoint.position) > waypointRadius)
             {
                 transform.position = Vector3.MoveTowards(
-                    transform.position, miniGameWaypoint.position, leadSpeed * Time.deltaTime);
+                    transform.position, targetWaypoint.position, leadSpeed * Time.deltaTime);
                 yield return null;
             }
         }
 
-        OpenMiniGame();
+        // 4. Finally, open the specific mini-game after arriving
+        //OpenSpecificGameBasedOnIndex();
     }
 
-    private void OpenMiniGame()
+    /// <summary>
+    /// Helper method to keep the coroutine clean. Opens the right game based on the stage.
+    /// </summary>
+    private void OpenSpecificGameBasedOnIndex()
     {
-        LockPlayer();                             // lock for the mini game
-        ClockDrawingGame.Instance?.OpenGame();
+        if (_currentGameIndex == 0 && ClockDrawingGame.Instance != null)
+        {
+            ClockDrawingGame.Instance.OpenGame(null);
+        }
+        else if (_currentGameIndex == 1 && MemoryMatchGame.Instance != null)
+        {
+            MemoryMatchGame.Instance.OpenGame();
+        }
+        else if (_currentGameIndex == 2 && PuzzleGame.Instance != null)
+        {
+            PuzzleGame.Instance.OpenGame(null);
+        }
+        else
+        {
+            // Fallback in case OpenMiniGame() is still needed
+            // OpenMiniGame(); 
+            Debug.LogWarning("[SonNPC] No game matched the current index!");
+        }
     }
 
     // =========================================================================
@@ -464,6 +507,11 @@ public class SonNPC : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        Transform targetWaypoint = transform;
+        if (miniGameWaypoints != null && _currentGameIndex < miniGameWaypoints.Length)
+        {
+            targetWaypoint = miniGameWaypoints[_currentGameIndex];
+        }
         if (patrolWaypoints != null)
         {
             Gizmos.color = Color.cyan;
@@ -477,11 +525,11 @@ public class SonNPC : MonoBehaviour
             }
         }
 
-        if (miniGameWaypoint != null)
+        if (miniGameWaypoints != null)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(miniGameWaypoint.position, 0.2f);
-            Gizmos.DrawWireSphere(miniGameWaypoint.position, stopDistance);
+            Gizmos.DrawSphere(targetWaypoint.position, 0.2f);
+            Gizmos.DrawWireSphere(targetWaypoint.position, stopDistance);
         }
     }
 }

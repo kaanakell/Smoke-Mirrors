@@ -249,7 +249,7 @@ public class ClockDrawingGame : MonoBehaviour
         _completed = true;
 
         CloseGame();
-        ItemProgressionManager.Instance?.ReportMiniGameCompleted();
+        ItemProgressionManager.Instance?.CompleteMiniGame();
 
         // Notify SonNPC (and any other listeners) that the game is over
         OnMiniGameCompleted?.Invoke();

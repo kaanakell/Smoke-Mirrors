@@ -689,7 +689,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.021641254, y: 0.043282866}
+  m_Offset: {x: 0.21674323, y: 0.043282866}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -699,7 +699,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.0432825, y: 2.0387893}
+  m_Size: {x: 0.56651354, y: 2.0387893}
   m_EdgeRadius: 0
 --- !u!114 &1054142335
 MonoBehaviour:
@@ -791,7 +791,7 @@ GameObject:
   - component: {fileID: 1121071061}
   - component: {fileID: 1121071060}
   m_Layer: 0
-  m_Name: SpawnPoint
+  m_Name: SpawnPoint_FromLivingRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -809,7 +809,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 568076bb6e63f7e41933722c75b9f724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnPoint
-  spawnID: Corridor
+  spawnID: from_livingroom
 --- !u!4 &1121071061
 Transform:
   m_ObjectHideFlags: 0
@@ -819,7 +819,7 @@ Transform:
   m_GameObject: {fileID: 1121071059}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.11, y: 0.13, z: 0}
+  m_LocalPosition: {x: 5.48, y: 0.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -947,6 +947,51 @@ Transform:
   m_Children:
   - {fileID: 1839985603}
   - {fileID: 1054142333}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1355518849
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1355518851}
+  - component: {fileID: 1355518850}
+  m_Layer: 0
+  m_Name: SpawnPoint_FromBathroom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1355518850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355518849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 568076bb6e63f7e41933722c75b9f724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnPoint
+  spawnID: from_bathroom
+--- !u!4 &1355518851
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355518849}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.87, y: 0.13, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1422232945
@@ -1142,7 +1187,6 @@ GameObject:
   - component: {fileID: 1839985603}
   - component: {fileID: 1839985605}
   - component: {fileID: 1839985604}
-  - component: {fileID: 1839985606}
   m_Layer: 0
   m_Name: DoorToBathroom
   m_TagString: Untagged
@@ -1199,7 +1243,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.1082077, y: 0.15149012}
+  m_Offset: {x: -0.4332776, y: 0.15149009}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1209,7 +1253,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.2164154, y: 2.0820723}
+  m_Size: {x: 0.5662756, y: 2.0820723}
   m_EdgeRadius: 0
 --- !u!114 &1839985605
 MonoBehaviour:
@@ -1224,22 +1268,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomTransition
   targetScene: Bathroom
-  spawnPointID: default
+  spawnPointID: 
   requireInteract: 0
   fadeImage: {fileID: 0}
   fadeDuration: 0.5
---- !u!114 &1839985606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1839985602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8e0b5c91eea4a846aaeafa2c26bd202, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BathroomDoorTrigger
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1248,6 +1280,7 @@ SceneRoots:
   - {fileID: 1293388518}
   - {fileID: 893466427}
   - {fileID: 1121071061}
+  - {fileID: 1355518851}
   - {fileID: 1285022953}
   - {fileID: 1422232947}
   - {fileID: 1707234502}

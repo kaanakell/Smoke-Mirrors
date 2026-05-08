@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemProgressionManager
   sonSceneName: LivingRoomScene
-  itemsPerApproach: 2
+  itemsPerStage: 01000000010000000200000003000000
   sonApproachDelay: 1.2
   unlockStages:
   - enabled: 1
@@ -235,10 +235,13 @@ MonoBehaviour:
     itemsVisibleThisStage: 0
   - enabled: 1
     stageName: Stage 2
-    itemsVisibleThisStage: 2
+    itemsVisibleThisStage: 1
   - enabled: 1
     stageName: Stage 3
     itemsVisibleThisStage: 2
+  - enabled: 1
+    stageName: Stage 4
+    itemsVisibleThisStage: 3
 --- !u!4 &138884447
 Transform:
   m_ObjectHideFlags: 0
@@ -1358,7 +1361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomTransition
   targetScene: Corridor
-  spawnPointID: Bathroom
+  spawnPointID: from_bathroom
   requireInteract: 0
   fadeImage: {fileID: 2840082132372455653}
   fadeDuration: 0.5

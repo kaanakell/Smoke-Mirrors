@@ -82,7 +82,7 @@ public class PuzzleGame : MonoBehaviour
         if (_completed) return;
         _completed = true;
         CloseGame();
-        ItemProgressionManager.Instance?.ReportMiniGameCompleted();
+        ItemProgressionManager.Instance?.CompleteMiniGame();
     }
 
     private void CloseGame()
