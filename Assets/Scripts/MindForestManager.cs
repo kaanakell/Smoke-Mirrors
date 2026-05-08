@@ -55,35 +55,40 @@ public class MindForestManager : MonoBehaviour
 
     private void Start()
     {
+        // FIX: Increment once per visit.
         _visitCount++;
 
-        // 1. Activate the correct seasonal layout
+        // 1. Seasonal Layout Activation
         if (seasonalLayouts != null && seasonalLayouts.Length > 0)
         {
-            // _visitCount starts at 1. We subtract 1 so visit 1 = index 0 (Winter)
+            // Visit 1 (index 0) = Winter, Visit 2 (index 1) = Autumn, etc.
             int layoutIndex = (_visitCount - 1) % seasonalLayouts.Length;
 
             for (int i = 0; i < seasonalLayouts.Length; i++)
             {
                 if (seasonalLayouts[i] != null)
-                {
                     seasonalLayouts[i].SetActive(i == layoutIndex);
-                }
             }
         }
+
+        // 2. Setup NPC and UI
         dialoguePanel.SetActive(false);
         if (continueHint != null) continueHint.SetActive(false);
 
         _npcSr = npc != null ? npc.GetComponent<SpriteRenderer>() : null;
+
         if (npc != null)
+        {
             npc.position = new Vector3(npcStartX, npc.position.y, npc.position.z);
-        SetNpcAlpha(0f);
+            SetNpcAlpha(0f);
+            var ai = npc.GetComponent<AIPath>();
+            if (ai != null) ai.canMove = false;
+        }
 
-        var ai = npc != null ? npc.GetComponent<AIPath>() : null;
-        if (ai != null) ai.canMove = false;
-
+        // 3. Prepare Dialogue
         _lines = BuildDialogueForThisVisit();
 
+        // 4. Start the sequence
         StartCoroutine(ForestRoutine());
     }
 
@@ -98,29 +103,25 @@ public class MindForestManager : MonoBehaviour
 
     private List<DialogueLine> BuildDialogueForThisVisit()
     {
-        int currentVisit = _visitCount;
+        // DO NOT increment _visitCount here. We did it in Start().
 
-        if (dialogueSets != null && dialogueSets.Length > 0)
+        // We use (_visitCount - 1) because the first visit is 1, 
+        // but the first array index is 0.
+        int index = _visitCount - 1;
+
+        if (dialogueSets == null || dialogueSets.Length == 0)
         {
-            int index;
-            if (loopDialogues)
-                index = currentVisit % dialogueSets.Length;
-            else
-                index = Mathf.Min(currentVisit, dialogueSets.Length - 1);
-
-            var set = dialogueSets[index];
-            if (set != null && set.lines != null && set.lines.Length > 0)
-            {
-                Debug.Log($"[MindForest] Visit {currentVisit + 1}, using dialogue set [{index}]: {set.name}");
-                return new List<DialogueLine>(set.lines);
-            }
+            return new List<DialogueLine> { new DialogueLine { speaker = "???", text = "..." } };
         }
 
-        return new List<DialogueLine>
+        // Handle index out of bounds (looping or clamping)
+        if (index >= dialogueSets.Length)
         {
-            new DialogueLine { speaker = "FIGURE", text = "You found it again." },
-            new DialogueLine { speaker = "FIGURE", text = "Keep looking. The house wants you to find it." }
-        };
+            index = loopDialogues ? (index % dialogueSets.Length) : (dialogueSets.Length - 1);
+        }
+
+        // Return the lines from the correct set
+        return new List<DialogueLine>(dialogueSets[index].lines);
     }
 
     private IEnumerator ForestRoutine()
@@ -136,7 +137,7 @@ public class MindForestManager : MonoBehaviour
 
         yield return new WaitForSeconds(timeBeforeNpcApproaches);
 
-        StartCoroutine(FadeNpc(0f, 1f, npcFadeInDuration));
+        //StartCoroutine(FadeNpc(0f, 1f, npcFadeInDuration));
         yield return StartCoroutine(NpcApproach());
 
         yield return new WaitForSeconds(0.4f);

@@ -74,19 +74,26 @@ public class ProgressionPickupItem : MonoBehaviour, IInteractable
 
         Inventory.Instance?.AddItem(itemData);
 
+        // Play Sound
         if (itemData.pickupSound != null)
         {
             if (_audio != null) _audio.PlayOneShot(itemData.pickupSound);
             else AudioSource.PlayClipAtPoint(itemData.pickupSound, transform.position);
         }
 
-        bool forestTriggered = MindForestTrigger.Instance != null &&
-                               MindForestTrigger.Instance.TryTrigger(itemData, interactor);
+        // NEW LOGIC: Check if it's a forest trigger
+        bool isForestItem = MindForestTrigger.Instance != null &&
+                            MindForestTrigger.Instance.TryTrigger(itemData, interactor);
 
-        if (!forestTriggered && !string.IsNullOrEmpty(itemData.memoryText))
+        // If it IS a forest item, the MindForestTrigger script handles the Memory automatically 
+        // because it calls StartCoroutine(MemoryThenForest).
+        // If it is NOT a forest item, we show the memory manually here as a fallback.
+        if (!isForestItem && !string.IsNullOrEmpty(itemData.memoryText))
+        {
             MemoryDisplay.Instance?.ShowMemory(itemData.memoryText, itemData.memoryBackground);
+        }
 
-        ItemProgressionManager.Instance?.ReportItemCollected(this, forestTriggered);
+        ItemProgressionManager.Instance?.ReportItemCollected(this, isForestItem);
 
         _sr.enabled = false;
         _col.enabled = false;

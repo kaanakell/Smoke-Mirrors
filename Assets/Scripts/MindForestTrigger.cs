@@ -50,17 +50,17 @@ public class MindForestTrigger : MonoBehaviour
         _lastTriggerTime = Time.time;
         _returnSceneName = SceneManager.GetActiveScene().name;
 
-        PlayerController pc = interactor.GetComponent<PlayerController>()
-                           ?? FindFirstObjectByType<PlayerController>();
-        ReturnPosition = pc != null ? pc.transform.position : Vector3.zero;
-
-        if (!string.IsNullOrEmpty(item.memoryText))
-            StartCoroutine(MemoryThenForest(item.memoryText, pc));
+        // We still use interactor here to save the return position
+        if (interactor != null)
+            ReturnPosition = interactor.transform.position;
         else
-        {
-            if (pc != null) pc.MovementLocked = true;
+            ReturnPosition = Vector3.zero;
+
+        // THE FIX: Removed the 'pc' or 'interactor' from this call
+        if (!string.IsNullOrEmpty(item.memoryText))
+            StartCoroutine(MemoryThenForest(item.memoryText, item));
+        else
             StartCoroutine(GlitchIntoForest());
-        }
 
         return true;
     }
@@ -70,16 +70,18 @@ public class MindForestTrigger : MonoBehaviour
         StartCoroutine(GlitchOutOfForest());
     }
 
-    private IEnumerator MemoryThenForest(string memoryText, PlayerController pc)
+    private IEnumerator MemoryThenForest(string memoryText, ItemData itemData)
     {
-        bool done = false;
-        MemoryDisplay.Instance.OnComplete += () => done = true;
-        MemoryDisplay.Instance.ShowMemory(memoryText);
+        if (MemoryDisplay.Instance != null)
+        {
+            MemoryDisplay.Instance.ShowMemory(memoryText, itemData.memoryBackground);
 
-        yield return new WaitUntil(() => done);
-        yield return new WaitForSeconds(0.3f);
+            bool memoryFinished = false;
+            MemoryDisplay.Instance.OnComplete += () => memoryFinished = true;
 
-        if (pc != null) pc.MovementLocked = true;
+            yield return new WaitUntil(() => memoryFinished);
+        }
+
         yield return StartCoroutine(GlitchIntoForest());
     }
 
