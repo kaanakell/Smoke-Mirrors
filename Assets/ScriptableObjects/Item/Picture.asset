@@ -19,4 +19,4 @@ MonoBehaviour:
   memoryText: I promised to fix up the treehouse by summer
   memoryBackground: {fileID: 21300000, guid: 41700ad02e31e04499a72971b036e66a, type: 3}
   pickupSound: {fileID: 8300000, guid: 8c7cc4f297776fe4780a34e105e95791, type: 3}
-  canTriggerMindForest: 0
+  canTriggerMindForest: 1

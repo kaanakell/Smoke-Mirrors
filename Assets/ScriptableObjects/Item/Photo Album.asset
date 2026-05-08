@@ -19,4 +19,4 @@ MonoBehaviour:
   memoryText: I recognise this kid. I should go look for him
   memoryBackground: {fileID: 21300000, guid: 320af3d42ebdd1d4f94b8c4c91e7aa57, type: 3}
   pickupSound: {fileID: 8300000, guid: 8315649d6a4f5c64a87c3a55c58ee23f, type: 3}
-  canTriggerMindForest: 0
+  canTriggerMindForest: 1

@@ -8234,6 +8234,10 @@ MonoBehaviour:
   timeBeforeNpcApproaches: 5
   playerLockRadius: 2.5
   stopDistance: 1.5
+  seasonalLayouts:
+  - {fileID: 744530457}
+  - {fileID: 1236012855}
+  - {fileID: 691265776}
   dialoguePanel: {fileID: 1119522041}
   speakerText: {fileID: 1443934908}
   bodyText: {fileID: 783572892}

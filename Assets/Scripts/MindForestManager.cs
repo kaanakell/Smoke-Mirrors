@@ -23,6 +23,10 @@ public class MindForestManager : MonoBehaviour
     [SerializeField] private float playerLockRadius = 2.5f;
     [SerializeField] private float stopDistance = 1.5f;
 
+    [Header("Seasonal Layouts")]
+    [Tooltip("Drag the Winter, Spring and Summer Tilemap in order")]
+    [SerializeField] private GameObject[] seasonalLayouts;
+
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI speakerText;
@@ -51,6 +55,22 @@ public class MindForestManager : MonoBehaviour
 
     private void Start()
     {
+        _visitCount++;
+
+        // 1. Activate the correct seasonal layout
+        if (seasonalLayouts != null && seasonalLayouts.Length > 0)
+        {
+            // _visitCount starts at 1. We subtract 1 so visit 1 = index 0 (Winter)
+            int layoutIndex = (_visitCount - 1) % seasonalLayouts.Length;
+
+            for (int i = 0; i < seasonalLayouts.Length; i++)
+            {
+                if (seasonalLayouts[i] != null)
+                {
+                    seasonalLayouts[i].SetActive(i == layoutIndex);
+                }
+            }
+        }
         dialoguePanel.SetActive(false);
         if (continueHint != null) continueHint.SetActive(false);
 
@@ -79,7 +99,6 @@ public class MindForestManager : MonoBehaviour
     private List<DialogueLine> BuildDialogueForThisVisit()
     {
         int currentVisit = _visitCount;
-        _visitCount++;
 
         if (dialogueSets != null && dialogueSets.Length > 0)
         {

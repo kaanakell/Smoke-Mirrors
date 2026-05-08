@@ -33,6 +33,16 @@ public class PlayerController : MonoBehaviour
         _rb.freezeRotation = true;
     }
 
+    private void Start()
+    {
+        // If we just got back from the forest, snap the player to their old spot!
+        if (MindForestTrigger.IsReturningFromForest)
+        {
+            transform.position = MindForestTrigger.ReturnPosition;
+            Debug.Log("Player position restored from Mind Forest trip.");
+        }
+    }
+
     private void Update()
     {
         if (MovementLocked)

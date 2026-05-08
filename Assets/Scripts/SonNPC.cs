@@ -138,6 +138,25 @@ public class SonNPC : MonoBehaviour
         StartCoroutine(ApproachThenTalk(introDialogue, () => StartCoroutine(LeadToGameRoutine())));
     }
 
+    /// <summary>
+    /// Allows external scripts (like a Trash Item) to call the Son over.
+    /// He will approach, play the provided dialogue, fire the callback, and return to patrol.
+    /// </summary>
+    public void TriggerCustomApproach(DialogueSet customDialogue, System.Action onComplete)
+    {
+        if (!IsAvailable) return;
+        
+        StopAllCoroutines();
+        StartCoroutine(ApproachThenTalk(customDialogue, () => 
+        {
+            // Trigger whatever the item wants to do (like removing it from inventory)
+            onComplete?.Invoke();
+            
+            // Go back to walking around
+            StartCoroutine(ReturnRoutine());
+        }));
+    }
+
     public void TriggerItemThresholdApproach(int gameIndex)
     {
         if (!IsAvailable) return;

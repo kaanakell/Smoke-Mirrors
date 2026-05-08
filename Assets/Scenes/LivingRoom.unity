@@ -3424,8 +3424,8 @@ GameObject:
   - component: {fileID: 830019757}
   - component: {fileID: 830019761}
   - component: {fileID: 830019760}
-  - component: {fileID: 830019759}
   - component: {fileID: 830019758}
+  - component: {fileID: 830019762}
   m_Layer: 6
   m_Name: Thrash
   m_TagString: Untagged
@@ -3465,22 +3465,6 @@ MonoBehaviour:
   pulseSpeed: 2.2
   minAlpha: 0.15
   maxAlpha: 0.75
---- !u!114 &830019759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 830019756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d7e4b9ef1163347ad4ab9d48082d2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
-  itemData: {fileID: 11400000, guid: f2aab8dd170971b4bb7aa1206687a24c, type: 2}
-  unlockStageIndex: 2
-  bobAmplitude: 0.06
-  bobSpeed: 1.5
 --- !u!58 &830019760
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3576,6 +3560,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &830019762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830019756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dc3e24567619d3459dc939604030700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrashPickupItem
+  itemData: {fileID: 11400000, guid: f2aab8dd170971b4bb7aa1206687a24c, type: 2}
+  sonReactionDialogue: {fileID: 11400000, guid: a4b3b99c94e6cca4899f69d6bca70dc4, type: 2}
 --- !u!1 &853430713
 GameObject:
   m_ObjectHideFlags: 0

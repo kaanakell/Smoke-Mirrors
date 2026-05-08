@@ -98,6 +98,20 @@ public class ItemProgressionManager : MonoBehaviour
             if (_approachCoroutine != null) StopCoroutine(_approachCoroutine);
             _approachCoroutine = StartCoroutine(DelayedSonApproach(_currentStage));
         }
+
+        if (scene.name == sonSceneName)
+        {
+            _sonNpc = FindFirstObjectByType<SonNPC>();
+            RefreshAllItemVisibility();
+
+            // THE FIX 3: Resume the approach if we delayed it for the forest!
+            if (_approachPending)
+            {
+                Debug.Log("[Progression] Resuming pending Son approach after returning to Living Room.");
+                if (_approachCoroutine != null) StopCoroutine(_approachCoroutine);
+                _approachCoroutine = StartCoroutine(DelayedSonApproach(_currentStage));
+            }
+        }
     }
 
     // =========================================================================
@@ -111,30 +125,50 @@ public class ItemProgressionManager : MonoBehaviour
         item.SetVisible(ShouldStageBeVisible(item.UnlockStageIndex));
     }
 
-    public void ReportItemCollected(ProgressionPickupItem item, bool isForestTrigger)
+    public void ReportItemCollected(ProgressionPickupItem item, bool mindForestTriggered = false)
     {
         if (item == null) return;
 
         _totalCollected++;
         OnItemCollected?.Invoke(_totalCollected);
 
+        // Make sure we only count items meant for the current stage!
         if (item.UnlockStageIndex == _currentStage)
         {
             _collectedThisRound++;
+            int needed = ItemsNeededForStage(_currentStage);
 
-            // Get the target number from your new MiniGameStageObject logic
-            int neededItems = ItemsNeededForStage(_currentStage);
+            Debug.Log($"[Progression] Collected {_totalCollected} total, " +
+                      $"{_collectedThisRound}/{needed} this round (stage {_currentStage}).");
 
-            Debug.Log($"[Progression] Stage {_currentStage} item collected: {_collectedThisRound} / {neededItems}");
-
-            // THE FIX: Ensure neededItems is greater than 0 so it doesn't auto-trigger!
-            if (neededItems > 0 && _collectedThisRound >= neededItems)
+            if (_collectedThisRound >= needed)
             {
-                _approachPending = true;
-                if (_approachCoroutine != null) StopCoroutine(_approachCoroutine);
+                _collectedThisRound = 0;
 
-                _approachCoroutine = StartCoroutine(DelayedSonApproach(_currentStage));
-                RefreshMiniGameVisibility();
+                // Check if we are on the absolute last stage.
+                bool isFinalStage = _currentStage >= itemsPerStage.Length - 1;
+
+                if (!isFinalStage)
+                {
+                    _approachPending = true;
+                    RefreshMiniGameVisibility();
+                    // THE FIX: We use your existing coroutine instead of a missing method
+                    if (!mindForestTriggered)
+                    {
+                        if (_approachCoroutine != null) StopCoroutine(_approachCoroutine);
+                        _approachCoroutine = StartCoroutine(DelayedSonApproach(_currentStage));
+                    }
+                    else
+                    {
+                        Debug.Log("[Progression] Mind Forest triggered — son approach queued for later.");
+                    }
+                }
+                else
+                {
+                    // It's the final stage! We don't want him asking to play a game.
+                    _approachPending = false;
+                    Debug.Log("[Progression] Final items collected. No more mini-games to lead to.");
+                }
             }
         }
     }
