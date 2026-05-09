@@ -65,6 +65,14 @@ public class PlayerSpawnManager : MonoBehaviour
         if (pc != null && target != null)
         {
             pc.transform.position = target.transform.position;
+
+            Rigidbody2D rb = pc.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.position = target.transform.position;
+                rb.linearVelocity = Vector2.zero;
+            }
+
             pc.MovementLocked = false;
         }
 

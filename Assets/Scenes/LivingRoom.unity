@@ -594,6 +594,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: 987471813412a7c4c8c488474af78507, type: 2}
   unlockStageIndex: 3
+  onCollected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 875073006}
+        m_TargetAssemblyTypeName: CigaretteSequence, Assembly-CSharp
+        m_MethodName: PlaySequence
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   bobAmplitude: 0.06
   bobSpeed: 1.5
 --- !u!114 &69217323
@@ -1217,6 +1232,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: 6b54fcf28964a144a95949a580567a26, type: 2}
   unlockStageIndex: 3
+  onCollected:
+    m_PersistentCalls:
+      m_Calls: []
   bobAmplitude: 0.06
   bobSpeed: 1.5
 --- !u!114 &249401487
@@ -3683,6 +3701,7 @@ GameObject:
   - component: {fileID: 856401536}
   - component: {fileID: 856401539}
   - component: {fileID: 856401540}
+  - component: {fileID: 856401541}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3830,6 +3849,18 @@ MonoBehaviour:
   maxX: 10
   minY: -10
   maxY: 10
+--- !u!114 &856401541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856401535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fcef909246f6864b99e83ddc7f799de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraShake
 --- !u!1 &866617118
 GameObject:
   m_ObjectHideFlags: 0
@@ -3905,6 +3936,53 @@ MonoBehaviour:
   wrongPairDelay: 0.6
   statusText: {fileID: 1035977383}
   closeButton: {fileID: 1083906852}
+--- !u!1 &875073005
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 875073007}
+  - component: {fileID: 875073006}
+  m_Layer: 0
+  m_Name: ArgumentSequence
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &875073006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875073005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f57890f5be07f4840a818cab453c7959, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CigaretteSequence
+  argumentDialogue: {fileID: 11400000, guid: 4dba3000572a5f2448b04ceb45f53c79, type: 2}
+  makeupDialogue: {fileID: 11400000, guid: e1af4404a58dac044a39f760b18b55a3, type: 2}
+  runawayPoint: {fileID: 1171115645}
+--- !u!4 &875073007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875073005}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.36422, y: -2.35825, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &889369854
 GameObject:
   m_ObjectHideFlags: 0
@@ -5076,6 +5154,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: 7a2e494be43a41c44b0f669b544404ac, type: 2}
   unlockStageIndex: 3
+  onCollected:
+    m_PersistentCalls:
+      m_Calls: []
   bobAmplitude: 0.06
   bobSpeed: 1.5
 --- !u!61 &1119035963
@@ -5248,11 +5329,10 @@ Transform:
   m_GameObject: {fileID: 1171115644}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.032, y: 0.023, z: 0}
+  m_LocalPosition: {x: -0.83, y: 1.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1297380664}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1235124256
@@ -5295,84 +5375,6 @@ RectTransform:
   m_AnchoredPosition: {x: 157, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1297380663
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1297380664}
-  - component: {fileID: 1297380665}
-  m_Layer: 0
-  m_Name: CryingSpot
-  m_TagString: SonCryingZone
-  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1297380664
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297380663}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1171115645}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &1297380665
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297380663}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.32923007, y: -0.012989312}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1.0874238, y: 0.5067193}
-  m_EdgeRadius: 0
 --- !u!1 &1310258815
 GameObject:
   m_ObjectHideFlags: 0
@@ -5935,6 +5937,7 @@ MonoBehaviour:
   approachSpeed: 2.2
   stopDistance: 1.2
   lockRadius: 2
+  makeupRadius: 2
   returnSpeed: 2.4
   miniGameWaypoints:
   - {fileID: 335135520}
@@ -6283,6 +6286,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: b412a3be439586641853d9d1653fe1e6, type: 2}
   unlockStageIndex: 2
+  onCollected:
+    m_PersistentCalls:
+      m_Calls: []
   bobAmplitude: 0.06
   bobSpeed: 1.5
 --- !u!114 &1423149263
@@ -9518,6 +9524,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: 641e2ea1f9739854d80e41ace269ce31, type: 2}
   unlockStageIndex: 2
+  onCollected:
+    m_PersistentCalls:
+      m_Calls: []
   bobAmplitude: 0.06
   bobSpeed: 1.5
 --- !u!114 &7325566060891298262
@@ -9610,6 +9619,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: a1317f63a653bc34e8f0f0b860c7c934, type: 2}
   unlockStageIndex: 1
+  onCollected:
+    m_PersistentCalls:
+      m_Calls: []
   bobAmplitude: 0.06
   bobSpeed: 1.5
 --- !u!114 &9002812002798103455
@@ -9649,3 +9661,4 @@ SceneRoots:
   - {fileID: 1170667673}
   - {fileID: 1861671181}
   - {fileID: 1443743400}
+  - {fileID: 875073007}

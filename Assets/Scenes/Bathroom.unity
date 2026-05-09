@@ -595,6 +595,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6245135462302262081, guid: a7b8fb91edc267941b4ced6228ffaffe, type: 3}
+      propertyPath: interactRadius
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 7211602321728228996, guid: a7b8fb91edc267941b4ced6228ffaffe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.18

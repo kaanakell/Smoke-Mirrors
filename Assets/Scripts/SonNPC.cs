@@ -17,6 +17,7 @@ public class SonNPC : MonoBehaviour
     [SerializeField] private float approachSpeed = 2.2f;
     [SerializeField] private float stopDistance = 1.2f;
     [SerializeField] private float lockRadius = 2.0f;
+    [SerializeField] private float makeupRadius = 2.5f; // How close father must be to apologize
 
     // ── Return ────────────────────────────────────────────────────────────────
     [Header("Return")]
@@ -42,7 +43,7 @@ public class SonNPC : MonoBehaviour
     private AIPath _ai;
     private bool _aStarAvailable;
 
-    private enum State { Patrol, Approach, Talk, LeadToGame, Return }
+    private enum State { Patrol, Approach, Talk, LeadToGame, Return, SpecialSequence }
     private State _state = State.Patrol;
 
     private PlayerController _player;
@@ -97,7 +98,8 @@ public class SonNPC : MonoBehaviour
         switch (_state)
         {
             case State.Patrol: UpdatePatrol(); break;
-            case State.Talk: break; // Do nothing, DialogueManager handles input
+            case State.Talk: break;
+            case State.SpecialSequence: break; // Do nothing, coroutine handles it
         }
     }
 
@@ -415,6 +417,104 @@ public class SonNPC : MonoBehaviour
         }
 
         BeginPatrol();
+    }
+
+    // =========================================================================
+    // Special Argument Sequence
+    // =========================================================================
+
+    public void TriggerArgumentSequence(DialogueSet argDialogue, DialogueSet makeupDialogue, Transform runawayPoint, System.Action onComplete)
+    {
+        if (!IsAvailable) return;
+        StopAllCoroutines();
+        StartCoroutine(ArgumentRoutine(argDialogue, makeupDialogue, runawayPoint, onComplete));
+    }
+
+    private IEnumerator ArgumentRoutine(DialogueSet argDialogue, DialogueSet makeDialogue, Transform runawayPoint, System.Action onComplete)
+    {
+        _state = State.SpecialSequence;
+        PauseAI();
+        if (_player == null) _player = FindFirstObjectByType<PlayerController>();
+
+        // 1. Walk to player
+        if (_aStarAvailable) yield return StartCoroutine(AStarApproach());
+        else yield return StartCoroutine(DirectApproach());
+
+        // 2. Play argument dialogue
+        bool argDone = false;
+        BeginDialogue(argDialogue, () => argDone = true);
+        yield return new WaitUntil(() => argDone);
+
+        // 3. THE POLISHED BUMP
+        LockPlayer();
+
+        // Calculate the direction from the Father to the Son
+        Vector3 dirTowardSon = (transform.position - _player.transform.position).normalized;
+        dirTowardSon.z = 0;
+        if (dirTowardSon == Vector3.zero) dirTowardSon = Vector3.right;
+
+        // Set up the subtle movement targets
+        Vector3 playerStart = _player.transform.position;
+        Vector3 playerBumpTarget = playerStart + dirTowardSon * 0.3f; // Father lunges slightly
+
+        Vector3 sonStart = transform.position;
+        Vector3 sonBumpTarget = sonStart + dirTowardSon * 0.5f; // Son stumbles back slightly
+
+        // Trigger Camera Shake!
+        if (CameraShake.Instance != null) CameraShake.Instance.Shake(0.2f, 0.15f);
+
+        float t = 0;
+        float bumpDuration = 0.35f;
+        while (t < bumpDuration)
+        {
+            t += Time.deltaTime;
+            float percent = t / bumpDuration;
+
+            // Cubic Ease-Out: makes the animation start fast and slow down naturally
+            float ease = 1f - Mathf.Pow(1f - percent, 3f);
+
+            _player.transform.position = Vector3.Lerp(playerStart, playerBumpTarget, ease);
+            transform.position = Vector3.Lerp(sonStart, sonBumpTarget, ease);
+            yield return null;
+        }
+
+        // 4. Run away
+        if (_aStarAvailable)
+        {
+            SetAISpeed(returnSpeed * 1.5f, true); // Run away
+            _ai.destination = runawayPoint.position;
+            while (!_ai.reachedDestination) yield return null;
+            PauseAI();
+        }
+        else
+        {
+            while (Vector3.Distance(transform.position, runawayPoint.position) > waypointRadius)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, runawayPoint.position, (returnSpeed * 1.5f) * Time.deltaTime);
+                yield return null;
+            }
+        }
+
+        // 5. Sulk and wait for player to enter the "Trigger" radius
+        UnlockPlayer();
+
+        // This loop acts exactly like a physical Trigger Collider!
+        while (Vector3.Distance(transform.position, _player.transform.position) > makeupRadius)
+        {
+            yield return null;
+        }
+
+        LockPlayer();
+
+        // 6. Play makeup dialogue
+        bool makeupDone = false;
+        BeginDialogue(makeDialogue, () => makeupDone = true);
+        yield return new WaitUntil(() => makeupDone);
+
+        // 7. Finish
+        UnlockPlayer();
+        onComplete?.Invoke();
+        StartCoroutine(ReturnRoutine());
     }
 
     // =========================================================================
