@@ -19,8 +19,10 @@ public class DialogueManager : MonoBehaviour
     [Header("Dialogue Box Sprites")]
     [Tooltip("Drag the PCDialogueBox.png here")]
     [SerializeField] private Sprite pcBoxSprite;
-    [Tooltip("Drag the SonDialogueBox1.png here")]
-    [SerializeField] private Sprite sonBoxSprite;
+
+    [Tooltip("Drag both of the Son's dialogue boxes here!")]
+    [SerializeField] private Sprite[] sonBoxSprites; // <-- Changed to an array
+
     [Tooltip("Fallback box if the speaker is neither")]
     [SerializeField] private Sprite defaultBoxSprite;
 
@@ -33,6 +35,9 @@ public class DialogueManager : MonoBehaviour
     private Coroutine _typeCoroutine;
     private PlayerController _player;
     private Action _onDialogueEndedCallback;
+    private int _sonBoxIndex = 0;
+
+    public bool IsDialogueActive => dialoguePanel != null && dialoguePanel.activeSelf;
 
     private void Awake()
     {
@@ -81,6 +86,12 @@ public class DialogueManager : MonoBehaviour
         // Lock player movement while talking
         if (_player != null) _player.MovementLocked = true;
 
+        // Cycle to the next Son box for this conversation
+        if (sonBoxSprites != null && sonBoxSprites.Length > 0)
+        {
+            _sonBoxIndex = (_sonBoxIndex + 1) % sonBoxSprites.Length;
+        }
+
         ShowLine();
     }
 
@@ -93,7 +104,11 @@ public class DialogueManager : MonoBehaviour
 
         if (speakerLower.Contains("son"))
         {
-            dialogueBoxBackground.sprite = sonBoxSprite;
+            // Use the currently selected box from the array
+            if (sonBoxSprites != null && sonBoxSprites.Length > 0)
+            {
+                dialogueBoxBackground.sprite = sonBoxSprites[_sonBoxIndex];
+            }
         }
         else if (speakerLower.Contains("father") || speakerLower.Contains("you") || speakerLower.Contains("pc"))
         {

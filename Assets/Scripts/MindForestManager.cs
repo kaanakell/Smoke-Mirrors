@@ -48,7 +48,7 @@ public class MindForestManager : MonoBehaviour
     {
         // FIX: Increment once per visit.
         _visitCount++;
-
+        Debug.Log($"<color=orange>[MindForest] Scene Started! Visit count is now: {_visitCount}. Playing Dialogue Index: {_visitCount - 1}</color>");
         // 1. Seasonal Layout Activation
         if (seasonalLayouts != null && seasonalLayouts.Length > 0)
         {
@@ -77,6 +77,12 @@ public class MindForestManager : MonoBehaviour
 
         // 4. Start the sequence
         StartCoroutine(ForestRoutine());
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStaticVariables()
+    {
+        _visitCount = 0;
     }
 
     private void Update()
@@ -236,7 +242,7 @@ public class MindForestManager : MonoBehaviour
     private void BeginDialogue()
     {
         // Figure out which dialogue set to use based on the visit count
-        int index = _visitCount % dialogueSets.Length;
+        int index = _visitCount - 1 % dialogueSets.Length;
         DialogueSet currentSet = dialogueSets[index];
 
         // Start the dialogue using our global manager!

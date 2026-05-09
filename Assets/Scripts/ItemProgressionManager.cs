@@ -49,6 +49,7 @@ public class ItemProgressionManager : MonoBehaviour
     private int _collectedThisRound = 0;
     private int _currentStage = 0;
     private bool _approachPending = false;
+    private bool _isMiniGameRevealed = false;
 
     private readonly List<ProgressionPickupItem> _allItems = new();
     private readonly List<MiniGameStageObject> _miniGames = new();
@@ -144,6 +145,8 @@ public class ItemProgressionManager : MonoBehaviour
             if (_collectedThisRound >= needed)
             {
                 _collectedThisRound = 0;
+                _isMiniGameRevealed = true;
+                RefreshMiniGameVisibility();
 
                 // Check if we are on the absolute last stage.
                 bool isFinalStage = _currentStage >= itemsPerStage.Length - 1;
@@ -188,6 +191,7 @@ public class ItemProgressionManager : MonoBehaviour
 
         _currentStage++;
         _collectedThisRound = 0;
+        _isMiniGameRevealed = false;
 
         RefreshAllItemVisibility();
 
@@ -271,10 +275,9 @@ public class ItemProgressionManager : MonoBehaviour
         foreach (var mg in _miniGames)
         {
             if (mg == null) continue;
-            mg.SetVisible(mg.ActivationStage == _currentStage);
+            mg.SetVisible(mg.ActivationStage == _currentStage && _isMiniGameRevealed);
         }
     }
-
     private void SetMiniGameVisibleForStage(int stage, bool visible)
     {
         foreach (var mg in _miniGames)

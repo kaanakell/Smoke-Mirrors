@@ -1423,7 +1423,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &681336784
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2717,8 +2717,10 @@ MonoBehaviour:
   dialogueBodyText: {fileID: 94836700}
   continuePrompt: {fileID: 1800082136}
   pcBoxSprite: {fileID: 21300000, guid: 507f3ca6f6a99214084e71fa58af99e1, type: 3}
-  sonBoxSprite: {fileID: 21300000, guid: 471be7ba2afa86d4eb5f105e5c9a26d9, type: 3}
-  defaultBoxSprite: {fileID: 21300000, guid: 4349ec37594a9f24197d2f2d67730c1b, type: 3}
+  sonBoxSprites:
+  - {fileID: 21300000, guid: 471be7ba2afa86d4eb5f105e5c9a26d9, type: 3}
+  - {fileID: 21300000, guid: 4349ec37594a9f24197d2f2d67730c1b, type: 3}
+  defaultBoxSprite: {fileID: 0}
   typeSpeed: 0.03
 --- !u!4 &1493774802
 Transform:
@@ -4357,6 +4359,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: a074635a87137aa44a1672bed75c4b2d, type: 2}
   unlockStageIndex: 0
+  onCollected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 681336783}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   bobAmplitude: 0.06
   bobSpeed: 1.5
 --- !u!114 &6972146789830583303

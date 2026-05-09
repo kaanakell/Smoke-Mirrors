@@ -3218,6 +3218,7 @@ GameObject:
   - component: {fileID: 770664639}
   - component: {fileID: 770664641}
   - component: {fileID: 770664640}
+  - component: {fileID: 770664642}
   m_Layer: 6
   m_Name: WaterPlant
   m_TagString: Untagged
@@ -3335,6 +3336,23 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &770664642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770664638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc0a6ad54e2e32f4a8b4a0bcdc1a4f21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlantInteractable
+  growthSprites:
+  - {fileID: -7074170301917031756, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
+  - {fileID: -2104799769585995935, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
+  waterPlantDialogue: {fileID: 11400000, guid: e45a18652e7d00b46ae992203fa2cf77, type: 2}
+  reminderMonologue: {fileID: 11400000, guid: e45a18652e7d00b46ae992203fa2cf77, type: 2}
 --- !u!1 &817770973
 GameObject:
   m_ObjectHideFlags: 0
@@ -6721,8 +6739,10 @@ MonoBehaviour:
   dialogueBodyText: {fileID: 1386105741}
   continuePrompt: {fileID: 740649803}
   pcBoxSprite: {fileID: 21300000, guid: 507f3ca6f6a99214084e71fa58af99e1, type: 3}
-  sonBoxSprite: {fileID: 21300000, guid: 471be7ba2afa86d4eb5f105e5c9a26d9, type: 3}
-  defaultBoxSprite: {fileID: 21300000, guid: 4349ec37594a9f24197d2f2d67730c1b, type: 3}
+  sonBoxSprites:
+  - {fileID: 21300000, guid: 471be7ba2afa86d4eb5f105e5c9a26d9, type: 3}
+  - {fileID: 21300000, guid: 4349ec37594a9f24197d2f2d67730c1b, type: 3}
+  defaultBoxSprite: {fileID: 0}
   typeSpeed: 0.03
 --- !u!4 &1443743400
 Transform:
@@ -7956,7 +7976,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleGame
   panel: {fileID: 1850888467}
   pieceContainer: {fileID: 2002327192}
-  puzzleSprite: {fileID: 21300000, guid: 320af3d42ebdd1d4f94b8c4c91e7aa57, type: 3}
+  puzzleSprite: {fileID: -318581016843099705, guid: 127dc3b20b8fa334cafbc8e7c929c15b, type: 3}
   pieceCount: 6
   piecePrefab: {fileID: 7400612562308974565, guid: cf442c3880bd13f43af8d315a09daba9, type: 3}
   pieceSize: {x: 600, y: 400}

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Collider2D))]
@@ -11,6 +12,10 @@ public class ProgressionPickupItem : MonoBehaviour, IInteractable
     [Header("Progression")]
     [Tooltip("0 = visible at start. 1 = after 1st mini-game. 2 = after 2nd. Etc.")]
     [SerializeField] private int unlockStageIndex = 0;
+
+    [Header("Events")]
+    [Tooltip("Fire events when this item is picked up (e.g. unlock a door).")]
+    public UnityEvent onCollected;
 
     public int UnlockStageIndex => unlockStageIndex;
 
@@ -71,6 +76,8 @@ public class ProgressionPickupItem : MonoBehaviour, IInteractable
     {
         if (!CanInteract || itemData == null) return;
         _collected = true;
+
+        onCollected?.Invoke();
 
         Inventory.Instance?.AddItem(itemData);
 
