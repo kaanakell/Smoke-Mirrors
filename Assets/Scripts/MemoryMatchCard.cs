@@ -21,13 +21,13 @@ public class MemoryMatchCard : MonoBehaviour, IPointerClickHandler
     [Tooltip("Optional child Image that lights up on select/match.")]
     [SerializeField] private Image outlineImage;
 
-    public void Init(int matchID, Texture2D texture, bool unrecognizable, MemoryMatchGame manager)
+    public void Init(int matchID, Texture2D texture, bool unrecognizable, int blockSize, MemoryMatchGame manager)
     {
         MatchID = matchID;
         _manager = manager;
         _image = GetComponent<RawImage>();
 
-        _image.texture = unrecognizable ? ScrambleTexture(texture) : texture;
+        _image.texture = unrecognizable ? ScrambleTexture(texture, blockSize) : texture;
         _image.color = normalColor;
 
         if (outlineImage != null) outlineImage.enabled = false;
@@ -58,7 +58,7 @@ public class MemoryMatchCard : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    private static Texture2D ScrambleTexture(Texture2D source)
+    private static Texture2D ScrambleTexture(Texture2D source, int blockSize)
     {
         int w = source.width, h = source.height;
         Texture2D copy = new Texture2D(w, h, source.format, false)
@@ -68,16 +68,17 @@ public class MemoryMatchCard : MonoBehaviour, IPointerClickHandler
         };
         copy.SetPixels(source.GetPixels());
 
-        const int block = 4;
-        int bCols = w / block;
-        int bRows = h / block;
+        int bCols = w / blockSize;
+        int bRows = h / blockSize;
+
+        if (bCols == 0 || bRows == 0) return copy;
 
         for (int by = 0; by < bRows; by++)
             for (int bx = 0; bx < bCols; bx++)
             {
                 int rby = Random.Range(0, bRows);
                 int rbx = Random.Range(0, bCols);
-                SwapBlocks(copy, bx * block, by * block, rbx * block, rby * block, block);
+                SwapBlocks(copy, bx * blockSize, by * blockSize, rbx * blockSize, rby * blockSize, blockSize);
             }
 
         copy.Apply();

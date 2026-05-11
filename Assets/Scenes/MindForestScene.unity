@@ -8285,7 +8285,7 @@ MonoBehaviour:
   npcDepartX: 8
   npcApproachSpeed: 2
   npcDepartSpeed: 2.8
-  npcFadeInDuration: 1.5
+  npcFadeInDuration: 2
   timeBeforeNpcApproaches: 5
   playerLockRadius: 2.5
   stopDistance: 1.5

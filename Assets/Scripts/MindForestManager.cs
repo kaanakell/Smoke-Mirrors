@@ -46,13 +46,10 @@ public class MindForestManager : MonoBehaviour
 
     private void Start()
     {
-        // FIX: Increment once per visit.
         _visitCount++;
         Debug.Log($"<color=orange>[MindForest] Scene Started! Visit count is now: {_visitCount}. Playing Dialogue Index: {_visitCount - 1}</color>");
-        // 1. Seasonal Layout Activation
         if (seasonalLayouts != null && seasonalLayouts.Length > 0)
         {
-            // Visit 1 (index 0) = Winter, Visit 2 (index 1) = Autumn, etc.
             int layoutIndex = (_visitCount - 1) % seasonalLayouts.Length;
 
             for (int i = 0; i < seasonalLayouts.Length; i++)
@@ -72,10 +69,8 @@ public class MindForestManager : MonoBehaviour
             if (ai != null) ai.canMove = false;
         }
 
-        // 3. Prepare Dialogue
         _lines = BuildDialogueForThisVisit();
 
-        // 4. Start the sequence
         StartCoroutine(ForestRoutine());
     }
 
@@ -92,10 +87,6 @@ public class MindForestManager : MonoBehaviour
 
     private List<DialogueLine> BuildDialogueForThisVisit()
     {
-        // DO NOT increment _visitCount here. We did it in Start().
-
-        // We use (_visitCount - 1) because the first visit is 1, 
-        // but the first array index is 0.
         int index = _visitCount - 1;
 
         if (dialogueSets == null || dialogueSets.Length == 0)
@@ -103,13 +94,11 @@ public class MindForestManager : MonoBehaviour
             return new List<DialogueLine> { new DialogueLine { speaker = "???", text = "..." } };
         }
 
-        // Handle index out of bounds (looping or clamping)
         if (index >= dialogueSets.Length)
         {
             index = loopDialogues ? (index % dialogueSets.Length) : (dialogueSets.Length - 1);
         }
 
-        // Return the lines from the correct set
         return new List<DialogueLine>(dialogueSets[index].lines);
     }
 
@@ -196,7 +185,7 @@ public class MindForestManager : MonoBehaviour
 
     private IEnumerator NpcDepart()
     {
-        //StartCoroutine(FadeNpc(1f, 0f, npcFadeInDuration));
+        StartCoroutine(FadeNpc(1f, 0f, npcFadeInDuration));
 
         var ai = npc != null ? npc.GetComponent<AIPath>() : null;
         bool graphReady = AstarPath.active != null && AstarPath.active.graphs?.Length > 0;
@@ -241,12 +230,9 @@ public class MindForestManager : MonoBehaviour
 
     private void BeginDialogue()
     {
-        // Figure out which dialogue set to use based on the visit count
         int index = _visitCount - 1 % dialogueSets.Length;
         DialogueSet currentSet = dialogueSets[index];
 
-        // Start the dialogue using our global manager!
-        // When it finishes, it will automatically run the EndSequence coroutine.
         DialogueManager.Instance.StartDialogue(currentSet, () =>
         {
             StartCoroutine(EndSequence());

@@ -34,7 +34,6 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         if (isLocked || _game.IsPlayingGlitch) return;
 
-        // Bring the piece to the front of the UI when grabbed
         transform.SetAsLastSibling();
     }
 
@@ -42,7 +41,6 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         if (isLocked || _game.IsPlayingGlitch) return;
 
-        // Move the piece consistently regardless of screen resolution
         rectTransform.anchoredPosition += eventData.delta / _canvas.scaleFactor;
 
         ClampToScreen();
@@ -52,7 +50,6 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         if (isLocked || _game.IsPlayingGlitch) return;
 
-        // Tell the game manager to check if we are close enough to snap
         _game.CheckPiecePlacement(this);
     }
 
@@ -68,7 +65,6 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
         Vector3 pos = rectTransform.position;
 
-        // Keep the piece entirely inside the canvas bounds
         if (pieceCorners[0].x < canvasCorners[0].x) pos.x += canvasCorners[0].x - pieceCorners[0].x;
         if (pieceCorners[2].x > canvasCorners[2].x) pos.x -= pieceCorners[2].x - canvasCorners[2].x;
         if (pieceCorners[0].y < canvasCorners[0].y) pos.y += canvasCorners[0].y - pieceCorners[0].y;

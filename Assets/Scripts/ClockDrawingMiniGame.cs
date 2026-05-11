@@ -6,15 +6,8 @@ public class ClockDrawingGame : MonoBehaviour
 {
     public static ClockDrawingGame Instance { get; private set; }
 
-    // ── Static event ─────────────────────────────────────────────────────────
-    /// <summary>
-    /// Fired whenever the mini game ends — whether the 30-second timer forced
-    /// it closed or the player pressed Done / Escape.
-    /// SonNPC subscribes to this to trigger the post-game dialogue.
-    /// </summary>
     public static event System.Action OnMiniGameCompleted;
 
-    // ── Monologue Panel ───────────────────────────────────────────────────────
     [Header("Monologue Panel")]
     [SerializeField] private GameObject monologuePanel;
     [SerializeField] private TextMeshProUGUI monologueText;
@@ -24,27 +17,22 @@ public class ClockDrawingGame : MonoBehaviour
     private string monologue =
         "I'm supposed to draw a clock.\nSomebody said so. When was that?";
 
-    // ── Drawing Panel ─────────────────────────────────────────────────────────
     [Header("Drawing Panel")]
     [SerializeField] private GameObject drawingPanel;
 
-    // ── Board Background ──────────────────────────────────────────────────────
     [Header("Board Background")]
     [SerializeField] private Image boardBackground;
 
-    // ── Drawing Area ──────────────────────────────────────────────────────────
     [Header("Drawing Area")]
     [SerializeField] private RawImage drawingCanvas;
     [SerializeField] private RectTransform drawingRect;
 
-    // ── UI Elements ───────────────────────────────────────────────────────────
     [Header("UI Elements")]
     [SerializeField] private RectTransform cursorDot;
     [SerializeField] private TextMeshProUGUI instructionText;
     [SerializeField] private Button clearAllButton;
     [SerializeField] private Button doneButton;
 
-    // ── Timer UI (optional) ───────────────────────────────────────────────────
     [Header("Timer")]
     [Tooltip("Seconds of drawing time before the Son takes the paper away.")]
     [SerializeField] private float drawingTimeLimitSec = 30f;
@@ -53,14 +41,12 @@ public class ClockDrawingGame : MonoBehaviour
     [Tooltip("Show the countdown only when this many seconds remain (0 = always show).")]
     [SerializeField] private float timerShowBelowSec = 10f;
 
-    // ── Ink ───────────────────────────────────────────────────────────────────
     [Header("Ink")]
     [SerializeField] private Color inkColor = new Color(0.08f, 0.04f, 0f, 1f);
     [SerializeField] private int brushRadius = 5;
     [SerializeField] private int eraserRadius = 12;
     [SerializeField] private int textureResolution = 512;
 
-    // ── Distortion ────────────────────────────────────────────────────────────
     [Header("Distortion")]
     [Tooltip("Seconds of normal drawing before inversion kicks in.")]
     [SerializeField] private float distortionDelaySec = 8f;
@@ -69,7 +55,6 @@ public class ClockDrawingGame : MonoBehaviour
     [SerializeField] private float extraRotationDeg = 0f;
     [SerializeField] private int tremorJitter = 1;
 
-    // ── Internals ─────────────────────────────────────────────────────────────
     private Texture2D _tex;
     private bool _drawingStarted;
     private float _drawingStartTime;
@@ -79,13 +64,9 @@ public class ClockDrawingGame : MonoBehaviour
     private bool _texDirty;
     private bool _timerRunning;
     private float _timerRemaining;
-    private bool _completed;           // guard against double-fire
+    private bool _completed;
     private PlayerController _player;
     private Canvas _parentCanvas;
-
-    // =========================================================================
-    // Unity lifecycle
-    // =========================================================================
 
     private void Awake()
     {
@@ -111,10 +92,6 @@ public class ClockDrawingGame : MonoBehaviour
     {
         if (_tex != null) Destroy(_tex);
     }
-
-    // =========================================================================
-    // Public API
-    // =========================================================================
 
     public void OpenGame(string overrideMonologue = null)
     {
@@ -146,12 +123,7 @@ public class ClockDrawingGame : MonoBehaviour
         if (boardBackground != null) boardBackground.sprite = sprite;
     }
 
-    /// <summary>Called when the player presses Done or Escape.</summary>
     public void CompletedByPlayer() => Complete();
-
-    // =========================================================================
-    // Update
-    // =========================================================================
 
     private void Update()
     {
@@ -161,7 +133,6 @@ public class ClockDrawingGame : MonoBehaviour
             return;
         }
 
-        // ── Monologue dismiss ─────────────────────────────────────────────────
         if (!_drawingStarted)
         {
             bool dismiss = Input.GetKeyDown(KeyCode.Space) ||
@@ -173,7 +144,6 @@ public class ClockDrawingGame : MonoBehaviour
 
         if (drawingPanel == null || !drawingPanel.activeSelf) return;
 
-        // ── Distortion trigger ────────────────────────────────────────────────
         if (!_distortionActive && Time.time - _drawingStartTime >= distortionDelaySec)
         {
             _distortionActive = true;
@@ -181,7 +151,6 @@ public class ClockDrawingGame : MonoBehaviour
                 instructionText.text = "Something feels… off.";
         }
 
-        // ── Countdown timer ───────────────────────────────────────────────────
         if (_timerRunning)
         {
             _timerRemaining -= Time.deltaTime;
@@ -195,7 +164,6 @@ public class ClockDrawingGame : MonoBehaviour
             }
         }
 
-        // ── Drawing input ─────────────────────────────────────────────────────
         _texDirty = false;
 
         Camera uiCam = (_parentCanvas != null &&
@@ -235,14 +203,6 @@ public class ClockDrawingGame : MonoBehaviour
         if (_texDirty) _tex.Apply();
     }
 
-    // =========================================================================
-    // Completion (unified path)
-    // =========================================================================
-
-    /// <summary>
-    /// Single completion path used by both the forced 30-second timer and
-    /// voluntary player dismissal. Guards against double-firing.
-    /// </summary>
     private void Complete()
     {
         if (_completed) return;
@@ -251,11 +211,9 @@ public class ClockDrawingGame : MonoBehaviour
         CloseGame();
         ItemProgressionManager.Instance?.CompleteMiniGame();
 
-        // Notify SonNPC (and any other listeners) that the game is over
         OnMiniGameCompleted?.Invoke();
     }
 
-    /// <summary>Internal close — tears down the texture and hides the panel.</summary>
     private void CloseGame()
     {
         _timerRunning = false;
@@ -264,14 +222,8 @@ public class ClockDrawingGame : MonoBehaviour
         if (_tex != null) { Destroy(_tex); _tex = null; }
         gameObject.SetActive(false);
 
-        // Player movement is re-locked by SonNPC once it's ready to talk,
-        // but unlock here in case SonNPC is absent (e.g. during testing).
         if (_player != null) { _player.MovementLocked = false; _player = null; }
     }
-
-    // =========================================================================
-    // Drawing start
-    // =========================================================================
 
     private void StartDrawing()
     {
@@ -281,7 +233,6 @@ public class ClockDrawingGame : MonoBehaviour
         _hadPrevPoint = false;
         _texDirty = false;
 
-        // Start the countdown
         _timerRemaining = drawingTimeLimitSec;
         _timerRunning = true;
         UpdateTimerDisplay();
@@ -292,10 +243,6 @@ public class ClockDrawingGame : MonoBehaviour
         CreateFreshTexture();
     }
 
-    // =========================================================================
-    // Timer display
-    // =========================================================================
-
     private void UpdateTimerDisplay()
     {
         if (timerText == null) return;
@@ -305,10 +252,6 @@ public class ClockDrawingGame : MonoBehaviour
         if (shouldShow)
             timerText.text = Mathf.CeilToInt(_timerRemaining).ToString();
     }
-
-    // =========================================================================
-    // Distortion
-    // =========================================================================
 
     private Vector2 Distort(Vector2 local)
     {
@@ -323,10 +266,6 @@ public class ClockDrawingGame : MonoBehaviour
         }
         return new Vector2(x, y);
     }
-
-    // =========================================================================
-    // Texture helpers
-    // =========================================================================
 
     private Vector2 LocalToTexCoord(Vector2 local)
     {

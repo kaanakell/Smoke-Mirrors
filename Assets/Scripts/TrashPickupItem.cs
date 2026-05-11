@@ -22,20 +22,16 @@ public class TrashPickupItem : MonoBehaviour, IInteractable
         if (!CanInteract || itemData == null) return;
         _collected = true;
 
-        // 1. Add to the player's UI Inventory
         Inventory.Instance?.AddItem(itemData);
         
-        // Play sound if you have one
         if (itemData.pickupSound != null)
         {
             AudioSource.PlayClipAtPoint(itemData.pickupSound, transform.position);
         }
 
-        // Hide the item in the physical world immediately
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
 
-        // 2. Start the sequence with the Son
         StartCoroutine(HandleTrashSequence());
     }
 
@@ -45,7 +41,6 @@ public class TrashPickupItem : MonoBehaviour, IInteractable
 
         if (son != null)
         {
-            // Wait patiently just in case the Son is busy playing a mini-game
             while (!son.IsAvailable)
             {
                 yield return new WaitForSeconds(0.5f);
@@ -53,25 +48,20 @@ public class TrashPickupItem : MonoBehaviour, IInteractable
 
             bool conversationFinished = false;
 
-            // 3. Call the Son over with our specific dialogue
             son.TriggerCustomApproach(sonReactionDialogue, () =>
             {
-                // 4. This runs AFTER the dialogue closes! Remove the item.
                 Inventory.Instance?.RemoveItem(itemData);
                 Debug.Log($"[TrashPickup] Son took the {itemData.itemName} away.");
                 conversationFinished = true;
             });
 
-            // Wait until the callback finishes before destroying this object
             yield return new WaitUntil(() => conversationFinished);
         }
         else
         {
-            // Failsafe: If the Son doesn't exist, just remove the item immediately
             Inventory.Instance?.RemoveItem(itemData);
         }
 
-        // Clean up the invisible object from the scene
         Destroy(gameObject);
     }
 }

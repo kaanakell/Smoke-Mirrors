@@ -54,7 +54,6 @@ public class ProgressionPickupItem : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        // Register with the persistent manager
         ItemProgressionManager.Instance?.RegisterItem(this);
     }
 
@@ -81,20 +80,15 @@ public class ProgressionPickupItem : MonoBehaviour, IInteractable
 
         Inventory.Instance?.AddItem(itemData);
 
-        // Play Sound
         if (itemData.pickupSound != null)
         {
             if (_audio != null) _audio.PlayOneShot(itemData.pickupSound);
             else AudioSource.PlayClipAtPoint(itemData.pickupSound, transform.position);
         }
 
-        // NEW LOGIC: Check if it's a forest trigger
         bool isForestItem = MindForestTrigger.Instance != null &&
                             MindForestTrigger.Instance.TryTrigger(itemData, interactor);
 
-        // If it IS a forest item, the MindForestTrigger script handles the Memory automatically 
-        // because it calls StartCoroutine(MemoryThenForest).
-        // If it is NOT a forest item, we show the memory manually here as a fallback.
         if (!isForestItem && !string.IsNullOrEmpty(itemData.memoryText))
         {
             MemoryDisplay.Instance?.ShowMemory(itemData.memoryText, itemData.memoryBackground);
@@ -115,7 +109,6 @@ public class ProgressionPickupItem : MonoBehaviour, IInteractable
 
     private void OnValidate()
     {
-        // Set sprite preview in editor — no Editor API needed
         if (itemData?.worldSprite != null)
         {
             var sr = GetComponent<SpriteRenderer>();

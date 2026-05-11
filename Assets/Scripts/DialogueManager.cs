@@ -21,7 +21,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Sprite pcBoxSprite;
 
     [Tooltip("Drag both of the Son's dialogue boxes here!")]
-    [SerializeField] private Sprite[] sonBoxSprites; // <-- Changed to an array
+    [SerializeField] private Sprite[] sonBoxSprites;
 
     [Tooltip("Fallback box if the speaker is neither")]
     [SerializeField] private Sprite defaultBoxSprite;
@@ -53,12 +53,10 @@ public class DialogueManager : MonoBehaviour
     {
         if (!dialoguePanel.activeSelf) return;
 
-        // Advance dialogue on Space or Left Mouse Click
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
             if (_isTyping)
             {
-                // If they press space while typing, instantly finish typing the line
                 StopCoroutine(_typeCoroutine);
                 dialogueBodyText.text = _currentSet.lines[_currentLineIndex].text;
                 _isTyping = false;
@@ -66,7 +64,6 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                // Move to the next line
                 NextLine();
             }
         }
@@ -79,14 +76,12 @@ public class DialogueManager : MonoBehaviour
         _currentSet = dialogueSet;
         _currentLineIndex = 0;
 
-        _onDialogueEndedCallback = onComplete; // Store the callback
+        _onDialogueEndedCallback = onComplete;
 
         dialoguePanel.SetActive(true);
 
-        // Lock player movement while talking
         if (_player != null) _player.MovementLocked = true;
 
-        // Cycle to the next Son box for this conversation
         if (sonBoxSprites != null && sonBoxSprites.Length > 0)
         {
             _sonBoxIndex = (_sonBoxIndex + 1) % sonBoxSprites.Length;
@@ -99,12 +94,10 @@ public class DialogueManager : MonoBehaviour
     {
         DialogueLine line = _currentSet.lines[_currentLineIndex];
 
-        // 1. Swap the visual box based on who is speaking!
         string speakerLower = line.speaker.ToLower();
 
         if (speakerLower.Contains("son"))
         {
-            // Use the currently selected box from the array
             if (sonBoxSprites != null && sonBoxSprites.Length > 0)
             {
                 dialogueBoxBackground.sprite = sonBoxSprites[_sonBoxIndex];
@@ -112,7 +105,6 @@ public class DialogueManager : MonoBehaviour
         }
         else if (speakerLower.Contains("father") || speakerLower.Contains("you") || speakerLower.Contains("pc"))
         {
-            // Edit the names in the line above based on what you actually type in your DialogueSet
             dialogueBoxBackground.sprite = pcBoxSprite;
         }
         else
@@ -120,13 +112,11 @@ public class DialogueManager : MonoBehaviour
             dialogueBoxBackground.sprite = defaultBoxSprite != null ? defaultBoxSprite : pcBoxSprite;
         }
 
-        // 2. Setup the text
         speakerNameText.text = line.speaker;
         dialogueBodyText.text = "";
 
         if (continuePrompt != null) continuePrompt.SetActive(false);
 
-        // 3. Start Typewriter effect
         if (_typeCoroutine != null) StopCoroutine(_typeCoroutine);
         _typeCoroutine = StartCoroutine(TypeRoutine(line.text));
     }
@@ -162,7 +152,6 @@ public class DialogueManager : MonoBehaviour
         if (_player != null) _player.MovementLocked = false;
         _currentSet = null;
 
-        // Trigger the callback if one was provided, then clear it
         _onDialogueEndedCallback?.Invoke();
         _onDialogueEndedCallback = null;
     }

@@ -145,14 +145,18 @@ public class MemoryMatchGame : MonoBehaviour
         _totalPairs = cardPairs.Length;
         int scrambleCount = Mathf.Clamp(unrecognizableCount, 0, cardPairs.Length);
 
-        var defs = new List<(int id, Texture2D tex, bool scramble)>();
+        var defs = new List<(int id, Texture2D tex, bool scramble, int blockSize)>();
+
         for (int i = 0; i < cardPairs.Length; i++)
         {
             if (cardPairs[i]?.cardSprite == null)
             { Debug.LogWarning($"[MemoryMatchGame] cardPairs[{i}] null — skipped."); _totalPairs--; continue; }
+
             Texture2D tex = ExtractReadableTexture(cardPairs[i].cardSprite);
-            defs.Add((i, tex, false));
-            defs.Add((i, tex, i < scrambleCount));
+            int bSize = cardPairs[i].scrambleBlockSize; // Grab the block size from the data!
+
+            defs.Add((i, tex, false, bSize));
+            defs.Add((i, tex, i < scrambleCount, bSize));
         }
 
         for (int i = defs.Count - 1; i > 0; i--)
@@ -162,7 +166,8 @@ public class MemoryMatchGame : MonoBehaviour
         {
             var go = Instantiate(cardPrefab, cardGrid);
             var card = go.GetComponent<MemoryMatchCard>();
-            card?.Init(d.id, d.tex, d.scramble, this);
+
+            card?.Init(d.id, d.tex, d.scramble, d.blockSize, this);
             _cards.Add(card);
         }
     }

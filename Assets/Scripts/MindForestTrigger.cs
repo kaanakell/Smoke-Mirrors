@@ -50,13 +50,11 @@ public class MindForestTrigger : MonoBehaviour
         _lastTriggerTime = Time.time;
         _returnSceneName = SceneManager.GetActiveScene().name;
 
-        // We still use interactor here to save the return position
         if (interactor != null)
             ReturnPosition = interactor.transform.position;
         else
             ReturnPosition = Vector3.zero;
 
-        // THE FIX: Removed the 'pc' or 'interactor' from this call
         if (!string.IsNullOrEmpty(item.memoryText))
             StartCoroutine(MemoryThenForest(item.memoryText, item));
         else

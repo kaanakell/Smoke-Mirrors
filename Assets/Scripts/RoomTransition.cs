@@ -52,16 +52,13 @@ public class RoomTransition : MonoBehaviour
 
         yield return StartCoroutine(Fade(0f, 1f));
 
-        // THE LOOP FIX: Check if we are in the middle of the bathroom emergency!
         if (CorridorSequenceManager.IsEmergencyLoopActive)
         {
-            // Count the loop and reload the SAME scene
             CorridorSequenceManager.LoopCount++;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         else
         {
-            // Normal behavior
             SceneManager.LoadScene(targetScene);
         }
     }

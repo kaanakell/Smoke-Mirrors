@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a4643877cd8ae74fb9ec941c4385c23, type: 3}
-  m_Name: CardData_1
+  m_Name: CardData_6
   m_EditorClassIdentifier: Assembly-CSharp::MemoryCardData
-  cardLabel: Bear
-  cardSprite: {fileID: 21300000, guid: a74613786b5cf3246bd69bfd2dbcfa72, type: 3}
-  scrambleBlockSize: 8
+  cardLabel: Moose
+  cardSprite: {fileID: 21300000, guid: ac9b062baf894144f864dff280e026f1, type: 3}
+  scrambleBlockSize: 16
   flavourText: 

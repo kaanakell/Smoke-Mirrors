@@ -14,11 +14,9 @@ public class PlantInteractable : MonoBehaviour, IInteractable
     [Tooltip("The automatic monologue reminding the player to water the plant.")]
     [SerializeField] private DialogueSet reminderMonologue;
 
-    // --- Static Memory ---
     private static int _growthStage = 0;
     private static bool _wasWateredThisVisit = false;
 
-    // --- Automatic Reminder Timer ---
     private float _reminderTimer = 0f;
     private float _nextReminderTime = 0f;
 
@@ -41,12 +39,11 @@ public class PlantInteractable : MonoBehaviour, IInteractable
         }
 
         UpdateSprite();
-        SetNextReminderTime(); // Start the clock!
+        SetNextReminderTime();
     }
 
     private void Update()
     {
-        // If it hasn't been watered yet, run the reminder timer
         if (!_wasWateredThisVisit)
         {
             _reminderTimer += Time.deltaTime;
@@ -54,16 +51,14 @@ public class PlantInteractable : MonoBehaviour, IInteractable
             if (_reminderTimer >= _nextReminderTime)
             {
                 TriggerReminder();
-                _reminderTimer = 0f; // Reset timer
-                SetNextReminderTime(); // Pick a new random time
+                _reminderTimer = 0f;
+                SetNextReminderTime();
             }
         }
     }
 
     private void TriggerReminder()
     {
-        // Only show the reminder if the dialogue manager exists, has the dialogue, 
-        // and ISN'T currently playing another conversation!
         if (DialogueManager.Instance != null &&
             reminderMonologue != null &&
             !DialogueManager.Instance.IsDialogueActive)
@@ -74,8 +69,7 @@ public class PlantInteractable : MonoBehaviour, IInteractable
 
     private void SetNextReminderTime()
     {
-        // Picks a random time between 1 and 3 minutes (60 to 180 seconds)
-        _nextReminderTime = Random.Range(60f, 180f);
+        _nextReminderTime = Random.Range(30f, 180f);
     }
 
     public void Interact(GameObject interactor)

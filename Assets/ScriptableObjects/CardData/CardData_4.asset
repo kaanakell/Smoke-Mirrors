@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MemoryCardData
   cardLabel: Fox
   cardSprite: {fileID: 21300000, guid: 3c4e7436d1d10af48886e86f542b74e0, type: 3}
+  scrambleBlockSize: 64
   flavourText: 

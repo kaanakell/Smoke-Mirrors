@@ -5,31 +5,26 @@ using UnityEngine;
 
 public class SonNPC : MonoBehaviour
 {
-    // ── Patrol ────────────────────────────────────────────────────────────────
     [Header("Patrol Waypoints")]
     [Tooltip("Empty GameObjects placed around the living room. Son walks between them.")]
     [SerializeField] private Transform[] patrolWaypoints;
     [SerializeField] private float patrolSpeed = 1.4f;
     [SerializeField] private float waypointRadius = 0.3f;
 
-    // ── Approach ──────────────────────────────────────────────────────────────
     [Header("Approach")]
     [SerializeField] private float approachSpeed = 2.2f;
     [SerializeField] private float stopDistance = 1.2f;
     [SerializeField] private float lockRadius = 2.0f;
-    [SerializeField] private float makeupRadius = 2.5f; // How close father must be to apologize
+    [SerializeField] private float makeupRadius = 2.5f;
 
-    // ── Return ────────────────────────────────────────────────────────────────
     [Header("Return")]
     [SerializeField] private float returnSpeed = 2.4f;
 
-    // ── Lead To Mini Game ────────────────────────────────────────────────────
     [Header("Lead To Mini Game")]
     [Tooltip("Waypoints for each game in order: Element 0 = Clock, Element 1 = Memory, Element 2 = Puzzle")]
     [SerializeField] private Transform[] miniGameWaypoints;
     [SerializeField] private float leadSpeed = 1.8f;
 
-    // ── Dialogue Sets ─────────────────────────────────────────────────────────
     [Header("Dialogue Sets")]
     [Tooltip("Plays when the Son first approaches the player in the living room.")]
     [SerializeField] private DialogueSet introDialogue;
@@ -38,7 +33,6 @@ public class SonNPC : MonoBehaviour
     [Tooltip("Plays after the Clock Drawing mini game ends (forced or by player).")]
     [SerializeField] private DialogueSet postMiniGameDialogue;
 
-    // ── Internals ─────────────────────────────────────────────────────────────
     private static bool _hasPlayedIntro = false;
     private AIPath _ai;
     private bool _aStarAvailable;
@@ -52,10 +46,6 @@ public class SonNPC : MonoBehaviour
     private int _currentGameIndex = 0;
 
     public bool IsAvailable => _state == State.Patrol;
-
-    // =========================================================================
-    // Unity lifecycle
-    // =========================================================================
 
     private void Awake()
     {
@@ -79,16 +69,12 @@ public class SonNPC : MonoBehaviour
     {
         _player = FindFirstObjectByType<PlayerController>();
 
-        // 1. Put the Son in the patrol state first so he registers as "Available"
         BeginPatrol();
 
-        // 2. Check if this is the player's first time entering
         if (!_hasPlayedIntro)
         {
-            // Mark it as played so it never fires again this session
             _hasPlayedIntro = true;
 
-            // Trigger the intro immediately!
             TriggerSceneEntryIntro();
         }
     }
@@ -99,19 +85,10 @@ public class SonNPC : MonoBehaviour
         {
             case State.Patrol: UpdatePatrol(); break;
             case State.Talk: break;
-            case State.SpecialSequence: break; // Do nothing, coroutine handles it
+            case State.SpecialSequence: break;
         }
     }
 
-    // =========================================================================
-    // Public API
-    // =========================================================================
-
-    /// <summary>
-    /// Called by the living-room trigger the first time the player enters.
-    /// The Son approaches, plays the intro DialogueSet, then leads the player
-    /// to the Clock Drawing mini game.
-    /// </summary>
     public void TriggerSceneEntryIntro()
     {
         if (!IsAvailable) return;
@@ -119,10 +96,6 @@ public class SonNPC : MonoBehaviour
         StartCoroutine(ApproachThenTalk(introDialogue, () => StartCoroutine(LeadToGameRoutine())));
     }
 
-    /// <summary>
-    /// Allows external scripts (like a Trash Item) to call the Son over.
-    /// He will approach, play the provided dialogue, fire the callback, and return to patrol.
-    /// </summary>
     public void TriggerCustomApproach(DialogueSet customDialogue, System.Action onComplete)
     {
         if (!IsAvailable) return;
@@ -130,10 +103,8 @@ public class SonNPC : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(ApproachThenTalk(customDialogue, () =>
         {
-            // Trigger whatever the item wants to do (like removing it from inventory)
             onComplete?.Invoke();
 
-            // Go back to walking around
             StartCoroutine(ReturnRoutine());
         }));
     }
@@ -142,26 +113,17 @@ public class SonNPC : MonoBehaviour
     {
         if (!IsAvailable) return;
 
-        _currentGameIndex = gameIndex; // Store the current game stage
+        _currentGameIndex = gameIndex;
 
         StopAllCoroutines();
         StartCoroutine(ApproachThenTalk(itemCollectionDialogue, () => StartCoroutine(LeadToGameRoutine())));
     }
-
-
-    // =========================================================================
-    // Event handler — ClockDrawingGame.OnMiniGameCompleted
-    // =========================================================================
 
     private void HandleMiniGameCompleted()
     {
         StopAllCoroutines();
         StartCoroutine(ApproachThenTalk(postMiniGameDialogue, () => StartCoroutine(ReturnRoutine())));
     }
-
-    // =========================================================================
-    // Patrol
-    // =========================================================================
 
     private void BeginPatrol()
     {
@@ -198,15 +160,6 @@ public class SonNPC : MonoBehaviour
         if (_aStarAvailable) _ai.destination = patrolWaypoints[_patrolIndex].position;
     }
 
-    // =========================================================================
-    // Approach → Talk pipeline
-    // =========================================================================
-
-    /// <summary>
-    /// Walks toward the player, locks movement on both sides, then starts
-    /// the given DialogueSet. <paramref name="onComplete"/> is invoked after
-    /// the last line is dismissed.
-    /// </summary>
     private IEnumerator ApproachThenTalk(DialogueSet dialogue, System.Action onComplete)
     {
         _state = State.Approach;
@@ -261,13 +214,8 @@ public class SonNPC : MonoBehaviour
         LockPlayer();
     }
 
-    // =========================================================================
-    // Dialogue
-    // =========================================================================
-
     private void BeginDialogue(DialogueSet set, System.Action onComplete)
     {
-        // Guard: empty set → skip straight to callback
         if (set == null || set.lines == null || set.lines.Length == 0)
         {
             UnlockPlayer();
@@ -275,9 +223,8 @@ public class SonNPC : MonoBehaviour
             return;
         }
 
-        _state = State.Talk; // Mark the Son as busy talking
+        _state = State.Talk;
 
-        // Call the new global manager
         if (DialogueManager.Instance != null)
         {
             DialogueManager.Instance.StartDialogue(set, () =>
@@ -294,39 +241,28 @@ public class SonNPC : MonoBehaviour
         }
     }
 
-    // =========================================================================
-    // Lead To Mini Game
-    // =========================================================================
-
     private IEnumerator LeadToGameRoutine()
     {
-        // 1. Get the correct destination for this stage
         Transform targetWaypoint = transform;
         if (miniGameWaypoints != null && _currentGameIndex < miniGameWaypoints.Length)
         {
-            // Here is where we pick the specific "car" out of the "parking lot"
             targetWaypoint = miniGameWaypoints[_currentGameIndex];
         }
 
         _state = State.LeadToGame;
 
-        // Player is free to follow during this phase
         UnlockPlayer();
 
-        // 2. Check if we have valid waypoints to walk to
         if (miniGameWaypoints == null || miniGameWaypoints.Length == 0)
         {
-            // Fallback: Open immediately where we stand
             OpenSpecificGameBasedOnIndex();
             yield break;
         }
 
-        // 3. Walk to the chosen waypoint using targetWaypoint.position
         if (_aStarAvailable)
         {
             SetAISpeed(leadSpeed, true);
 
-            // FIXED: Using targetWaypoint.position
             _ai.destination = targetWaypoint.position;
 
             float timeout = 20f, elapsed = 0f;
@@ -344,7 +280,6 @@ public class SonNPC : MonoBehaviour
         }
         else
         {
-            // FIXED: Using targetWaypoint.position in the fallback movement too
             while (Vector3.Distance(transform.position, targetWaypoint.position) > waypointRadius)
             {
                 transform.position = Vector3.MoveTowards(
@@ -352,14 +287,8 @@ public class SonNPC : MonoBehaviour
                 yield return null;
             }
         }
-
-        // 4. Finally, open the specific mini-game after arriving
-        //OpenSpecificGameBasedOnIndex();
     }
 
-    /// <summary>
-    /// Helper method to keep the coroutine clean. Opens the right game based on the stage.
-    /// </summary>
     private void OpenSpecificGameBasedOnIndex()
     {
         if (_currentGameIndex == 0 && ClockDrawingGame.Instance != null)
@@ -376,15 +305,9 @@ public class SonNPC : MonoBehaviour
         }
         else
         {
-            // Fallback in case OpenMiniGame() is still needed
-            // OpenMiniGame(); 
             Debug.LogWarning("[SonNPC] No game matched the current index!");
         }
     }
-
-    // =========================================================================
-    // Return to patrol
-    // =========================================================================
 
     private IEnumerator ReturnRoutine()
     {
@@ -419,10 +342,6 @@ public class SonNPC : MonoBehaviour
         BeginPatrol();
     }
 
-    // =========================================================================
-    // Special Argument Sequence
-    // =========================================================================
-
     public void TriggerArgumentSequence(DialogueSet argDialogue, DialogueSet makeupDialogue, Transform runawayPoint, System.Action onComplete)
     {
         if (!IsAvailable) return;
@@ -436,31 +355,25 @@ public class SonNPC : MonoBehaviour
         PauseAI();
         if (_player == null) _player = FindFirstObjectByType<PlayerController>();
 
-        // 1. Walk to player
         if (_aStarAvailable) yield return StartCoroutine(AStarApproach());
         else yield return StartCoroutine(DirectApproach());
 
-        // 2. Play argument dialogue
         bool argDone = false;
         BeginDialogue(argDialogue, () => argDone = true);
         yield return new WaitUntil(() => argDone);
 
-        // 3. THE POLISHED BUMP
         LockPlayer();
 
-        // Calculate the direction from the Father to the Son
         Vector3 dirTowardSon = (transform.position - _player.transform.position).normalized;
         dirTowardSon.z = 0;
         if (dirTowardSon == Vector3.zero) dirTowardSon = Vector3.right;
 
-        // Set up the subtle movement targets
         Vector3 playerStart = _player.transform.position;
-        Vector3 playerBumpTarget = playerStart + dirTowardSon * 0.3f; // Father lunges slightly
+        Vector3 playerBumpTarget = playerStart + dirTowardSon * 0.3f;
 
         Vector3 sonStart = transform.position;
-        Vector3 sonBumpTarget = sonStart + dirTowardSon * 0.5f; // Son stumbles back slightly
+        Vector3 sonBumpTarget = sonStart + dirTowardSon * 0.5f;
 
-        // Trigger Camera Shake!
         if (CameraShake.Instance != null) CameraShake.Instance.Shake(0.2f, 0.15f);
 
         float t = 0;
@@ -470,7 +383,6 @@ public class SonNPC : MonoBehaviour
             t += Time.deltaTime;
             float percent = t / bumpDuration;
 
-            // Cubic Ease-Out: makes the animation start fast and slow down naturally
             float ease = 1f - Mathf.Pow(1f - percent, 3f);
 
             _player.transform.position = Vector3.Lerp(playerStart, playerBumpTarget, ease);
@@ -478,10 +390,9 @@ public class SonNPC : MonoBehaviour
             yield return null;
         }
 
-        // 4. Run away
         if (_aStarAvailable)
         {
-            SetAISpeed(returnSpeed * 1.5f, true); // Run away
+            SetAISpeed(returnSpeed * 1.5f, true);
             _ai.destination = runawayPoint.position;
             while (!_ai.reachedDestination) yield return null;
             PauseAI();
@@ -495,10 +406,8 @@ public class SonNPC : MonoBehaviour
             }
         }
 
-        // 5. Sulk and wait for player to enter the "Trigger" radius
         UnlockPlayer();
 
-        // This loop acts exactly like a physical Trigger Collider!
         while (Vector3.Distance(transform.position, _player.transform.position) > makeupRadius)
         {
             yield return null;
@@ -506,20 +415,14 @@ public class SonNPC : MonoBehaviour
 
         LockPlayer();
 
-        // 6. Play makeup dialogue
         bool makeupDone = false;
         BeginDialogue(makeDialogue, () => makeupDone = true);
         yield return new WaitUntil(() => makeupDone);
 
-        // 7. Finish
         UnlockPlayer();
         onComplete?.Invoke();
         StartCoroutine(ReturnRoutine());
     }
-
-    // =========================================================================
-    // Helpers
-    // =========================================================================
 
     private void LockPlayer()
     {
@@ -544,10 +447,6 @@ public class SonNPC : MonoBehaviour
         _ai.maxSpeed = speed;
         _ai.canMove = canMove;
     }
-
-    // =========================================================================
-    // Editor gizmos
-    // =========================================================================
 
     private void OnDrawGizmosSelected()
     {

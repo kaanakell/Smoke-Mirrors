@@ -8,19 +8,10 @@ public class ItemProgressionManager : MonoBehaviour
 {
     public static ItemProgressionManager Instance { get; private set; }
 
-    // ── Events ────────────────────────────────────────────────────────────────
-
     public event Action<int> OnItemCollected;
     public event Action<int> OnStageUnlocked;
 
-    /// <summary>
-    /// Fired after ANY mini game completes and the stage has been advanced.
-    /// SonNPC subscribes to this to trigger its post-game dialogue for every
-    /// mini game — not just the clock drawing one.
-    /// </summary>
     public static event Action OnMiniGameCompleted;
-
-    // ── Inspector ─────────────────────────────────────────────────────────────
 
     [Header("Scene Settings")]
     [Tooltip("Name of the scene that contains SonNPC (e.g. 'LivingRoomScene').")]
@@ -43,8 +34,6 @@ public class ItemProgressionManager : MonoBehaviour
     [Tooltip("Stage 0 = visible at start. Stage N = revealed after Nth mini-game.")]
     [SerializeField] private UnlockStage[] unlockStages;
 
-    // ── Runtime state ─────────────────────────────────────────────────────────
-
     private int _totalCollected = 0;
     private int _collectedThisRound = 0;
     private int _currentStage = 0;
@@ -56,10 +45,6 @@ public class ItemProgressionManager : MonoBehaviour
 
     private SonNPC _sonNpc;
     private Coroutine _approachCoroutine;
-
-    // =========================================================================
-    // Unity lifecycle
-    // =========================================================================
 
     private void Awake()
     {
@@ -76,24 +61,19 @@ public class ItemProgressionManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // ── Re-discover items ──────────────────────────────────────────────────
         _allItems.Clear();
         foreach (var item in FindObjectsByType<ProgressionPickupItem>(FindObjectsSortMode.None))
             RegisterItem(item);
 
-        // ── Re-discover mini game stations ────────────────────────────────────
-        // Remove destroyed entries from previous scenes first
         _miniGames.RemoveAll(mg => mg == null);
         foreach (var mg in FindObjectsByType<MiniGameStageObject>(FindObjectsSortMode.None))
             RegisterMiniGame(mg);
 
-        // ── Find SonNPC in new scene ───────────────────────────────────────────
         _sonNpc = FindFirstObjectByType<SonNPC>();
 
         RefreshAllItemVisibility();
         RefreshMiniGameVisibility();
 
-        // ── Trigger queued son approach if the Son is now available ───────────
         if (_approachPending && _sonNpc != null)
         {
             if (_approachCoroutine != null) StopCoroutine(_approachCoroutine);
@@ -105,7 +85,6 @@ public class ItemProgressionManager : MonoBehaviour
             _sonNpc = FindFirstObjectByType<SonNPC>();
             RefreshAllItemVisibility();
 
-            // THE FIX 3: Resume the approach if we delayed it for the forest!
             if (_approachPending)
             {
                 Debug.Log("[Progression] Resuming pending Son approach after returning to Living Room.");
@@ -114,10 +93,6 @@ public class ItemProgressionManager : MonoBehaviour
             }
         }
     }
-
-    // =========================================================================
-    // Item API
-    // =========================================================================
 
     public void RegisterItem(ProgressionPickupItem item)
     {
@@ -133,7 +108,6 @@ public class ItemProgressionManager : MonoBehaviour
         _totalCollected++;
         OnItemCollected?.Invoke(_totalCollected);
 
-        // Make sure we only count items meant for the current stage!
         if (item.UnlockStageIndex == _currentStage)
         {
             _collectedThisRound++;
@@ -148,14 +122,12 @@ public class ItemProgressionManager : MonoBehaviour
                 _isMiniGameRevealed = true;
                 RefreshMiniGameVisibility();
 
-                // Check if we are on the absolute last stage.
                 bool isFinalStage = _currentStage >= itemsPerStage.Length - 1;
 
                 if (!isFinalStage)
                 {
                     _approachPending = true;
                     RefreshMiniGameVisibility();
-                    // THE FIX: We use your existing coroutine instead of a missing method
                     if (!mindForestTriggered)
                     {
                         if (_approachCoroutine != null) StopCoroutine(_approachCoroutine);
@@ -168,7 +140,6 @@ public class ItemProgressionManager : MonoBehaviour
                 }
                 else
                 {
-                    // It's the final stage! We don't want him asking to play a game.
                     _approachPending = false;
                     Debug.Log("[Progression] Final items collected. No more mini-games to lead to.");
                 }
@@ -176,17 +147,8 @@ public class ItemProgressionManager : MonoBehaviour
         }
     }
 
-    // =========================================================================
-    // Mini game API
-    // =========================================================================
-
-    /// <summary>
-    /// Call this from any mini game (ClockDrawingGame, PuzzleGame, MemoryMatchGame)
-    /// when the player finishes or the timer runs out.
-    /// </summary>
     public void CompleteMiniGame()
     {
-        // Hide the station that just finished
         SetMiniGameVisibleForStage(_currentStage, false);
 
         _currentStage++;
@@ -198,26 +160,16 @@ public class ItemProgressionManager : MonoBehaviour
         Debug.Log($"[Progression] Stage {_currentStage} unlocked. Required items: {ItemsNeededForStage(_currentStage)}");
         OnStageUnlocked?.Invoke(_currentStage);
 
-        // Notify SonNPC (and any other listeners) so the post-game dialogue plays
         OnMiniGameCompleted?.Invoke();
     }
-
-    // =========================================================================
-    // Mini game station registry
-    // =========================================================================
 
     public void RegisterMiniGame(MiniGameStageObject mg)
     {
         if (mg == null || _miniGames.Contains(mg)) return;
         _miniGames.Add(mg);
 
-        // Apply correct visibility immediately
         mg.SetVisible(mg.ActivationStage == _currentStage);
     }
-
-    // =========================================================================
-    // Son approach
-    // =========================================================================
 
     private IEnumerator DelayedSonApproach(int targetStage)
     {
@@ -231,8 +183,6 @@ public class ItemProgressionManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
-        // THE FIX: If the player manually finished the game while we were waiting,
-        // the stage naturally advanced. Abort this queued approach so we don't open the NEXT game!
         if (targetStage != _currentStage)
         {
             _approachPending = false;
@@ -246,7 +196,6 @@ public class ItemProgressionManager : MonoBehaviour
             _approachPending = false;
             _approachCoroutine = null;
 
-            // Trigger the Son for the stage we memorized
             _sonNpc.TriggerItemThresholdApproach(targetStage);
             Debug.Log($"[Progression] Son approach triggered successfully for stage {targetStage}.");
         }
@@ -256,10 +205,6 @@ public class ItemProgressionManager : MonoBehaviour
             Debug.Log("[Progression] Son not found after delay — approach still pending.");
         }
     }
-
-    // =========================================================================
-    // Visibility helpers
-    // =========================================================================
 
     private void RefreshAllItemVisibility()
     {
@@ -294,29 +239,17 @@ public class ItemProgressionManager : MonoBehaviour
         return true;
     }
 
-    // =========================================================================
-    // Helpers
-    // =========================================================================
-
-    /// <summary>Returns how many items must be collected at a given stage.</summary>
     private int ItemsNeededForStage(int stage)
     {
         if (itemsPerStage == null || itemsPerStage.Length == 0) return 1;
-        // Clamp so the last entry applies to any stage beyond the array bounds
         int idx = Mathf.Clamp(stage, 0, itemsPerStage.Length - 1);
         return Mathf.Max(1, itemsPerStage[idx]);
     }
-
-    // =========================================================================
-    // Public read-only state
-    // =========================================================================
 
     public int TotalCollected => _totalCollected;
     public int CurrentStage => _currentStage;
     public bool ApproachPending => _approachPending;
 }
-
-// ── Data class ────────────────────────────────────────────────────────────────
 
 [Serializable]
 public class UnlockStage

@@ -35,7 +35,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        // If we just got back from the forest, snap the player to their old spot!
         if (MindForestTrigger.IsReturningFromForest)
         {
             transform.position = MindForestTrigger.ReturnPosition;

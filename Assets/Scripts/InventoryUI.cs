@@ -27,8 +27,6 @@ public class InventoryUI : MonoBehaviour
         Inventory.Instance.OnInventoryChanged += RefreshUI;
         BuildSlots();
         initialized = true;
-
-        //gameObject.SetActive(false);
     }
 
     void OnEnable()
