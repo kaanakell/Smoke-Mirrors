@@ -17,7 +17,7 @@ TagManager:
   - Interactable
   - Collider
   - Son
-  - 
+  - VisionMask
   - 
   - 
   - 
@@ -43,6 +43,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: VisionMask
+    uniqueID: 1205156095
     locked: 0
   m_RenderingLayers:
   - Default
