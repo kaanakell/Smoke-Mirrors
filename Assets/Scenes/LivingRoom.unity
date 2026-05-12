@@ -623,7 +623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882fbb0119ec144f947ff0d77a73918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldHighlight
-  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 0.2}
   glowScale: 1
   pulseSpeed: 2.2
   minAlpha: 0.15
@@ -1419,7 +1419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882fbb0119ec144f947ff0d77a73918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldHighlight
-  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 0.2}
   glowScale: 1
   pulseSpeed: 2.2
   minAlpha: 0.15
@@ -4091,7 +4091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882fbb0119ec144f947ff0d77a73918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldHighlight
-  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 0.2}
   glowScale: 1
   pulseSpeed: 2.2
   minAlpha: 0.15
@@ -5795,7 +5795,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882fbb0119ec144f947ff0d77a73918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldHighlight
-  glowColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 0.2}
   glowScale: 1.25
   pulseSpeed: 2.2
   minAlpha: 0.12
@@ -6789,9 +6789,8 @@ MonoBehaviour:
   leadSpeed: 1.6
   introDialogue: {fileID: 11400000, guid: 4c94c1931f2dad340a63a049e3d92c99, type: 2}
   leadToGameDialogues:
-  - {fileID: 11400000, guid: 14aeaa38db6f65a4b96196294e0577c1, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 71cacf0ab100318498eb1445baec0c2f, type: 2}
+  - {fileID: 11400000, guid: ebf7217b7100f454d879aacf8a3587bd, type: 2}
   postMiniGameDialogue: {fileID: 11400000, guid: 260b9f053acab33419eaed2f335020b7, type: 2}
 --- !u!58 &1378083626
 CircleCollider2D:
@@ -7149,7 +7148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882fbb0119ec144f947ff0d77a73918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldHighlight
-  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 0.2}
   glowScale: 1
   pulseSpeed: 2.2
   minAlpha: 0.15
@@ -10839,7 +10838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882fbb0119ec144f947ff0d77a73918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldHighlight
-  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 0.2}
   glowScale: 1
   pulseSpeed: 2.2
   minAlpha: 0.15
@@ -10934,7 +10933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882fbb0119ec144f947ff0d77a73918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldHighlight
-  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+  glowColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 0.2}
   glowScale: 1
   pulseSpeed: 2.2
   minAlpha: 0.15

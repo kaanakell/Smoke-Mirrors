@@ -116,14 +116,26 @@ public class SonNPC : MonoBehaviour
         _currentGameIndex = gameIndex;
 
         DialogueSet selectedDialogue = null;
-        if (leadToGameDialogues != null && leadToGameDialogues.Length > 0)
+
+        if (gameIndex > 0 && leadToGameDialogues != null)
         {
-            int safeIndex = Mathf.Clamp(gameIndex, 0, leadToGameDialogues.Length - 1);
-            selectedDialogue = leadToGameDialogues[safeIndex];
+            int arrayIndex = gameIndex - 1; // Shift index so 1 becomes 0, 2 becomes 1
+            if (arrayIndex < leadToGameDialogues.Length)
+            {
+                selectedDialogue = leadToGameDialogues[arrayIndex];
+            }
         }
 
         StopAllCoroutines();
-        StartCoroutine(ApproachThenTalk(selectedDialogue, () => StartCoroutine(LeadToGameRoutine())));
+
+        if (selectedDialogue != null)
+        {
+            StartCoroutine(ApproachThenTalk(selectedDialogue, () => StartCoroutine(LeadToGameRoutine())));
+        }
+        else
+        {
+            StartCoroutine(LeadToGameRoutine());
+        }
     }
 
     private void HandleMiniGameCompleted()

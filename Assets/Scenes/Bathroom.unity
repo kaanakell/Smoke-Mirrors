@@ -4943,7 +4943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882fbb0119ec144f947ff0d77a73918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldHighlight
-  glowColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 0.29803923}
+  glowColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 0.2}
   glowScale: 1
   pulseSpeed: 2.2
   minAlpha: 0.15
