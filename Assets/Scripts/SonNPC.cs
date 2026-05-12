@@ -28,8 +28,8 @@ public class SonNPC : MonoBehaviour
     [Header("Dialogue Sets")]
     [Tooltip("Plays when the Son first approaches the player in the living room.")]
     [SerializeField] private DialogueSet introDialogue;
-    [Tooltip("Plays when enough items are collected, leading to the mini-game.")]
-    [SerializeField] private DialogueSet itemCollectionDialogue;
+    [Tooltip("Element 0 = Clock Game, Element 1 = Memory Game, Element 2 = Puzzle Game")]
+    [SerializeField] private DialogueSet[] leadToGameDialogues;
     [Tooltip("Plays after the Clock Drawing mini game ends (forced or by player).")]
     [SerializeField] private DialogueSet postMiniGameDialogue;
 
@@ -115,8 +115,15 @@ public class SonNPC : MonoBehaviour
 
         _currentGameIndex = gameIndex;
 
+        DialogueSet selectedDialogue = null;
+        if (leadToGameDialogues != null && leadToGameDialogues.Length > 0)
+        {
+            int safeIndex = Mathf.Clamp(gameIndex, 0, leadToGameDialogues.Length - 1);
+            selectedDialogue = leadToGameDialogues[safeIndex];
+        }
+
         StopAllCoroutines();
-        StartCoroutine(ApproachThenTalk(itemCollectionDialogue, () => StartCoroutine(LeadToGameRoutine())));
+        StartCoroutine(ApproachThenTalk(selectedDialogue, () => StartCoroutine(LeadToGameRoutine())));
     }
 
     private void HandleMiniGameCompleted()

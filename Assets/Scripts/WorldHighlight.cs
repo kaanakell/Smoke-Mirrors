@@ -59,10 +59,22 @@ public class WorldHighlight : MonoBehaviour
             _glow.sprite = _source.sprite;
             _glow.sortingLayerID = _source.sortingLayerID;
             _glow.sortingOrder = _source.sortingOrder - 1;
+
+            if (_source.sharedMaterial != null)
+            {
+                _glow.material = new Material(_source.sharedMaterial);
+            }
+            else
+            {
+                _glow.material = new Material(Shader.Find("Sprites/Default"));
+            }
+        }
+        else
+        {
+            _glow.material = new Material(Shader.Find("Sprites/Default"));
         }
 
         _glow.color = new Color(glowColor.r, glowColor.g, glowColor.b, 0f);
-        _glow.material = new Material(Shader.Find("Sprites/Default"));
 
         go.transform.SetAsFirstSibling();
     }
