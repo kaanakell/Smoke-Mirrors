@@ -300,7 +300,6 @@ GameObject:
   - component: {fileID: 1095529237707291799}
   - component: {fileID: 6245135462302262081}
   - component: {fileID: 5436717268585556016}
-  - component: {fileID: 8937332583235953136}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -505,20 +504,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8937332583235953136
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5421875425524123402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f49f3cf1091e77849a2da11f502bbcb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VisionConeAim
-  mainCam: {fileID: 0}
-  rotationOffset: -90
 --- !u!1 &7490064771897176282
 GameObject:
   m_ObjectHideFlags: 0

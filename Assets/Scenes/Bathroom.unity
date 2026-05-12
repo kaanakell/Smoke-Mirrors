@@ -715,8 +715,7 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8937332583235953136, guid: a7b8fb91edc267941b4ced6228ffaffe, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1177,10 +1176,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
   target: {fileID: 0}
-  smoothSpeed: 5
+  smoothSpeed: 10
   offset: {x: 0, y: 0}
-  pixelPerfect: 0
-  pixelsPerUnit: 16
+  pixelPerfect: 1
+  pixelsPerUnit: 64
   useBounds: 1
   minX: -10
   maxX: 10
@@ -3048,7 +3047,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d804f35c2145b504d9da7f9d09b05923, type: 2}
+  - {fileID: 2100000, guid: 5bbc6469f89a53c4fb6e4e32107c7b26, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4780,7 +4779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882fbb0119ec144f947ff0d77a73918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldHighlight
-  glowColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
+  glowColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 0.29803923}
   glowScale: 1
   pulseSpeed: 2.2
   minAlpha: 0.15
