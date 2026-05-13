@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: BathtubDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Father
-    text: I hate showering.
+  - speaker: <glitch>Father</glitch>
+    text: I hate showering. <glitch>Father</glitch>

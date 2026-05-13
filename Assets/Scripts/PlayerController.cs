@@ -4,7 +4,6 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float walkSpeed = 3f;
-    [SerializeField] private float sprintSpeed = 5.5f;
 
     [Header("Animator Parameter Names")]
     [Tooltip("Int parameter: 0=Down  1=Up  2=Left  3=Right")]
@@ -68,8 +67,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        bool sprinting = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        _rb.linearVelocity = _input * (sprinting ? sprintSpeed : walkSpeed);
+        _rb.linearVelocity = _input * walkSpeed;
     }
 
     private void UpdateAnimator()

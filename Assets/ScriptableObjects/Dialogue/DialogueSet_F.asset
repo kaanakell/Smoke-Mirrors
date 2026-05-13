@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: DialogueSet_F
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Father
+  - speaker: <glitch>Father</glitch>
     text: Wooh... So cold today!
   - speaker: Son
     text: Yeah, it's great! Did you see the snowman mom and I made??
-  - speaker: Father
+  - speaker: <glitch>Father</glitch>
     text: Hard to miss!

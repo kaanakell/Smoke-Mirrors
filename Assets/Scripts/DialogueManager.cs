@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -10,24 +11,19 @@ public class DialogueManager : MonoBehaviour
 
     [Header("UI Components")]
     [SerializeField] private GameObject dialoguePanel;
-    [Tooltip("The Image component that holds the dialogue box graphic.")]
     [SerializeField] private Image dialogueBoxBackground;
     [SerializeField] private TextMeshProUGUI speakerNameText;
     [SerializeField] private TextMeshProUGUI dialogueBodyText;
     [SerializeField] private GameObject continuePrompt;
 
     [Header("Dialogue Box Sprites")]
-    [Tooltip("Drag the PCDialogueBox.png here")]
     [SerializeField] private Sprite pcBoxSprite;
-
-    [Tooltip("Drag both of the Son's dialogue boxes here!")]
     [SerializeField] private Sprite[] sonBoxSprites;
-
-    [Tooltip("Fallback box if the speaker is neither")]
     [SerializeField] private Sprite defaultBoxSprite;
 
     [Header("Settings")]
     [SerializeField] private float typeSpeed = 0.03f;
+    [SerializeField] private float glitchRefreshRate = 0.08f;
 
     private DialogueSet _currentSet;
     private int _currentLineIndex = 0;
@@ -35,73 +31,123 @@ public class DialogueManager : MonoBehaviour
     private Coroutine _typeCoroutine;
     private PlayerController _player;
     private Action _onDialogueEndedCallback;
-    private int _sonBoxIndex = 0;
 
-    public bool IsDialogueActive => dialoguePanel != null && dialoguePanel.activeSelf;
+    private string _currentRawSpeaker = "";
+    private string _currentRawBody = "";
+    private int _visibleCharCount;
+    private float _glitchTimer;
 
     private void Awake()
     {
-        // Setup Singleton
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
+
         if (dialoguePanel != null) dialoguePanel.SetActive(false);
-        _player = FindFirstObjectByType<PlayerController>();
     }
 
     private void Update()
     {
-        if (!dialoguePanel.activeSelf) return;
+        if (!IsDialogueActive) return;
 
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
-            if (_isTyping)
-            {
-                StopCoroutine(_typeCoroutine);
-                dialogueBodyText.text = _currentSet.lines[_currentLineIndex].text;
-                _isTyping = false;
-                if (continuePrompt != null) continuePrompt.SetActive(true);
-            }
-            else
-            {
-                NextLine();
-            }
+            HandleInteraction();
+        }
+
+        _glitchTimer += Time.deltaTime;
+        if (_glitchTimer >= glitchRefreshRate)
+        {
+            _glitchTimer = 0;
+            RefreshDialogueUI();
         }
     }
 
-    public void StartDialogue(DialogueSet dialogueSet, Action onComplete = null)
+    private void HandleInteraction()
     {
-        if (dialogueSet == null || dialogueSet.lines.Length == 0) return;
+        if (_isTyping)
+        {
+            string cleanText = Regex.Replace(_currentRawBody, @"<glitch>(.*?)</glitch>", "$1");
+            _visibleCharCount = cleanText.Length;
+            _isTyping = false;
+            if (continuePrompt != null) continuePrompt.SetActive(true);
+        }
+        else
+        {
+            NextLine();
+        }
+    }
 
-        _currentSet = dialogueSet;
+    private void RefreshDialogueUI()
+    {
+        speakerNameText.text = ProcessGlitchTags(_currentRawSpeaker);
+
+        string fullyScrambledBody = ProcessGlitchTags(_currentRawBody);
+
+        if (!string.IsNullOrEmpty(fullyScrambledBody))
+        {
+            int lengthToShow = Mathf.Min(_visibleCharCount, fullyScrambledBody.Length);
+            dialogueBodyText.text = fullyScrambledBody.Substring(0, lengthToShow);
+        }
+    }
+
+    public void StartDialogue(DialogueSet set, Action onEnded = null)
+    {
+        _currentSet = set;
+        _onDialogueEndedCallback = onEnded;
         _currentLineIndex = 0;
 
-        _onDialogueEndedCallback = onComplete;
+        if (dialoguePanel != null) dialoguePanel.SetActive(true);
 
-        dialoguePanel.SetActive(true);
-
+        if (_player == null) _player = FindFirstObjectByType<PlayerController>();
         if (_player != null) _player.MovementLocked = true;
-
-        if (sonBoxSprites != null && sonBoxSprites.Length > 0)
-        {
-            _sonBoxIndex = (_sonBoxIndex + 1) % sonBoxSprites.Length;
-        }
 
         ShowLine();
     }
 
     private void ShowLine()
     {
+        if (_currentSet == null || _currentLineIndex >= _currentSet.lines.Length) return;
+
         DialogueLine line = _currentSet.lines[_currentLineIndex];
 
-        string speakerLower = line.speaker.ToLower();
+        _currentRawSpeaker = line.speaker ?? "";
+        _currentRawBody = line.text ?? "";
+        _visibleCharCount = 0;
 
+        UpdateDialogueBoxSprite(_currentRawSpeaker);
+
+        if (continuePrompt != null) continuePrompt.SetActive(false);
+        if (_typeCoroutine != null) StopCoroutine(_typeCoroutine);
+
+        _typeCoroutine = StartCoroutine(TypeRoutine());
+    }
+
+    private IEnumerator TypeRoutine()
+    {
+        _isTyping = true;
+
+        string cleanText = Regex.Replace(_currentRawBody, @"<glitch>(.*?)</glitch>", "$1");
+        int targetLength = cleanText.Length;
+
+        while (_visibleCharCount < targetLength)
+        {
+            if (!_isTyping) break;
+
+            _visibleCharCount++;
+            yield return new WaitForSeconds(typeSpeed);
+        }
+
+        _isTyping = false;
+        if (continuePrompt != null) continuePrompt.SetActive(true);
+    }
+
+    private void UpdateDialogueBoxSprite(string speaker)
+    {
+        string speakerLower = speaker.ToLower();
         if (speakerLower.Contains("son"))
         {
-            if (sonBoxSprites != null && sonBoxSprites.Length > 0)
-            {
-                dialogueBoxBackground.sprite = sonBoxSprites[_sonBoxIndex];
-            }
+            int index = Mathf.Clamp(_currentLineIndex % 2, 0, sonBoxSprites.Length - 1);
+            dialogueBoxBackground.sprite = sonBoxSprites[index];
         }
         else if (speakerLower.Contains("father") || speakerLower.Contains("you") || speakerLower.Contains("pc"))
         {
@@ -111,26 +157,24 @@ public class DialogueManager : MonoBehaviour
         {
             dialogueBoxBackground.sprite = defaultBoxSprite != null ? defaultBoxSprite : pcBoxSprite;
         }
-
-        speakerNameText.text = line.speaker;
-        dialogueBodyText.text = "";
-
-        if (continuePrompt != null) continuePrompt.SetActive(false);
-
-        if (_typeCoroutine != null) StopCoroutine(_typeCoroutine);
-        _typeCoroutine = StartCoroutine(TypeRoutine(line.text));
     }
 
-    private IEnumerator TypeRoutine(string text)
+    private string ProcessGlitchTags(string text)
     {
-        _isTyping = true;
-        foreach (char c in text.ToCharArray())
+        if (string.IsNullOrEmpty(text)) return "";
+        return Regex.Replace(text, @"<glitch>(.*?)</glitch>", match =>
         {
-            dialogueBodyText.text += c;
-            yield return new WaitForSeconds(typeSpeed);
-        }
-        _isTyping = false;
-        if (continuePrompt != null) continuePrompt.SetActive(true);
+            return GenerateGibberish(match.Groups[1].Value.Length);
+        });
+    }
+
+    private string GenerateGibberish(int length)
+    {
+        string chars = "!@#$%^&*()_+-=X{}[]\\|;:<>/?";
+        char[] scrambled = new char[length];
+        for (int i = 0; i < length; i++)
+            scrambled[i] = chars[UnityEngine.Random.Range(0, chars.Length)];
+        return new string(scrambled);
     }
 
     private void NextLine()
@@ -148,11 +192,16 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
-        dialoguePanel.SetActive(false);
+        if (dialoguePanel != null) dialoguePanel.SetActive(false);
         if (_player != null) _player.MovementLocked = false;
+
         _currentSet = null;
+        _currentRawSpeaker = "";
+        _currentRawBody = "";
 
         _onDialogueEndedCallback?.Invoke();
         _onDialogueEndedCallback = null;
     }
+
+    public bool IsDialogueActive => dialoguePanel != null && dialoguePanel.activeSelf;
 }

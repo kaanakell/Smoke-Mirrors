@@ -15,9 +15,9 @@ MonoBehaviour:
   lines:
   - speaker: Son
     text: You've had one 30 minutes ago. Check the journal.
-  - speaker: Father
+  - speaker: <glitch>Father</glitch>
     text: No, I haven't.
   - speaker: Son
     text: I will give you a new one when it's time.
-  - speaker: Father
+  - speaker: <glitch>Father</glitch>
     text: They're mine, fuck off!

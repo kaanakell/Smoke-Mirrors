@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IntroDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Son
+  - speaker: <glitch>Son</glitch>
     text: All washed up, yeah?
-  - speaker: Son
+  - speaker: S<glitch>son</glitch>
     text: Alright, let's do something together! Follow me.

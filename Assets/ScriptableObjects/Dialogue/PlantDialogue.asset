@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PlantDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Father
+  - speaker: <glitch>Father</glitch>
     text: I should water the plant.

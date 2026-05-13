@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: BathroomDoorLockDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Father
-    text: I already washed my hands. I should go to the living room.
+  - speaker: <glitch>Father</glitch>
+    text: I already took my medicine. I should go to the living room.

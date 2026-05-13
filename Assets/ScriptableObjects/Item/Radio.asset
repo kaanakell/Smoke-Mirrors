@@ -17,6 +17,5 @@ MonoBehaviour:
   worldSprite: {fileID: -8058838277252969893, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
   inventorySprite: {fileID: -8058838277252969893, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
   memoryText: The weather report is good! It will be nice to work today
-  memoryBackground: {fileID: 0}
+  memoryBackground: {fileID: 21300000, guid: 437b8a61687d3d141beb9c0f077178fe, type: 3}
   pickupSound: {fileID: 8300000, guid: 8d024d54c10e26542b3748c3da711199, type: 3}
-  canTriggerMindForest: 0

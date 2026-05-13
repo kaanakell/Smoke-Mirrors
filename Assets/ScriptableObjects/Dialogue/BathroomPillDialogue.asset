@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: BathroomPillDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Father
-    text: I need to take my medicine!!
+  - speaker: <glitch>Father</glitch>
+    text: "He\u2019ll shout at me again if I don\u2019t take my medication."

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: AccidentDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Father
+  - speaker: <glitch>Father</glitch>
     text: Oh.... I need to hide this..

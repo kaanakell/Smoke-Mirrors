@@ -16,7 +16,6 @@ MonoBehaviour:
   description: 
   worldSprite: {fileID: -4208745347748030604, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
   inventorySprite: {fileID: -4208745347748030604, guid: 4b9552c4637854644a9d66e4956bba61, type: 3}
-  memoryText: "Who \u0131s th\u0131s for?"
+  memoryText: Tastes horrible, hopefully it ends.
   memoryBackground: {fileID: 21300000, guid: 471ae44bbaff08e47a4a39baf6598232, type: 3}
   pickupSound: {fileID: 8300000, guid: 1f7954d7aeb12b54aa7fd55d77da05fa, type: 3}
-  canTriggerMindForest: 0

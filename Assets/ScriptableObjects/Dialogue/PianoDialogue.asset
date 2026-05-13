@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PianoDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Father
+  - speaker: <glitch>Father</glitch>
     text: She used to warm up with this tune each day!

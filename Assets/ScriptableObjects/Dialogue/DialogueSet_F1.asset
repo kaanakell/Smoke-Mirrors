@@ -15,11 +15,11 @@ MonoBehaviour:
   lines:
   - speaker: Son
     text: Hey, [REDACTED]. The competition just ended, you missed it. Again.
-  - speaker: Father
+  - speaker: <glitch>Father</glitch>
     text: What, no?? It was next week?!
   - speaker: Son
     text: Yeah, last week. You need to start using a calendar, old man.
-  - speaker: Father
+  - speaker: <glitch>Father</glitch>
     text: I suppose time passes by faster when you're older...
   - speaker: Son
     text: I won 2nd place, by the way. Mom already put the painting up in the bathroom.

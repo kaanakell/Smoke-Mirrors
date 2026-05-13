@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CryingDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Father
+  - speaker: <glitch>Father</glitch>
     text: Oh, what's wrong, heart? Why are you crying?
   - speaker: Son
     text: It's nothing, dad...
