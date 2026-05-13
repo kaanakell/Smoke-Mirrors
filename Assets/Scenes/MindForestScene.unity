@@ -8426,12 +8426,12 @@ MonoBehaviour:
   playerLockRadius: 2.5
   stopDistance: 1.5
   seasonalLayouts:
-  - {fileID: 744530457}
   - {fileID: 1236012855}
+  - {fileID: 744530457}
   - {fileID: 691265776}
   dialogueSets:
-  - {fileID: 11400000, guid: 5644c2c5471e696439537b1b7bfdecdc, type: 2}
   - {fileID: 11400000, guid: af5ab842a701e55468a67cf269591179, type: 2}
+  - {fileID: 11400000, guid: 5644c2c5471e696439537b1b7bfdecdc, type: 2}
   - {fileID: 11400000, guid: e875aecb3a054f347ae030e3c217dff6, type: 2}
   loopDialogues: 0
 --- !u!4 &1050824764

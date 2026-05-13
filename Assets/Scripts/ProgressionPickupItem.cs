@@ -54,7 +54,18 @@ public class ProgressionPickupItem : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        ItemProgressionManager.Instance?.RegisterItem(this);
+        if (ItemProgressionManager.Instance != null)
+        {
+            ItemProgressionManager.Instance.RegisterItem(this);
+        }
+
+        if (itemData?.worldSprite != null)
+            _sr.sprite = itemData.worldSprite;
+
+        if (ItemProgressionManager.Instance == null)
+        {
+            SetVisible(false);
+        }
     }
 
     private void Update()
@@ -77,7 +88,6 @@ public class ProgressionPickupItem : MonoBehaviour, IInteractable
         _collected = true;
 
         onCollected?.Invoke();
-
         Inventory.Instance?.AddItem(itemData);
 
         if (itemData.pickupSound != null)
@@ -86,15 +96,15 @@ public class ProgressionPickupItem : MonoBehaviour, IInteractable
             else AudioSource.PlayClipAtPoint(itemData.pickupSound, transform.position);
         }
 
-        bool isForestItem = MindForestTrigger.Instance != null &&
-                            MindForestTrigger.Instance.TryTrigger(itemData, interactor);
+        bool forestTriggered = StoryManager.Instance != null &&
+                               StoryManager.Instance.OnItemCollected(itemData, interactor);
 
-        if (!isForestItem && !string.IsNullOrEmpty(itemData.memoryText))
+        if (!forestTriggered && !string.IsNullOrEmpty(itemData.memoryText))
         {
             MemoryDisplay.Instance?.ShowMemory(itemData.memoryText, itemData.memoryBackground);
         }
 
-        ItemProgressionManager.Instance?.ReportItemCollected(this, isForestItem);
+        ItemProgressionManager.Instance?.ReportItemCollected(this, false);
 
         _sr.enabled = false;
         _col.enabled = false;

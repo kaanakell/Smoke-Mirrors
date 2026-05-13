@@ -22,8 +22,4 @@ public class ItemData : ScriptableObject
 
     [Header("Audio")]
     public AudioClip pickupSound;
-
-    [Header("Mind Forest")]
-    [Tooltip("If false, picking up this item will never trigger the mind forest event.")]
-    public bool canTriggerMindForest = true;
 }

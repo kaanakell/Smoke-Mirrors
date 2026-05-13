@@ -363,22 +363,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20792bed157815a4b8bd548cb91889a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemProgressionManager
-  sonSceneName: LivingRoomScene
-  itemsPerStage: 01000000010000000200000003000000
-  sonApproachDelay: 1.2
   unlockStages:
   - enabled: 1
+    stageName: Stage 0
+  - enabled: 1
     stageName: Stage 1
-    itemsVisibleThisStage: 0
   - enabled: 1
     stageName: Stage 2
-    itemsVisibleThisStage: 1
-  - enabled: 1
-    stageName: Stage 3
-    itemsVisibleThisStage: 2
   - enabled: 1
     stageName: Stage 4
-    itemsVisibleThisStage: 3
+  - enabled: 1
+    stageName: Stage 5
 --- !u!4 &138884447
 Transform:
   m_ObjectHideFlags: 0
@@ -569,7 +564,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1017207525}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 569910413156668039, guid: a7b8fb91edc267941b4ced6228ffaffe, type: 3}
       propertyPath: m_Color.b
@@ -1595,12 +1590,12 @@ GameObject:
   - component: {fileID: 681336784}
   - component: {fileID: 681336786}
   m_Layer: 0
-  m_Name: DoorToLivingRoom
+  m_Name: DoorToCorridor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &681336784
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1676,9 +1671,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomTransition
   targetScene: Corridor
   spawnPointID: from_bathroom
-  requireInteract: 0
-  fadeImage: {fileID: 2840082132372455653}
-  fadeDuration: 0.5
+  isLocked: 1
+  lockedDialogue: {fileID: 11400000, guid: 6fa26407730132f4494e0f1cdc7c67a7, type: 2}
 --- !u!1 &706181421
 GameObject:
   m_ObjectHideFlags: 0
@@ -1953,38 +1947,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7338646782149600672}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1017207524
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1017207525}
-  m_Layer: 0
-  m_Name: PlayerHolder
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1017207525
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1017207524}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1415927765}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1017530382
@@ -2580,11 +2542,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MindForestTrigger
   mindForestSceneName: MindForestScene
-  triggerChance: 1
-  minimumPickupsBefore: 1
-  cooldownSeconds: 20
   glitchDuration: 0.9
   overlayFadeOut: 0.5
+  delayAfterMemory: 1
 --- !u!4 &1251592744
 Transform:
   m_ObjectHideFlags: 0
@@ -2872,11 +2832,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!4 &1415927765 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7211602321728228996, guid: a7b8fb91edc267941b4ced6228ffaffe, type: 3}
-  m_PrefabInstance: {fileID: 208806775}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1420333063
 GameObject:
   m_ObjectHideFlags: 0
@@ -4018,6 +3973,53 @@ Transform:
   - {fileID: 681336785}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1980458226
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1980458228}
+  - component: {fileID: 1980458227}
+  m_Layer: 0
+  m_Name: StoryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1980458227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980458226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a441919afc9322f4ca15590fb44b9b85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StoryManager
+  currentPhase: 0
+  itemsCollectedThisPhase: 0
+  sonNPC: {fileID: 0}
+--- !u!4 &1980458228
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980458226}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.75403, y: -0.54017, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2028591929
 GameObject:
   m_ObjectHideFlags: 0
@@ -4917,9 +4919,9 @@ MonoBehaviour:
   onCollected:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 681336783}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 681336786}
+        m_TargetAssemblyTypeName: RoomTransition, Assembly-CSharp
+        m_MethodName: SetLocked
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4927,7 +4929,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
   bobAmplitude: 0.06
   bobSpeed: 1.5
@@ -5269,4 +5271,5 @@ SceneRoots:
   - {fileID: 1377919561}
   - {fileID: 1018083374}
   - {fileID: 1752840264}
-  - {fileID: 1017207525}
+  - {fileID: 208806775}
+  - {fileID: 1980458228}

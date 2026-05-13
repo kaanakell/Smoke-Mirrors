@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 public class BathroomEmergencyTrigger : MonoBehaviour
 {
     [Header("Trigger Conditions")]
-    [Tooltip("Which stage should trigger this emergency? (e.g. 2)")]
-    [SerializeField] private int targetStage = 2;
-    [Tooltip("How many seconds after the stage begins before the emergency hits?")]
-    [SerializeField] private float delayBeforeEmergency = 120f; // 2 minutes
+    [Tooltip("Which story phase should trigger this emergency?")]
+    [SerializeField] private StoryManager.StoryPhase targetPhase = StoryManager.StoryPhase.Forest1Done;
+
+    [Tooltip("How many seconds after the phase begins before the emergency hits?")]
+    [SerializeField] private float delayBeforeEmergency = 30f;
 
     [Header("Sequence")]
     [SerializeField] private DialogueSet emergencyDialogue;
@@ -21,9 +22,18 @@ public class BathroomEmergencyTrigger : MonoBehaviour
     {
         if (_hasTriggered) return;
 
-        if (ItemProgressionManager.Instance != null && ItemProgressionManager.Instance.CurrentStage == targetStage)
+        if (StoryManager.Instance == null) return;
+
+        if (StoryManager.Instance.corridorEventHasOccurred)
         {
             _hasTriggered = true;
+            return;
+        }
+
+        if (StoryManager.Instance.currentPhase == targetPhase)
+        {
+            _hasTriggered = true;
+            StoryManager.Instance.corridorEventHasOccurred = true;
             StartCoroutine(EmergencyRoutine());
         }
     }
@@ -38,8 +48,11 @@ public class BathroomEmergencyTrigger : MonoBehaviour
         }
 
         bool dialogueFinished = false;
-        DialogueManager.Instance.StartDialogue(emergencyDialogue, () => dialogueFinished = true);
-        yield return new WaitUntil(() => dialogueFinished);
+        if (DialogueManager.Instance != null)
+        {
+            DialogueManager.Instance.StartDialogue(emergencyDialogue, () => dialogueFinished = true);
+            yield return new WaitUntil(() => dialogueFinished);
+        }
 
         CorridorSequenceManager.IsEmergencyLoopActive = true;
         CorridorSequenceManager.LoopCount = 0;

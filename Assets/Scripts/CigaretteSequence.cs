@@ -7,7 +7,6 @@ public class CigaretteSequence : MonoBehaviour
     [SerializeField] private DialogueSet makeupDialogue;
 
     [Header("Locations")]
-    [Tooltip("Where the son runs off to sulk after the argument.")]
     [SerializeField] private Transform runawayPoint;
 
     public void PlaySequence()
@@ -18,6 +17,11 @@ public class CigaretteSequence : MonoBehaviour
             son.TriggerArgumentSequence(argumentDialogue, makeupDialogue, runawayPoint, () =>
             {
                 Debug.Log("[Sequence] Argument sequence concluded.");
+
+                if (StoryManager.Instance != null)
+                {
+                    StoryManager.Instance.OnMakeupEventFinished();
+                }
             });
         }
     }

@@ -439,8 +439,8 @@ public class SonNPC : MonoBehaviour
         yield return new WaitUntil(() => makeupDone);
 
         UnlockPlayer();
+        _state = State.Patrol;
         onComplete?.Invoke();
-        StartCoroutine(ReturnRoutine());
     }
 
     private void LockPlayer()

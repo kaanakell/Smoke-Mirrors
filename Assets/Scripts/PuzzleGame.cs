@@ -118,10 +118,7 @@ public class PuzzleGame : MonoBehaviour
 
     private void CompleteMiniGame()
     {
-        if (ItemProgressionManager.Instance != null)
-        {
-            ItemProgressionManager.Instance.CompleteMiniGame();
-        }
+        if (StoryManager.Instance != null) StoryManager.Instance.OnMiniGameCompleted(2);
 
         CloseGame();
     }

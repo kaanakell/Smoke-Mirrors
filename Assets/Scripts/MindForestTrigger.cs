@@ -13,24 +13,15 @@ public class MindForestTrigger : MonoBehaviour
     [Header("Scene")]
     [SerializeField] private string mindForestSceneName = "MindForestScene";
 
-    [Header("Trigger Probability")]
-    [Range(0f, 1f)]
-    [SerializeField] private float triggerChance = 0.30f;
-    [SerializeField] private int minimumPickupsBefore = 2;
-    [SerializeField] private float cooldownSeconds = 90f;
-
     [Header("Glitch Timing")]
     [SerializeField] private float glitchDuration = 0.9f;
     [SerializeField] private float overlayFadeOut = 0.5f;
+    [Tooltip("How long to wait AFTER closing the memory before the glitch starts.")]
+    [SerializeField] private float delayAfterMemory = 1.0f;
 
-    private int _totalPickups = 0;
-    private float _lastTriggerTime = -999f;
     private string _returnSceneName;
-
     private Canvas _glitchCanvas;
-    private Image _white;
-    private Image _red;
-    private Image _cyan;
+    private Image _white, _red, _cyan;
 
     private void Awake()
     {
@@ -40,27 +31,15 @@ public class MindForestTrigger : MonoBehaviour
         BuildGlitchOverlay();
     }
 
-    public bool TryTrigger(ItemData item, GameObject interactor)
+    public void ForceTrigger(ItemData item, GameObject interactor)
     {
-        if (!item.canTriggerMindForest) return false;
-
-        _totalPickups++;
-        if (!RollSucceeds()) return false;
-
-        _lastTriggerTime = Time.time;
         _returnSceneName = SceneManager.GetActiveScene().name;
+        ReturnPosition = interactor != null ? interactor.transform.position : Vector3.zero;
 
-        if (interactor != null)
-            ReturnPosition = interactor.transform.position;
-        else
-            ReturnPosition = Vector3.zero;
-
-        if (!string.IsNullOrEmpty(item.memoryText))
-            StartCoroutine(MemoryThenForest(item.memoryText, item));
+        if (item != null && !string.IsNullOrEmpty(item.memoryText))
+            StartCoroutine(MemoryThenForestSequence(item));
         else
             StartCoroutine(GlitchIntoForest());
-
-        return true;
     }
 
     public void ReturnToHouse()
@@ -68,17 +47,14 @@ public class MindForestTrigger : MonoBehaviour
         StartCoroutine(GlitchOutOfForest());
     }
 
-    private IEnumerator MemoryThenForest(string memoryText, ItemData itemData)
+    private IEnumerator MemoryThenForestSequence(ItemData itemData)
     {
         if (MemoryDisplay.Instance != null)
         {
-            MemoryDisplay.Instance.ShowMemory(memoryText, itemData.memoryBackground);
-
-            bool memoryFinished = false;
-            MemoryDisplay.Instance.OnComplete += () => memoryFinished = true;
-
-            yield return new WaitUntil(() => memoryFinished);
+            MemoryDisplay.Instance.ShowMemory(itemData.memoryText, itemData.memoryBackground);
         }
+
+        yield return new WaitForSeconds(6.0f);
 
         yield return StartCoroutine(GlitchIntoForest());
     }
@@ -88,10 +64,7 @@ public class MindForestTrigger : MonoBehaviour
         _glitchCanvas.gameObject.SetActive(true);
         yield return StartCoroutine(PlayGlitch(glitchDuration));
 
-        SetAlpha(_white, 1f);
-        SetAlpha(_red, 0f);
-        SetAlpha(_cyan, 0f);
-
+        SetAlpha(_white, 1f); SetAlpha(_red, 0f); SetAlpha(_cyan, 0f);
         IsReturningFromForest = false;
         PlayerSpawnManager.NextSpawnID = "forest_entry";
 
@@ -106,10 +79,7 @@ public class MindForestTrigger : MonoBehaviour
         _glitchCanvas.gameObject.SetActive(true);
         yield return StartCoroutine(PlayGlitch(glitchDuration));
 
-        SetAlpha(_white, 1f);
-        SetAlpha(_red, 0f);
-        SetAlpha(_cyan, 0f);
-
+        SetAlpha(_white, 1f); SetAlpha(_red, 0f); SetAlpha(_cyan, 0f);
         IsReturningFromForest = true;
 
         AsyncOperation load = SceneManager.LoadSceneAsync(_returnSceneName);
@@ -132,17 +102,14 @@ public class MindForestTrigger : MonoBehaviour
                 float offset = Mathf.Lerp(0f, 40f, phase) + Random.Range(-4f, 4f);
                 SetAlpha(_red, Random.Range(0f, 0.15f * phase));
                 SetAlpha(_cyan, Random.Range(0f, 0.15f * phase));
-                Shift(_red, offset);
-                Shift(_cyan, -offset);
+                Shift(_red, offset); Shift(_cyan, -offset);
                 SetAlpha(_white, Random.value < 0.1f ? Random.Range(0.1f, 0.35f) : 0f);
             }
             else
             {
                 float phase = (t - 0.55f) / 0.45f;
-                SetAlpha(_white, Mathf.Clamp01(
-                    Mathf.SmoothStep(0f, 1f, phase) + Random.Range(-0.03f, 0.03f)));
-                SetAlpha(_red, 0f);
-                SetAlpha(_cyan, 0f);
+                SetAlpha(_white, Mathf.Clamp01(Mathf.SmoothStep(0f, 1f, phase) + Random.Range(-0.03f, 0.03f)));
+                SetAlpha(_red, 0f); SetAlpha(_cyan, 0f);
             }
             yield return null;
         }
@@ -150,9 +117,6 @@ public class MindForestTrigger : MonoBehaviour
 
     private IEnumerator FadeOverlayOut(float duration)
     {
-        yield return null;
-        yield return null;
-
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -160,18 +124,8 @@ public class MindForestTrigger : MonoBehaviour
             SetAlpha(_white, Mathf.Lerp(1f, 0f, elapsed / duration));
             yield return null;
         }
-
-        SetAlpha(_white, 0f);
-        SetAlpha(_red, 0f);
-        SetAlpha(_cyan, 0f);
+        SetAlpha(_white, 0f); SetAlpha(_red, 0f); SetAlpha(_cyan, 0f);
         _glitchCanvas.gameObject.SetActive(false);
-    }
-
-    private bool RollSucceeds()
-    {
-        if (_totalPickups < minimumPickupsBefore) return false;
-        if (Time.time - _lastTriggerTime < cooldownSeconds) return false;
-        return Random.value < triggerChance;
     }
 
     private void BuildGlitchOverlay()
@@ -197,22 +151,11 @@ public class MindForestTrigger : MonoBehaviour
         var img = go.AddComponent<Image>();
         img.color = color;
         var rt = img.rectTransform;
-        rt.anchorMin = Vector2.zero;
-        rt.anchorMax = Vector2.one;
-        rt.offsetMin = Vector2.zero;
-        rt.offsetMax = Vector2.zero;
+        rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
         return img;
     }
 
-    private void SetAlpha(Image img, float a)
-    {
-        Color c = img.color; c.a = a; img.color = c;
-    }
-
-    private void Shift(Image img, float offsetX)
-    {
-        var rt = img.rectTransform;
-        rt.offsetMin = new Vector2(offsetX, 0);
-        rt.offsetMax = new Vector2(offsetX, 0);
-    }
+    private void SetAlpha(Image img, float a) { Color c = img.color; c.a = a; img.color = c; }
+    private void Shift(Image img, float offsetX) { var rt = img.rectTransform; rt.offsetMin = new Vector2(offsetX, 0); rt.offsetMax = new Vector2(offsetX, 0); }
 }

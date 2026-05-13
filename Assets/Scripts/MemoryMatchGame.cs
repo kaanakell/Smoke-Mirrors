@@ -74,7 +74,7 @@ public class MemoryMatchGame : MonoBehaviour
         _completed = true;
         StopAllCoroutines();
         CloseGame();
-        ItemProgressionManager.Instance?.CompleteMiniGame();
+        if (StoryManager.Instance != null) StoryManager.Instance.OnMiniGameCompleted(1);
     }
 
     private void CloseGame()

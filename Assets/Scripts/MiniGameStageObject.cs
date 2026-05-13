@@ -15,11 +15,7 @@ public class MiniGameStageObject : MonoBehaviour
 
     private void Start()
     {
-        if (ItemProgressionManager.Instance != null)
-            ItemProgressionManager.Instance.RegisterMiniGame(this);
-        else
-            Debug.LogWarning($"[MiniGameStageObject] IPM not found — '{gameObject.name}' " +
-                             "will stay hidden. Make sure ItemProgressionManager is in the scene.");
+        ItemProgressionManager.Instance?.RegisterMiniGame(this);
     }
 
     public void SetVisible(bool visible) => gameObject.transform.GetChild(0).gameObject.SetActive(visible);

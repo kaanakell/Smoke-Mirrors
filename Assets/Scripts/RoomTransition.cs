@@ -1,56 +1,64 @@
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
+[RequireComponent(typeof(Collider2D))]
 public class RoomTransition : MonoBehaviour
 {
-    [Header("Destination")]
-    [SerializeField] private string targetScene = "";
-    [SerializeField] private string spawnPointID = "default";
+    [Header("Transition Settings")]
+    [SerializeField] private string targetScene;
+    [SerializeField] private string spawnPointID;
 
-    [Header("Require Interact (SPACE) to use door")]
-    [SerializeField] private bool requireInteract = true;
+    [Header("Lock System")]
+    [SerializeField] private bool isLocked = false;
+    [SerializeField] private DialogueSet lockedDialogue;
 
-    [Header("Transition")]
-    [SerializeField] private Image fadeImage;
-    [SerializeField] private float fadeDuration = 0.5f;
-
-    private bool _playerInRange = false;
     private bool _transitioning = false;
 
-    private void Update()
+    public void SetLocked(bool locked)
     {
-        if (!_playerInRange || _transitioning) return;
+        isLocked = locked;
+        Debug.Log($"[RoomTransition] {gameObject.name} is now {(isLocked ? "LOCKED" : "UNLOCKED")}");
+    }
 
-        bool shouldTransition = !requireInteract || Input.GetKeyDown(KeyCode.Space);
-        if (shouldTransition)
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (_transitioning) return;
+
+        if (col.CompareTag("Player"))
+        {
+            if (isLocked)
+            {
+                Vector3 pushDirection = (col.transform.position - transform.position).normalized;
+                col.transform.position += pushDirection * 0.5f;
+
+                if (lockedDialogue != null && DialogueManager.Instance != null)
+                {
+                    PlayerController pc = col.GetComponent<PlayerController>();
+                    if (pc != null) pc.MovementLocked = true;
+
+                    DialogueManager.Instance.StartDialogue(lockedDialogue, () =>
+                    {
+                        if (pc != null) pc.MovementLocked = false;
+                    });
+                }
+                return;
+            }
+
             StartCoroutine(DoTransition());
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-            _playerInRange = true;
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-            _playerInRange = false;
+        }
     }
 
     private IEnumerator DoTransition()
     {
         _transitioning = true;
-
         PlayerController pc = FindFirstObjectByType<PlayerController>();
         if (pc != null) pc.MovementLocked = true;
 
         PlayerSpawnManager.NextSpawnID = spawnPointID;
 
-        yield return StartCoroutine(Fade(0f, 1f));
+        if (PlayerSpawnManager.Instance != null)
+            yield return StartCoroutine(PlayerSpawnManager.Instance.FadeOut(0.5f));
 
         if (CorridorSequenceManager.IsEmergencyLoopActive)
         {
@@ -61,28 +69,5 @@ public class RoomTransition : MonoBehaviour
         {
             SceneManager.LoadScene(targetScene);
         }
-    }
-
-    private IEnumerator Fade(float from, float to)
-    {
-        if (fadeImage == null) yield break;
-
-        float elapsed = 0f;
-        Color c = fadeImage.color;
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            c.a = Mathf.Lerp(from, to, elapsed / fadeDuration);
-            fadeImage.color = c;
-            yield return null;
-        }
-        c.a = to;
-        fadeImage.color = c;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawIcon(transform.position, "d_SceneAsset Icon", true);
     }
 }

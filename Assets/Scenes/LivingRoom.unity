@@ -593,7 +593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: 987471813412a7c4c8c488474af78507, type: 2}
-  unlockStageIndex: 3
+  unlockStageIndex: 2
   onCollected:
     m_PersistentCalls:
       m_Calls:
@@ -1401,7 +1401,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: 6b54fcf28964a144a95949a580567a26, type: 2}
-  unlockStageIndex: 3
+  unlockStageIndex: 1
   onCollected:
     m_PersistentCalls:
       m_Calls: []
@@ -2745,8 +2745,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f31c921379587f847bef66a6f386d9b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BathroomEmergencyTrigger
-  targetStage: 2
-  delayBeforeEmergency: 120
+  targetPhase: 5
+  delayBeforeEmergency: 30
   emergencyDialogue: {fileID: 11400000, guid: ba67a580248bd1149a29f156dca86efb, type: 2}
   corridorSceneName: Corridor
   corridorSpawnID: from_livingroom
@@ -3015,7 +3015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d87adde82196f5a4eb054e68d98ecce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniGameStageObject
-  activationStage: 1
+  activationStage: 2
 --- !u!1 &518238432
 GameObject:
   m_ObjectHideFlags: 0
@@ -7130,7 +7130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: b412a3be439586641853d9d1653fe1e6, type: 2}
-  unlockStageIndex: 2
+  unlockStageIndex: 1
   onCollected:
     m_PersistentCalls:
       m_Calls: []
@@ -7475,9 +7475,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomTransition
   targetScene: Corridor
   spawnPointID: from_livingroom
-  requireInteract: 0
-  fadeImage: {fileID: 166161274}
-  fadeDuration: 0.5
+  isLocked: 1
+  lockedDialogue: {fileID: 11400000, guid: c702087bbcc7bb04abae8b2ff663fdb9, type: 2}
 --- !u!61 &1434938089
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8610,13 +8609,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2534374251924123876}
-  - {fileID: 830019757}
-  - {fileID: 4211478766991917741}
   - {fileID: 1423149258}
   - {fileID: 249401482}
   - {fileID: 69217318}
+  - {fileID: 4211478766991917741}
   - {fileID: 1119035959}
+  - {fileID: 2534374251924123876}
+  - {fileID: 830019757}
   - {fileID: 770664639}
   - {fileID: 1885984952}
   m_Father: {fileID: 0}
@@ -10468,7 +10467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d87adde82196f5a4eb054e68d98ecce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniGameStageObject
-  activationStage: 2
+  activationStage: 4
 --- !u!1 &2052507784
 GameObject:
   m_ObjectHideFlags: 0
@@ -10820,7 +10819,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: 641e2ea1f9739854d80e41ace269ce31, type: 2}
-  unlockStageIndex: 2
+  unlockStageIndex: 3
   onCollected:
     m_PersistentCalls:
       m_Calls: []
@@ -10915,7 +10914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionPickupItem
   itemData: {fileID: 11400000, guid: a1317f63a653bc34e8f0f0b860c7c934, type: 2}
-  unlockStageIndex: 1
+  unlockStageIndex: 5
   onCollected:
     m_PersistentCalls:
       m_Calls: []

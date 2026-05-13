@@ -159,7 +159,7 @@ public class ClockDrawingGame : MonoBehaviour
             if (_timerRemaining <= 0f)
             {
                 _timerRunning = false;
-                Complete();     // Son takes the paper
+                Complete();
                 return;
             }
         }
@@ -209,7 +209,7 @@ public class ClockDrawingGame : MonoBehaviour
         _completed = true;
 
         CloseGame();
-        ItemProgressionManager.Instance?.CompleteMiniGame();
+        if (StoryManager.Instance != null) StoryManager.Instance.OnMiniGameCompleted(0);
 
         OnMiniGameCompleted?.Invoke();
     }
