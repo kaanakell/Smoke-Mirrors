@@ -860,7 +860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07dd968000b7e424696afcb56641d1c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisionMaskManager
-  visionRenderTexture: {fileID: 8400000, guid: 39d7e80221165c3488ed8c9c59b5fde2, type: 2}
+  visionCamera: {fileID: 1379163905}
 --- !u!4 &411247209
 Transform:
   m_ObjectHideFlags: 0
@@ -2667,7 +2667,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 512
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 39d7e80221165c3488ed8c9c59b5fde2, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
