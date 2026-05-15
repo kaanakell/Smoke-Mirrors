@@ -475,7 +475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed65a15bb97aef4bb57d059178abe85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
-  interactRadius: 1.2
+  interactRadius: 0.5
   interactLayer:
     serializedVersion: 2
     m_Bits: 64

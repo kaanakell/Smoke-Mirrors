@@ -5,15 +5,29 @@ using System.Collections;
 public class StoryManager : MonoBehaviour
 {
     public static StoryManager Instance { get; private set; }
-    public enum StoryPhase { Intro, ClockGameDone, Forest1Done, MemoryGameDone, Forest2Done, PuzzleGameDone }
+
+    public enum StoryPhase
+    {
+        Intro,
+        ClockGameDone,
+        Forest1Done,
+        MemoryGameDone,
+        Forest2Done,
+        PuzzleGameDone,
+        Forest3Done      // ← NEW: triggers credits transition on return
+    }
+
     public StoryPhase currentPhase = StoryPhase.Intro;
     public int itemsCollectedThisPhase = 0;
     public bool isMiniGameActiveInCurrentPhase = false;
-
     public bool corridorEventHasOccurred = false;
+
+    [Header("Scenes")]
+    [SerializeField] private string gameplaySceneName = "MainScene";
 
     [HideInInspector] public SonNPC sonNPC;
 
+    // ── Lifecycle ───────────────────────────────────────────────────────────
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -29,12 +43,34 @@ public class StoryManager : MonoBehaviour
         sonNPC = FindFirstObjectByType<SonNPC>();
         SyncItemStages();
 
-        if (MindForestTrigger.IsReturningFromForest && currentPhase == StoryPhase.Forest2Done)
+        HandleMusicForScene(scene.name);
+
+        if (MindForestTrigger.IsReturningFromForest)
         {
-            StartCoroutine(RevealPuzzleAfterForest2());
+            if (currentPhase == StoryPhase.Forest2Done)
+                StartCoroutine(RevealPuzzleAfterForest2());
+
+            // Forest3Done returns to the house normally.
+            // Credits are triggered later via OnSonDeparture().
         }
     }
 
+    // ── Music ────────────────────────────────────────────────────────────────
+    /// <summary>
+    /// Tells AudioManager which music to play based on the scene we just loaded.
+    /// Extend the gameplay-scene list if you have more scenes.
+    /// </summary>
+    private void HandleMusicForScene(string sceneName)
+    {
+        if (AudioManager.Instance == null) return;
+
+        // Gameplay scenes (house + forest) use gameplay music
+        // Menu / credits are handled by their own screen scripts (MainMenuUI / CreditsScreen)
+        if (sceneName == gameplaySceneName || sceneName.Contains("Forest"))
+            AudioManager.Instance.PlayGameplayMusic();
+    }
+
+    // ── Story sequences ──────────────────────────────────────────────────────
     private IEnumerator RevealPuzzleAfterForest2()
     {
         yield return null;
@@ -59,15 +95,12 @@ public class StoryManager : MonoBehaviour
         }
 
         if (sonNPC != null && sonNPC.IsAvailable)
-        {
             sonNPC.TriggerItemThresholdApproach(1);
-        }
         else
-        {
             Debug.LogWarning("[StoryManager] GuideSonToMemoryMatch: son not available after timeout.");
-        }
     }
 
+    // ── Progression ──────────────────────────────────────────────────────────
     public void SyncItemStages()
     {
         int stage = GetStageForPhase(currentPhase);
@@ -117,13 +150,14 @@ public class StoryManager : MonoBehaviour
 
     private bool TriggerForest(ItemData item, GameObject interactor)
     {
-        currentPhase++;
+        currentPhase++;                         // advances through Forest1Done → Forest2Done → Forest3Done
         itemsCollectedThisPhase = 0;
         isMiniGameActiveInCurrentPhase = false;
         MindForestTrigger.Instance.ForceTrigger(item, interactor);
         return true;
     }
 
+    // ── Event callbacks ──────────────────────────────────────────────────────
     public void OnMakeupEventFinished()
     {
         itemsCollectedThisPhase = 0;
@@ -147,6 +181,7 @@ public class StoryManager : MonoBehaviour
         SyncItemStages();
     }
 
+    // ── Helpers ──────────────────────────────────────────────────────────────
     private int GetStageForPhase(StoryPhase phase)
     {
         switch (phase)
@@ -157,6 +192,7 @@ public class StoryManager : MonoBehaviour
             case StoryPhase.MemoryGameDone: return 3;
             case StoryPhase.Forest2Done: return 4;
             case StoryPhase.PuzzleGameDone: return 5;
+            case StoryPhase.Forest3Done: return 6;
             default: return 0;
         }
     }

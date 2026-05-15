@@ -244,6 +244,13 @@ public class MindForestManager : MonoBehaviour
         if (_player != null) _player.MovementLocked = false;
         yield return StartCoroutine(NpcDepart());
         yield return new WaitForSeconds(0.4f);
-        MindForestTrigger.Instance?.ReturnToHouse();
+
+        bool isFinalForest = StoryManager.Instance != null &&
+                             StoryManager.Instance.currentPhase == StoryManager.StoryPhase.Forest3Done;
+
+        if (isFinalForest)
+            MindForestTrigger.Instance?.TransitionToCredits();
+        else
+            MindForestTrigger.Instance?.ReturnToHouse();
     }
 }
