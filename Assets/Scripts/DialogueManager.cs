@@ -193,12 +193,26 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
-        if (dialoguePanel != null) dialoguePanel.SetActive(false);
-        if (_player != null) _player.MovementLocked = false;
+        dialogueBodyText.text = "";
+        speakerNameText.text = "";
+        if(continuePrompt != null)
+            continuePrompt.SetActive(false);
 
         _currentSet = null;
         _currentRawSpeaker = "";
         _currentRawBody = "";
+
+        StartCoroutine(CloseDialogueNextFrame());
+    }
+
+    private IEnumerator CloseDialogueNextFrame()
+    {
+        yield return null;
+
+        if(dialoguePanel != null)
+            dialoguePanel.SetActive(false);
+        if(_player != null)
+            _player.MovementLocked = false;
 
         _onDialogueEndedCallback?.Invoke();
         _onDialogueEndedCallback = null;
