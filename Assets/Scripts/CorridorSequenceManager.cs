@@ -60,6 +60,7 @@ public class CorridorSequenceManager : MonoBehaviour
 
             puddleGraphic.transform.position = puddlePos;
             puddleGraphic.SetActive(true);
+            if (_player != null) _player.MovementLocked = true;
         }
         yield return new WaitForSeconds(1.5f);
 
@@ -73,6 +74,7 @@ public class CorridorSequenceManager : MonoBehaviour
         while (Vector3.Distance(sonTransform.position, targetPos) > 0.2f)
         {
             sonTransform.position = Vector3.MoveTowards(sonTransform.position, targetPos, 1.2f * Time.deltaTime);
+            if (_player != null) _player.MovementLocked = true;
             yield return null;
         }
 

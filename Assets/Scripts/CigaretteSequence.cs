@@ -8,6 +8,7 @@ public class CigaretteSequence : MonoBehaviour
 
     [Header("Locations")]
     [SerializeField] private Transform runawayPoint;
+    private PlayerController _player;
 
     public void PlaySequence()
     {
@@ -17,7 +18,7 @@ public class CigaretteSequence : MonoBehaviour
             son.TriggerArgumentSequence(argumentDialogue, makeupDialogue, runawayPoint, () =>
             {
                 Debug.Log("[Sequence] Argument sequence concluded.");
-
+	if (_player != null) _player.MovementLocked = true;
                 if (StoryManager.Instance != null)
                 {
                     StoryManager.Instance.OnMakeupEventFinished();

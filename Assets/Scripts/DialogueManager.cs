@@ -49,7 +49,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (!IsDialogueActive) return;
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             HandleInteraction();
         }
@@ -183,6 +183,7 @@ public class DialogueManager : MonoBehaviour
         if (_currentLineIndex < _currentSet.lines.Length)
         {
             ShowLine();
+            if (_player != null) _player.MovementLocked = true;
         }
         else
         {
