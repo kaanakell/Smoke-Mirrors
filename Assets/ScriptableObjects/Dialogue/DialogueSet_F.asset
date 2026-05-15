@@ -15,7 +15,7 @@ MonoBehaviour:
   lines:
   - speaker: <glitch>Father</glitch>
     text: Wooh... So cold today!
-  - speaker: Son
+  - speaker: <glitch>Son</glitch>
     text: Yeah, it's great! Did you see the snowman mom and I made??
   - speaker: <glitch>Father</glitch>
     text: Hard to miss!

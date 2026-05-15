@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: SonAccidentDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Son
+  - speaker: So<glitch>Son</glitch>
     text: Ugh you did it again?! How hard is it to just-....
-  - speaker: Son
+  - speaker: <glitch>Son</glitch>
     text: '*inhales* ...... *exhales*'
-  - speaker: Son
+  - speaker: So<glitch>Son</glitch>
     text: Let's clean you up.

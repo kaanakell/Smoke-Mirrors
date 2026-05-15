@@ -15,5 +15,5 @@ MonoBehaviour:
   lines:
   - speaker: <glitch>Father</glitch>
     text: Oh, what's wrong, heart? Why are you crying?
-  - speaker: Son
+  - speaker: S<glitch>Son</glitch>
     text: It's nothing, dad...

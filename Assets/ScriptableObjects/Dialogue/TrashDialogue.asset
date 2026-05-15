@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TrashDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Son
+  - speaker: <glitch>Son</glitch>
     text: Why are you carying this rubbish? Give it here!
   - speaker: <glitch>Father</glitch>
     text: No, I need it.

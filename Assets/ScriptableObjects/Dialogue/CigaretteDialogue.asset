@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: CigaretteDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Son
+  - speaker: S<glitch>Son</glitch>
     text: You've had one 30 minutes ago. Check the journal.
   - speaker: <glitch>Father</glitch>
     text: No, I haven't.
-  - speaker: Son
+  - speaker: <glitch>Son</glitch>
     text: I will give you a new one when it's time.
   - speaker: <glitch>Father</glitch>
     text: They're mine, fuck off!

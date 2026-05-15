@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: DialogueSet_F1
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Son
-    text: Hey, [REDACTED]. The competition just ended, you missed it. Again.
+  - speaker: S<glitch>Son</glitch>
+    text: Hey, <glitch>Father</glitch> . The competition just ended, you missed it.
+      Again.
   - speaker: <glitch>Father</glitch>
     text: What, no?? It was next week?!
-  - speaker: Son
+  - speaker: <glitch>Son</glitch>
     text: Yeah, last week. You need to start using a calendar, old man.
   - speaker: <glitch>Father</glitch>
     text: I suppose time passes by faster when you're older...
-  - speaker: Son
+  - speaker: S<glitch>Son</glitch>
     text: I won 2nd place, by the way. Mom already put the painting up in the bathroom.

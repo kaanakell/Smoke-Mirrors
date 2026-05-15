@@ -17,16 +17,16 @@ MonoBehaviour:
     text: I think it's time for dinner. I should get home...
   - speaker: <glitch>Father</glitch>
     text: Excuse me, I must get to my house. Where is it?
-  - speaker: Son
+  - speaker: S<glitch>Son</glitch>
     text: This is your house, dad. You are home.
   - speaker: <glitch>Father</glitch>
     text: No, I-... My wife is at home. I think I need to search for her.
-  - speaker: Son
+  - speaker: <glitch>Son</glitch>
     text: .....
   - speaker: Son
     text: Hey, why don't we play cards until she comes? She told me she will be a
       bit late tonight.
   - speaker: <glitch>Father</glitch>
     text: Am I okay?
-  - speaker: <glitch>Father</glitch>
+  - speaker: S<glitch>Son</glitch>
     text: Yeah! Yeah, dad, you are okay...

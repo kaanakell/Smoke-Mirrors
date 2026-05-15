@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: ItemCollectionDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Son
+  - speaker: <glitch>Son</glitch>
     text: Follow me dad, let's do something together!

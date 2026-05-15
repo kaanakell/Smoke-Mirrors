@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DrawingGameOutroDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
-  - speaker: Son
+  - speaker: S<glitch>Son</glitch>
     text: .....
-  - speaker: Son
+  - speaker: So<glitch>Son</glitch>
     text: Why don't you go walk around a bit, stretch your legs?
