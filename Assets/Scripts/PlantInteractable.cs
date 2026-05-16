@@ -44,6 +44,14 @@ public class PlantInteractable : MonoBehaviour, IInteractable
 
     private void Update()
     {
+        // Check if StoryManager exists and if a minigame is actively running
+        if (StoryManager.Instance != null && StoryManager.Instance.isMiniGameActiveInCurrentPhase)
+        {
+            // Freeze the reminder timer completely while playing a minigame
+            _reminderTimer = 0f;
+            return;
+        }
+
         if (!_wasWateredThisVisit)
         {
             _reminderTimer += Time.deltaTime;

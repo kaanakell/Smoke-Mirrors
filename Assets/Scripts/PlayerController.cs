@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private const int DIR_UP = 1;
     private const int DIR_LEFT = 2;
     private const int DIR_RIGHT = 3;
+    private bool _isFacingForced = false;
 
     private void Awake()
     {
@@ -73,8 +74,8 @@ public class PlayerController : MonoBehaviour
     private void UpdateAnimator()
     {
         if (_anim == null) return;
-
-        _anim.SetFloat(animSpeed, _input.magnitude);
+        float speed = _isFacingForced ? 1f : _input.magnitude;
+        _anim.SetFloat(animSpeed, speed);
         _anim.SetInteger(animDirection, GetDirectionInt(_lastDir));
     }
 
@@ -87,4 +88,21 @@ public class PlayerController : MonoBehaviour
     }
 
     public Vector2 FacingDirection => _lastDir;
+
+    public void ForceFacePosition(Vector3 targetPos)
+    {
+        Vector2 dir = (targetPos - transform.position).normalized;
+        if (dir.sqrMagnitude > 0.01f)
+        {
+            _lastDir = dir;
+            _isFacingForced = true;
+            UpdateAnimator();
+        }
+    }
+
+    public void ClearForcedFacing()
+    {
+        _isFacingForced = false;
+        UpdateAnimator();
+    }
 }

@@ -18,14 +18,19 @@ MonoBehaviour:
   - speaker: <glitch>Father</glitch>
     text: Excuse me, I must get to my house. Where is it?
   - speaker: S<glitch>Son</glitch>
-    text: This is your house, dad. You are home.
+    text: This is your house, dad.
+  - speaker: <glitch>Son</glitch>
+    text: You are home.
   - speaker: <glitch>Father</glitch>
-    text: No, I-... My wife is at home. I think I need to search for her.
+    text: No, I-... My wife is at home.
+  - speaker: <glitch>Father</glitch>
+    text: ' I think I need to search for her.'
   - speaker: <glitch>Son</glitch>
     text: .....
   - speaker: Son
-    text: Hey, why don't we play cards until she comes? She told me she will be a
-      bit late tonight.
+    text: Hey, why don't we play cards until she comes?
+  - speaker: S<glitch>Son</glitch>
+    text: ' She told me she will be a bit late tonight.'
   - speaker: <glitch>Father</glitch>
     text: Am I okay?
   - speaker: S<glitch>Son</glitch>

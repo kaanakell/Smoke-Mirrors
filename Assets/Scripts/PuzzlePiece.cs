@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(RectTransform))]
+[RequireComponent(typeof(Image))]
 public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [HideInInspector] public RectTransform rectTransform;
+    private Image _image;
 
     [Header("Positions")]
     [Tooltip("The anchored position where this piece belongs.")]
@@ -12,7 +15,18 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     [Tooltip("The anchored position where this piece jumps to during the glitch.")]
     public Vector2 scrambledPosition;
 
-    [HideInInspector] public bool isLocked = false;
+    private bool _isLocked = false;
+    public bool isLocked
+    {
+        get => _isLocked;
+        set
+        {
+            _isLocked = value;
+            if (_isLocked)
+                transform.SetAsFirstSibling();
+            SetPieceAlpha(1f);
+        }
+    }
 
     private PuzzleGame _game;
     private Canvas _canvas;
@@ -21,6 +35,7 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+        _image = GetComponent<Image>();
     }
 
     public void Setup(PuzzleGame game, Canvas canvas)
@@ -28,6 +43,14 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         _game = game;
         _canvas = canvas;
         _canvasRect = canvas.GetComponent<RectTransform>();
+    }
+
+    private void Update()
+    {
+        if (_image == null) return;
+        Color c = _image.color;
+        c.a = 1f;
+        _image.color = c;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -75,6 +98,19 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void SnapTo(Vector2 pos)
     {
-        rectTransform.anchoredPosition = pos;
+        if (rectTransform != null)
+            rectTransform.anchoredPosition = pos;
+        SetPieceAlpha(1f);
+    }
+
+    private void SetPieceAlpha(float alpha)
+    {
+        if (_image == null) _image = GetComponent<Image>();
+        if (_image != null)
+        {
+            Color c = _image.color;
+            c.a = alpha;
+            _image.color = c;
+        }
     }
 }

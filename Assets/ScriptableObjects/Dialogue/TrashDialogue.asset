@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
   - speaker: <glitch>Son</glitch>
-    text: Why are you carying this rubbish? Give it here!
+    text: Why are you carying this rubbish?
+  - speaker: <glitch>Son</glitch>
+    text: ' Give it here!'
   - speaker: <glitch>Father</glitch>
     text: No, I need it.

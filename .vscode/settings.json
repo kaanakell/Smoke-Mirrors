@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Smoke-Mirrors.slnx"
+    "dotnet.defaultSolution": "Smoke_Mirrors.slnx"
 }

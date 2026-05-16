@@ -149,7 +149,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 0.45
+  m_PointLightOuterRadius: 0.7
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -257,10 +257,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -709,8 +709,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 1
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
-    m_Center: {x: 2.68555, y: 0.013249993, z: 0}
-    m_Extent: {x: 2.76495, y: 1.45805, z: 0}
+    m_Center: {x: 2.78205, y: 0.01394999, z: 0}
+    m_Extent: {x: 2.66845, y: 1.45735, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -725,8 +725,8 @@ MonoBehaviour:
   - {x: 5.090112, y: 0.84184104, z: 0}
   - {x: 4.8965764, y: 1.0962025, z: 0}
   - {x: 4.6541567, y: 1.3210847, z: 0}
-  - {x: 0.075552106, y: 0.06967425, z: 0}
-  - {x: 0.07051265, y: -0.10740906, z: 0}
+  - {x: 0.26300603, y: 0.5195637, z: 0}
+  - {x: 0.27046353, y: -0.4698199, z: 0}
   - {x: 4.706662, y: -1.2966714, z: 0}
   - {x: 4.9226155, y: -1.047815, z: 0}
   - {x: 5.094705, y: -0.74698263, z: 0}
@@ -744,5 +744,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f49f3cf1091e77849a2da11f502bbcb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisionConeAim
-  mainCam: {fileID: 0}
   rotationOffset: 0
+  useMovementKeys: 1

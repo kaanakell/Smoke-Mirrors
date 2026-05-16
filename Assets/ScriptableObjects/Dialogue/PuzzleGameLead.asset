@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
   - speaker: Son
-    text: "Helloo?? You\u2019re not listening to me again! Come on, it\u2019s time
-      for your daily puzzle."
+    text: 'Helloo??  '
+  - speaker: <glitch>Son</glitch>
+    text: "You\u2019re not listening to me again!"
+  - speaker: So<glitch>Son</glitch>
+    text: "Come on, it\u2019s time for your daily puzzle."

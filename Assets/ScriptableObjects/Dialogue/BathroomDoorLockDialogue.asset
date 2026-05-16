@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
   - speaker: <glitch>Father</glitch>
-    text: I already took my medicine. I should go to the living room.
+    text: 'I already took my medicine. '
+  - speaker: <glitch>Father</glitch>
+    text: 'I should go to the living room. '

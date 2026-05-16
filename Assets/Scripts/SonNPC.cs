@@ -68,15 +68,21 @@ public class SonNPC : MonoBehaviour
     private void Start()
     {
         _player = FindFirstObjectByType<PlayerController>();
-
         BeginPatrol();
 
         if (!_hasPlayedIntro)
         {
             _hasPlayedIntro = true;
-
-            TriggerSceneEntryIntro();
+            StartCoroutine(IntroAfterDelay());
         }
+    }
+
+    private IEnumerator IntroAfterDelay()
+    {
+        yield return null;
+        if (_player == null) _player = FindFirstObjectByType<PlayerController>();
+        StopAllCoroutines();
+        StartCoroutine(ApproachThenTalk(introDialogue, () => StartCoroutine(LeadToGameRoutine())));
     }
 
     private void Update()
@@ -119,7 +125,7 @@ public class SonNPC : MonoBehaviour
 
         if (gameIndex > 0 && leadToGameDialogues != null)
         {
-            int arrayIndex = gameIndex - 1; // Shift index so 1 becomes 0, 2 becomes 1
+            int arrayIndex = gameIndex - 1;
             if (arrayIndex < leadToGameDialogues.Length)
             {
                 selectedDialogue = leadToGameDialogues[arrayIndex];
@@ -182,7 +188,7 @@ public class SonNPC : MonoBehaviour
     private IEnumerator ApproachThenTalk(DialogueSet dialogue, System.Action onComplete)
     {
         _state = State.Approach;
-        PauseAI();                           // freeze NPC movement immediately
+        PauseAI();
 
         if (_player == null)
             _player = FindFirstObjectByType<PlayerController>();
@@ -493,5 +499,11 @@ public class SonNPC : MonoBehaviour
             Gizmos.DrawSphere(targetWaypoint.position, 0.2f);
             Gizmos.DrawWireSphere(targetWaypoint.position, stopDistance);
         }
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics()
+    {
+        _hasPlayedIntro = false;
     }
 }

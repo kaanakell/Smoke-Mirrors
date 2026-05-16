@@ -17,8 +17,8 @@ public class MemoryDisplay : MonoBehaviour
 
     [Header("Timing")]
     [SerializeField] private float fadeInDuration = 0.6f;
-    [SerializeField] private float holdDuration = 2.5f;
     [SerializeField] private float fadeOutDuration = 0.8f;
+    // Removed holdDuration since it is now manual!
 
     public event Action OnComplete;
 
@@ -34,16 +34,16 @@ public class MemoryDisplay : MonoBehaviour
             canvasGroup.blocksRaycasts = false;
         }
 
-        if(backgroundImage != null) backgroundImage.gameObject.SetActive(false);
+        if (backgroundImage != null) backgroundImage.gameObject.SetActive(false);
     }
 
     public void ShowMemory(string text, Sprite background = null)
     {
         if (memoryText != null) memoryText.text = text;
 
-        if(backgroundImage != null)
+        if (backgroundImage != null)
         {
-            if(background != null)
+            if (background != null)
             {
                 backgroundImage.sprite = background;
                 backgroundImage.gameObject.SetActive(true);
@@ -63,7 +63,13 @@ public class MemoryDisplay : MonoBehaviour
         if (pc != null) pc.MovementLocked = true;
 
         yield return StartCoroutine(Fade(0f, 1f, fadeInDuration));
-        yield return new WaitForSeconds(holdDuration);
+
+        // BUFFER: Wait a tiny bit so they don't accidentally skip it while mashing space
+        yield return new WaitForSeconds(0.5f);
+
+        // WAIT FOR INPUT: Pause the coroutine until Space or Click is pressed
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
+
         yield return StartCoroutine(Fade(1f, 0f, fadeOutDuration));
 
         if (pc != null) pc.MovementLocked = false;

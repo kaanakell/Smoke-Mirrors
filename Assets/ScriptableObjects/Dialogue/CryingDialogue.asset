@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
   - speaker: <glitch>Father</glitch>
-    text: Oh, what's wrong, heart? Why are you crying?
+    text: 'Oh, what''s wrong, heart? '
+  - speaker: <glitch>Father</glitch>
+    text: Why are you crying?
   - speaker: S<glitch>Son</glitch>
     text: It's nothing, dad...

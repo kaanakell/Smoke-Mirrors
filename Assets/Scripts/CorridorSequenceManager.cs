@@ -45,6 +45,11 @@ public class CorridorSequenceManager : MonoBehaviour
 
     private IEnumerator AccidentCinematic()
     {
+        if (_player != null)
+        {
+            _player.MovementLocked = true;
+            _player.ForceFacePosition(sonTransform.position);
+        }
         yield return new WaitForSeconds(1.5f);
 
         if (_player != null) _player.MovementLocked = true;
@@ -53,39 +58,69 @@ public class CorridorSequenceManager : MonoBehaviour
         if (puddleGraphic != null && _player != null)
         {
             Vector3 puddlePos = _player.transform.position;
-
-            puddlePos.y -= 0.5f; 
-
+            puddlePos.y -= 0.5f;
             puddlePos.z = puddleGraphic.transform.position.z;
 
             puddleGraphic.transform.position = puddlePos;
             puddleGraphic.SetActive(true);
-            if (_player != null) _player.MovementLocked = true;
         }
         yield return new WaitForSeconds(1.5f);
 
         bool fatherDone = false;
         DialogueManager.Instance.StartDialogue(fatherShameMonologue, () => fatherDone = true);
-        yield return new WaitUntil(() => fatherDone);
+        while (!fatherDone)
+        {
+            if (_player != null)
+            {
+                _player.MovementLocked = true;
+                _player.ForceFacePosition(sonTransform.position);
+            }
+            yield return null;
+        }
 
+        if (_player != null) _player.MovementLocked = true;
         yield return StartCoroutine(FadeSprite(sonRenderer, 0f, 1f, 1.5f));
 
         Vector3 targetPos = _player.transform.position + new Vector3(1f, 0, 0);
         while (Vector3.Distance(sonTransform.position, targetPos) > 0.2f)
         {
             sonTransform.position = Vector3.MoveTowards(sonTransform.position, targetPos, 1.2f * Time.deltaTime);
-            if (_player != null) _player.MovementLocked = true;
+            if (_player != null)
+            {
+                _player.MovementLocked = true;
+                _player.ForceFacePosition(sonTransform.position);
+            }
+            _player.ForceFacePosition(sonTransform.position);
             yield return null;
         }
 
         bool sonDone = false;
         DialogueManager.Instance.StartDialogue(sonComfortDialogue, () => sonDone = true);
-        yield return new WaitUntil(() => sonDone);
+        while (!sonDone)
+        {
+            if (_player != null)
+            {
+                _player.MovementLocked = true;
+                _player.ForceFacePosition(sonTransform.position);
+            }
+            _player.ForceFacePosition(sonTransform.position);
+            yield return null;
+        }
+
+        if (_player != null) _player.MovementLocked = true;
 
         while (Vector3.Distance(_player.transform.position, bathroomDoorTarget.position) > 0.5f)
         {
             _player.transform.position = Vector3.MoveTowards(_player.transform.position, bathroomDoorTarget.position, 1.5f * Time.deltaTime);
             sonTransform.position = Vector3.MoveTowards(sonTransform.position, bathroomDoorTarget.position, 1.5f * Time.deltaTime);
+
+            if (_player != null)
+            {
+                _player.MovementLocked = true;
+                _player.ForceFacePosition(bathroomDoorTarget.position);
+            }
+            FacePosition(sonTransform, bathroomDoorTarget.position);
+
             yield return null;
         }
 
@@ -117,5 +152,18 @@ public class CorridorSequenceManager : MonoBehaviour
             yield return null;
         }
         SetAlpha(sr, to);
+    }
+
+    private void FacePosition(Transform subject, Vector3 targetPos)
+    {
+        if (subject == null) return;
+        float diffX = targetPos.x - subject.position.x;
+        if (Mathf.Abs(diffX) > 0.05f)
+        {
+            float direction = Mathf.Sign(diffX);
+            Vector3 scale = subject.localScale;
+            scale.x = direction * Mathf.Abs(scale.x);
+            subject.localScale = scale;
+        }
     }
 }

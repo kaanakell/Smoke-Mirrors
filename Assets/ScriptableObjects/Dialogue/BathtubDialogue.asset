@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
   - speaker: <glitch>Father</glitch>
-    text: I hate showering. <glitch>Father</glitch>
+    text: I hate showering.

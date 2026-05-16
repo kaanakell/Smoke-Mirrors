@@ -98,15 +98,12 @@ public class ClockDrawingGame : MonoBehaviour
         _player = FindFirstObjectByType<PlayerController>();
         if (_player != null) _player.MovementLocked = true;
 
-        if (monologueText != null)
-            monologueText.text = overrideMonologue ?? monologue;
-
-        _drawingStarted = false;
         _completed = false;
         gameObject.SetActive(true);
 
-        if (monologuePanel != null) monologuePanel.SetActive(true);
-        if (drawingPanel != null) drawingPanel.SetActive(false);
+        if (monologuePanel != null) monologuePanel.SetActive(false);
+
+        StartDrawing();
     }
 
     public void ClearAll()
@@ -130,15 +127,6 @@ public class ClockDrawingGame : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace))
         {
             Complete();
-            return;
-        }
-
-        if (!_drawingStarted)
-        {
-            bool dismiss = Input.GetKeyDown(KeyCode.Space) ||
-                           Input.GetKeyDown(KeyCode.Return) ||
-                           Input.GetMouseButtonDown(0);
-            if (dismiss) StartDrawing();
             return;
         }
 

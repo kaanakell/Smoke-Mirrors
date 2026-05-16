@@ -47,9 +47,16 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
-        if (!IsDialogueActive) return;
+        if (!dialoguePanel.activeSelf) return;
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        Transform sonT = GetSonTransform();
+        if (sonT != null)
+        {
+            if (_player != null) _player.ForceFacePosition(sonT.position);
+            VisionConeAim.OverrideTarget = sonT;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
             HandleInteraction();
         }
@@ -69,6 +76,8 @@ public class DialogueManager : MonoBehaviour
             string cleanText = Regex.Replace(_currentRawBody, @"<glitch>(.*?)</glitch>", "$1");
             _visibleCharCount = cleanText.Length;
             _isTyping = false;
+            RefreshDialogueUI();
+
             if (continuePrompt != null) continuePrompt.SetActive(true);
         }
         else
@@ -193,14 +202,22 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
-        dialogueBodyText.text = "";
-        speakerNameText.text = "";
-        if(continuePrompt != null)
-            continuePrompt.SetActive(false);
+        dialoguePanel.SetActive(false);
+
+        if (_player != null)
+        {
+            _player.MovementLocked = false;
+            _player.ClearForcedFacing();
+        }
+
+        VisionConeAim.OverrideTarget = null;
+        VisionConeAim cone = FindFirstObjectByType<VisionConeAim>();
+        if (cone != null && _player != null)
+            cone.SetLastDirection(_player.FacingDirection);
 
         _currentSet = null;
-        _currentRawSpeaker = "";
-        _currentRawBody = "";
+        _onDialogueEndedCallback?.Invoke();
+        _onDialogueEndedCallback = null;
 
         StartCoroutine(CloseDialogueNextFrame());
     }
@@ -209,9 +226,9 @@ public class DialogueManager : MonoBehaviour
     {
         yield return null;
 
-        if(dialoguePanel != null)
+        if (dialoguePanel != null)
             dialoguePanel.SetActive(false);
-        if(_player != null)
+        if (_player != null)
             _player.MovementLocked = false;
 
         _onDialogueEndedCallback?.Invoke();
@@ -219,4 +236,13 @@ public class DialogueManager : MonoBehaviour
     }
 
     public bool IsDialogueActive => dialoguePanel != null && dialoguePanel.activeSelf;
+
+    private Transform GetSonTransform()
+    {
+        SonNPC sonScript = FindFirstObjectByType<SonNPC>();
+        if (sonScript != null) return sonScript.transform;
+
+        GameObject foundSon = GameObject.Find("Son") ?? GameObject.Find("SonNPC") ?? GameObject.Find("NPC");
+        return foundSon != null ? foundSon.transform : null;
+    }
 }

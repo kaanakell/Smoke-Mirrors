@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
   - speaker: S<glitch>Son</glitch>
-    text: "I don\u2019t want to send you to a facility, I promised mom to take care
-      of you. But, you need to remember stuff like this, okay?"
+    text: "I don\u2019t want to send you to a facility. "
+  - speaker: So<glitch>Son</glitch>
+    text: I promised mom to take care of you.
+  - speaker: So<glitch>Son</glitch>
+    text: But, you need to remember stuff like this, okay?
   - speaker: So<glitch>Son</glitch>
     text: "Let\u2019s play a game now!"

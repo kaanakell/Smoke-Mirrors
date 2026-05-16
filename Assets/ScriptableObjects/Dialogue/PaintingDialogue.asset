@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
   - speaker: <glitch>Father</glitch>
-    text: The Great Wave of Kanagawa! Once we saw it in person, my son wouldn't stop
-      redrawing it.
+    text: 'The Great Wave of Kanagawa! '
+  - speaker: <glitch>Father</glitch>
+    text: Once we saw it in person, my son wouldn't stop redrawing it.

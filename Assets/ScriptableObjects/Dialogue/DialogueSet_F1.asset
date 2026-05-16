@@ -14,13 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSet
   lines:
   - speaker: S<glitch>Son</glitch>
-    text: Hey, <glitch>Father</glitch> . The competition just ended, you missed it.
-      Again.
+    text: Hey, <glitch>Father</glitch> .
+  - speaker: S<glitch>Son</glitch>
+    text: The competition just ended, you missed it. Again.
   - speaker: <glitch>Father</glitch>
     text: What, no?? It was next week?!
   - speaker: <glitch>Son</glitch>
-    text: Yeah, last week. You need to start using a calendar, old man.
+    text: Yeah, last week.
+  - speaker: S<glitch>Son</glitch>
+    text: You need to start using a calendar, old man.
   - speaker: <glitch>Father</glitch>
     text: I suppose time passes by faster when you're older...
   - speaker: S<glitch>Son</glitch>
-    text: I won 2nd place, by the way. Mom already put the painting up in the bathroom.
+    text: I won 2nd place, by the way.
+  - speaker: S<glitch>Son</glitch>
+    text: ' Mom already put the painting up in the bathroom.'
